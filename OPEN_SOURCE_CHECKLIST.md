@@ -68,6 +68,8 @@ Use this checklist before publishing `personal-homepage-skill` to GitHub.
 - [ ] demo/template-gallery.html opens in a browser.
 - [ ] Demo deck explains problem, solution, workflow, presets, quality rules, and roadmap.
 - [ ] Template gallery shows all built-in visual presets and category filters.
+- [ ] assets/template-previews/ includes preview images for all built-in visual presets.
+- [ ] README.md embeds template preview images for GitHub browsing.
 - [ ] Demo materials contain no private user data.
 - [ ] Demo materials use only self-contained CSS/JS and public fonts.
 - [ ] DEMO_SCRIPT.md explains how to present the deck and gallery.
