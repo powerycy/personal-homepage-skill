@@ -65,29 +65,11 @@ Skill 会检查：
 
 ## 内置模板预览
 
-这些图片会随仓库一起发布，方便在 GitHub 上直接看到模板方向。实际生成主页时，Agent 会优先跟随用户给定参考；模板只在方向不清楚或用户主动选择时使用。
+下面这张图直接由 `demo/template-gallery.html` 导出，展示当前 Skill 内置模板总览。实际生成主页时，Agent 会优先跟随用户给定参考；模板只在方向不清楚或用户主动选择时使用。
 
-| 模板 | 预览 |
-| --- | --- |
-| Cinematic Scroll Personal Brand | ![Cinematic Scroll Personal Brand](assets/template-previews/cinematic-scroll-personal-brand.svg) |
-| Soft Product Video Hero | ![Soft Product Video Hero](assets/template-previews/soft-product-video-hero.svg) |
-| TOONHUB Figurine Carousel | ![TOONHUB Figurine Carousel](assets/template-previews/toonhub-figurine-carousel.svg) |
-| Clean Developer Homepage | ![Clean Developer Homepage](assets/template-previews/clean-developer-homepage.svg) |
-| 3D Tech Portfolio | ![3D Tech Portfolio](assets/template-previews/3d-tech-portfolio.svg) |
-| Motion Gradient Brand | ![Motion Gradient Brand](assets/template-previews/motion-gradient-brand.svg) |
-| Magazine Portfolio | ![Magazine Portfolio](assets/template-previews/magazine-portfolio.svg) |
-| Terminal Hacker Homepage | ![Terminal Hacker Homepage](assets/template-previews/terminal-hacker-homepage.svg) |
-| Minimal Premium Resume | ![Minimal Premium Resume](assets/template-previews/minimal-premium-resume.svg) |
-| Cute Pixel Creator | ![Cute Pixel Creator](assets/template-previews/cute-pixel-creator.svg) |
-| AI System Dashboard | ![AI System Dashboard](assets/template-previews/ai-system-dashboard.svg) |
-| Creator Bento Homepage | ![Creator Bento Homepage](assets/template-previews/creator-bento-homepage.svg) |
-| Dark Editorial Portfolio | ![Dark Editorial Portfolio](assets/template-previews/dark-editorial-portfolio.svg) |
-| Art Museum Portfolio | ![Art Museum Portfolio](assets/template-previews/art-museum-portfolio.svg) |
-| Spatial Project Gallery | ![Spatial Project Gallery](assets/template-previews/spatial-project-gallery.svg) |
-| Business Personal Brand | ![Business Personal Brand](assets/template-previews/business-personal-brand.svg) |
-| Case Study Portfolio | ![Case Study Portfolio](assets/template-previews/case-study-portfolio.svg) |
+![Template Gallery Preview](assets/template-gallery-preview.png)
 
-更完整的可交互 Gallery：
+可交互 Gallery：
 
 ```text
 demo/template-gallery.html
