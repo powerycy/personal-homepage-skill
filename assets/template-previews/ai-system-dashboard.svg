@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="213.333" viewBox="0 0 1080 640" role="img" aria-label="AI System Dashboard template preview">
+  <rect width="1080" height="640" rx="42" fill="#07101e"/>
+  <rect x="24" y="24" width="1032" height="592" rx="34" fill="none" stroke="#e9f4ff" stroke-opacity="0.12"/>
+  <rect x="610" y="92" width="395" height="335" rx="28" fill="#07111f" stroke="#69d7ff" opacity="0.9"/><path d="M650 340 C740 250 805 390 965 190" fill="none" stroke="#69d7ff" stroke-width="7"/><circle cx="965" cy="190" r="14" fill="#69d7ff"/><rect x="650" y="145" width="90" height="52" rx="14" fill="#69d7ff" opacity="0.22"/><rect x="760" y="145" width="180" height="52" rx="14" fill="white" opacity="0.08"/>
+  <text x="82" y="96" font-family="Verdana, sans-serif" font-size="25" font-weight="700" fill="#69d7ff" letter-spacing="5">Tech</text>
+  <text x="80" y="230" font-family="Georgia, Times New Roman, serif" font-size="76" font-weight="700" fill="#e9f4ff">AI System Dashboard</text>
+  <text x="84" y="300" font-family="Verdana, sans-serif" font-size="28" fill="#e9f4ff" opacity="0.72">AI 系统面板 · Agent 工作流</text>
+  <rect x="84" y="388" width="230" height="58" rx="29" fill="#69d7ff" opacity="0.92"/>
+  <text x="199" y="425" font-family="Verdana, sans-serif" font-size="20" font-weight="700" fill="#07101e" text-anchor="middle">Template Preview</text>
+  <rect x="334" y="388" width="210" height="58" rx="29" fill="#e9f4ff" opacity="0.10" stroke="#e9f4ff" stroke-opacity="0.18"/>
+  <text x="439" y="425" font-family="Verdana, sans-serif" font-size="20" font-weight="700" fill="#e9f4ff" text-anchor="middle">Personal Site</text>
+</svg>

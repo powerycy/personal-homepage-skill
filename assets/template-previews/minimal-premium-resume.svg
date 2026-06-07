@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="213.333" viewBox="0 0 1080 640" role="img" aria-label="Premium Resume template preview">
+  <rect width="1080" height="640" rx="42" fill="#f7f2ea"/>
+  <rect x="24" y="24" width="1032" height="592" rx="34" fill="none" stroke="#24211d" stroke-opacity="0.12"/>
+  <rect x="680" y="82" width="285" height="405" rx="18" fill="white" opacity="0.66"/><line x1="720" y1="165" x2="900" y2="165" stroke="#9b7b4f" stroke-width="8"/><line x1="720" y1="220" x2="910" y2="220" stroke="#24211d" opacity="0.25" stroke-width="5"/><line x1="720" y1="260" x2="850" y2="260" stroke="#24211d" opacity="0.25" stroke-width="5"/>
+  <text x="82" y="96" font-family="Verdana, sans-serif" font-size="25" font-weight="700" fill="#9b7b4f" letter-spacing="5">Business</text>
+  <text x="80" y="230" font-family="Georgia, Times New Roman, serif" font-size="76" font-weight="700" fill="#24211d">Premium Resume</text>
+  <text x="84" y="300" font-family="Verdana, sans-serif" font-size="28" fill="#24211d" opacity="0.72">极简履历 · 高级数字名片</text>
+  <rect x="84" y="388" width="230" height="58" rx="29" fill="#9b7b4f" opacity="0.92"/>
+  <text x="199" y="425" font-family="Verdana, sans-serif" font-size="20" font-weight="700" fill="#f7f2ea" text-anchor="middle">Template Preview</text>
+  <rect x="334" y="388" width="210" height="58" rx="29" fill="#24211d" opacity="0.10" stroke="#24211d" stroke-opacity="0.18"/>
+  <text x="439" y="425" font-family="Verdana, sans-serif" font-size="20" font-weight="700" fill="#24211d" text-anchor="middle">Personal Site</text>
+</svg>
