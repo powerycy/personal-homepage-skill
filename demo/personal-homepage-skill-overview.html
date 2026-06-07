@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>personal-homepage-skill overview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    /* === VIEWPORT BASE: fixed 1920x1080 stage copied into the deck === */
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    .deck-viewport {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    .deck-stage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        transform-origin: 0 0;
+        background: var(--slide-bg, #fff);
+    }
+
+    .slide {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        display: block;
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+        background: var(--slide-bg, #fff);
+    }
+
+    .slide.active,
+    .slide.visible {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+        z-index: 1;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.2s !important;
+        }
+    }
+
+    /* === DESIGN TOKENS === */
+    :root {
+      --stage-bg: #090b0d;
+      --slide-bg: #090b0d;
+      --ink: #f6efe2;
+      --muted: rgba(246, 239, 226, 0.66);
+      --soft: rgba(246, 239, 226, 0.12);
+      --line: rgba(246, 239, 226, 0.18);
+      --gold: #f3b45c;
+      --cyan: #75e2ff;
+      --green: #9ae887;
+      --paper: #f4ead8;
+      --blue: #476cff;
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: "Manrope", sans-serif;
+      color: var(--ink);
+    }
+
+    /* === SHARED SLIDE ATMOSPHERE === */
+    .slide {
+      background:
+        radial-gradient(circle at 13% 16%, rgba(117, 226, 255, 0.18), transparent 28%),
+        radial-gradient(circle at 78% 12%, rgba(243, 180, 92, 0.16), transparent 28%),
+        linear-gradient(135deg, #08090b 0%, #11151b 48%, #07080a 100%);
+    }
+
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(246, 239, 226, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(246, 239, 226, 0.04) 1px, transparent 1px);
+      background-size: 72px 72px;
+      mask-image: radial-gradient(circle at 50% 45%, black 0%, transparent 72%);
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .slide::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.32'/%3E%3C/svg%3E");
+      mix-blend-mode: soft-light;
+      opacity: 0.22;
+      pointer-events: none;
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      padding: 86px 110px;
+    }
+
+    .kicker {
+      font: 700 22px/1 "JetBrains Mono", monospace;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 34px;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    h1 {
+      font: 400 142px/0.92 "Instrument Serif", serif;
+      letter-spacing: -0.055em;
+      max-width: 1250px;
+    }
+
+    h2 {
+      font: 400 108px/0.96 "Instrument Serif", serif;
+      letter-spacing: -0.045em;
+      max-width: 1100px;
+    }
+
+    h3 {
+      font: 800 34px/1.08 "Manrope", sans-serif;
+      letter-spacing: -0.04em;
+    }
+
+    .lead {
+      font-size: 36px;
+      line-height: 1.28;
+      letter-spacing: -0.035em;
+      color: var(--muted);
+      max-width: 850px;
+      margin-top: 38px;
+    }
+
+    .serif {
+      font-family: "Instrument Serif", serif;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .mono {
+      font-family: "JetBrains Mono", monospace;
+      letter-spacing: -0.02em;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 46px;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      background: rgba(246, 239, 226, 0.06);
+      border-radius: 999px;
+      padding: 13px 20px;
+      font: 700 18px/1 "JetBrains Mono", monospace;
+      color: rgba(246, 239, 226, 0.82);
+      backdrop-filter: blur(18px);
+    }
+
+    .progress {
+      position: absolute;
+      z-index: 5;
+      left: 110px;
+      bottom: 52px;
+      width: 420px;
+      height: 2px;
+      background: rgba(246, 239, 226, 0.16);
+      overflow: hidden;
+    }
+
+    .progress span {
+      display: block;
+      width: calc(var(--progress, 0) * 1%);
+      height: 100%;
+      background: linear-gradient(90deg, var(--cyan), var(--gold));
+      transition: width 0.35s var(--ease-out-expo);
+    }
+
+    .page-number {
+      position: absolute;
+      z-index: 5;
+      right: 110px;
+      bottom: 42px;
+      font: 700 22px/1 "JetBrains Mono", monospace;
+      color: rgba(246, 239, 226, 0.5);
+    }
+
+    /* === ANIMATION SYSTEM === */
+    .reveal {
+      opacity: 0;
+      transform: translateY(34px);
+      transition: opacity 0.72s var(--ease-out-expo), transform 0.72s var(--ease-out-expo);
+      transition-delay: var(--delay, 0ms);
+    }
+
+    .visible .reveal {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .float-card {
+      animation: floatCard 7s ease-in-out infinite;
+    }
+
+    @keyframes floatCard {
+      0%, 100% { transform: translateY(0) rotate(-1deg); }
+      50% { transform: translateY(-18px) rotate(1deg); }
+    }
+
+    /* === SLIDE 1: TITLE === */
+    .title-layout {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 70px;
+      align-items: center;
+      height: 100%;
+    }
+
+    .title-mark {
+      position: relative;
+      width: 620px;
+      height: 620px;
+      border-radius: 44px;
+      border: 1px solid rgba(246, 239, 226, 0.18);
+      background:
+        linear-gradient(145deg, rgba(246, 239, 226, 0.12), rgba(246, 239, 226, 0.03)),
+        radial-gradient(circle at 35% 25%, rgba(117, 226, 255, 0.32), transparent 34%),
+        radial-gradient(circle at 70% 75%, rgba(243, 180, 92, 0.28), transparent 36%);
+      box-shadow: 0 38px 120px rgba(0, 0, 0, 0.45);
+      overflow: hidden;
+    }
+
+    .title-mark .orbit {
+      position: absolute;
+      border: 1px solid rgba(246, 239, 226, 0.18);
+      border-radius: 50%;
+      inset: 76px;
+      animation: spin 28s linear infinite;
+    }
+
+    .title-mark .orbit:nth-child(2) { inset: 142px; animation-duration: 18s; animation-direction: reverse; }
+    .title-mark .orbit:nth-child(3) { inset: 220px; animation-duration: 13s; }
+
+    .title-mark .core {
+      position: absolute;
+      inset: 238px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: #08090b;
+      display: grid;
+      place-items: center;
+      font: 800 58px/1 "Manrope", sans-serif;
+      letter-spacing: -0.08em;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* === SLIDE 2: PROBLEM === */
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      margin-top: 58px;
+    }
+
+    .problem-card {
+      min-height: 168px;
+      border: 1px solid rgba(246, 239, 226, 0.14);
+      background: rgba(246, 239, 226, 0.055);
+      border-radius: 30px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .problem-card strong {
+      font: 800 28px/1.05 "Manrope", sans-serif;
+      letter-spacing: -0.04em;
+    }
+
+    .problem-card span {
+      font-size: 19px;
+      color: rgba(246, 239, 226, 0.58);
+      line-height: 1.35;
+    }
+
+    /* === SLIDE 3: CORE BEHAVIOR === */
+    .split {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 72px;
+      align-items: center;
+      height: 100%;
+    }
+
+    .checklist {
+      display: grid;
+      gap: 18px;
+    }
+
+    .check-item {
+      border-left: 4px solid var(--cyan);
+      padding: 24px 28px;
+      background: rgba(246, 239, 226, 0.06);
+      border-radius: 0 26px 26px 0;
+    }
+
+    .check-item h3 { margin-bottom: 9px; }
+    .check-item p { font-size: 23px; line-height: 1.33; color: var(--muted); }
+
+    /* === SLIDE 4: WORKFLOW === */
+    .workflow {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 18px;
+      margin-top: 70px;
+    }
+
+    .step {
+      position: relative;
+      height: 430px;
+      border: 1px solid rgba(246, 239, 226, 0.16);
+      background: linear-gradient(180deg, rgba(246, 239, 226, 0.09), rgba(246, 239, 226, 0.035));
+      border-radius: 34px;
+      padding: 28px 24px;
+      overflow: hidden;
+    }
+
+    .step::after {
+      content: attr(data-step);
+      position: absolute;
+      right: 18px;
+      bottom: -18px;
+      font: 400 126px/1 "Instrument Serif", serif;
+      color: rgba(246, 239, 226, 0.08);
+    }
+
+    .step .mono { color: var(--gold); font-size: 17px; }
+    .step h3 { margin: 24px 0 16px; font-size: 30px; }
+    .step p { color: var(--muted); font-size: 20px; line-height: 1.36; }
+
+    /* === SLIDE 5: PRESET LIBRARY === */
+    .preset-board {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-top: 54px;
+    }
+
+    .preset {
+      height: 190px;
+      border-radius: 28px;
+      padding: 24px;
+      border: 1px solid rgba(246, 239, 226, 0.16);
+      background: var(--preset-bg, rgba(246, 239, 226, 0.07));
+      overflow: hidden;
+      position: relative;
+    }
+
+    .preset::before {
+      content: "";
+      position: absolute;
+      inset: auto -20px -38px auto;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: rgba(246, 239, 226, 0.18);
+      filter: blur(1px);
+    }
+
+    .preset h3 { font-size: 25px; position: relative; }
+    .preset p { margin-top: 14px; font-size: 18px; line-height: 1.32; color: rgba(246, 239, 226, 0.68); position: relative; }
+
+    /* === SLIDE 6: CONTINUOUS WEBPAGE QUALITY === */
+    .continuity-canvas {
+      position: relative;
+      height: 610px;
+      margin-top: 48px;
+      border-radius: 46px;
+      border: 1px solid rgba(246, 239, 226, 0.16);
+      background:
+        linear-gradient(180deg, rgba(117, 226, 255, 0.16), rgba(246, 239, 226, 0.07) 50%, rgba(243, 180, 92, 0.12)),
+        #10141a;
+      overflow: hidden;
+    }
+
+    .wave {
+      position: absolute;
+      left: -120px;
+      right: -120px;
+      height: 240px;
+      border-radius: 50%;
+      background: rgba(246, 239, 226, 0.10);
+      filter: blur(0.2px);
+    }
+
+    .wave.one { top: 142px; transform: rotate(-4deg); }
+    .wave.two { top: 310px; transform: rotate(5deg); background: rgba(117, 226, 255, 0.10); }
+
+    .site-strip {
+      position: absolute;
+      width: 310px;
+      height: 430px;
+      border-radius: 30px;
+      background: rgba(8, 9, 11, 0.64);
+      border: 1px solid rgba(246, 239, 226, 0.16);
+      padding: 22px;
+    }
+
+    .site-strip:nth-child(3) { left: 120px; top: 88px; }
+    .site-strip:nth-child(4) { left: 505px; top: 54px; }
+    .site-strip:nth-child(5) { left: 890px; top: 112px; }
+    .site-strip:nth-child(6) { left: 1275px; top: 68px; }
+
+    .mini-line { height: 12px; background: rgba(246, 239, 226, 0.18); border-radius: 99px; margin-bottom: 14px; }
+    .mini-line.short { width: 62%; background: rgba(117, 226, 255, 0.28); }
+    .mini-box { height: 210px; border-radius: 22px; background: rgba(246, 239, 226, 0.08); margin-top: 28px; }
+
+    /* === SLIDE 7: OPEN-SOURCE FILE MAP === */
+    .file-map {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 38px;
+      margin-top: 48px;
+    }
+
+    .file-column {
+      border: 1px solid rgba(246, 239, 226, 0.16);
+      border-radius: 34px;
+      background: rgba(246, 239, 226, 0.055);
+      padding: 30px;
+    }
+
+    .file-row {
+      display: grid;
+      grid-template-columns: 310px 1fr;
+      gap: 22px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(246, 239, 226, 0.11);
+      font-size: 20px;
+      line-height: 1.28;
+    }
+
+    .file-row:last-child { border-bottom: 0; }
+    .file-row .mono { color: var(--gold); font-size: 18px; }
+    .file-row span:last-child { color: var(--muted); }
+
+    /* === SLIDE 8: ROADMAP === */
+    .roadmap {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 26px;
+      margin-top: 62px;
+    }
+
+    .road-card {
+      min-height: 420px;
+      border-radius: 38px;
+      padding: 36px;
+      border: 1px solid rgba(246, 239, 226, 0.16);
+      background: linear-gradient(180deg, rgba(246, 239, 226, 0.10), rgba(246, 239, 226, 0.035));
+    }
+
+    .road-card .mono { color: var(--cyan); font-size: 18px; }
+    .road-card h3 { margin: 28px 0 22px; font-size: 38px; }
+    .road-card ul { margin: 0; padding-left: 22px; color: var(--muted); font-size: 23px; line-height: 1.55; }
+
+    /* === NON-SLIDE UI === */
+    .hint {
+      position: fixed;
+      z-index: 20;
+      right: clamp(14px, 2vw, 28px);
+      top: clamp(14px, 2vw, 28px);
+      color: rgba(246, 239, 226, 0.66);
+      font: 700 clamp(10px, 1vw, 13px)/1 "JetBrains Mono", monospace;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="deck-viewport">
+    <div class="hint">Arrow keys / Space</div>
+    <main class="deck-stage" id="deckStage">
+      <!-- === SLIDE 1: TITLE === -->
+      <section class="slide active visible" data-title="Title">
+        <div class="content title-layout">
+          <div>
+            <div class="kicker reveal">Open-source AI Skill</div>
+            <h1 class="reveal" style="--delay: 80ms">personal-homepage-skill</h1>
+            <p class="lead reveal" style="--delay: 160ms">A documentation-first quality system for agents that generate distinctive personal homepages, portfolios, creator hubs, and developer profiles.</p>
+            <div class="chip-row reveal" style="--delay: 240ms">
+              <span class="chip">reference-first</span>
+              <span class="chip">anti-AI-slop</span>
+              <span class="chip">continuous webpage</span>
+            </div>
+          </div>
+          <div class="title-mark float-card reveal" style="--delay: 180ms">
+            <div class="orbit"></div>
+            <div class="orbit"></div>
+            <div class="orbit"></div>
+            <div class="core">PH</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 2: PROBLEM === -->
+      <section class="slide" data-title="Problem">
+        <div class="content">
+          <div class="kicker reveal">The problem</div>
+          <h2 class="reveal" style="--delay: 70ms">AI homepages often look like the same <span class="serif">generic landing page</span>.</h2>
+          <div class="problem-grid">
+            <div class="problem-card reveal" style="--delay: 120ms"><strong>Vague hero copy</strong><span>Visitors cannot tell who the person is or what proof supports their identity.</span></div>
+            <div class="problem-card reveal" style="--delay: 170ms"><strong>Visual references ignored</strong><span>Concrete templates are replaced by unrelated AI-generated style options.</span></div>
+            <div class="problem-card reveal" style="--delay: 220ms"><strong>Fake credibility</strong><span>Metrics, awards, testimonials, and links are invented instead of marked as placeholders.</span></div>
+            <div class="problem-card reveal" style="--delay: 270ms"><strong>Icon-wall skills</strong><span>Capabilities are reduced to logo lists instead of being connected to real output.</span></div>
+            <div class="problem-card reveal" style="--delay: 320ms"><strong>Weak project cards</strong><span>Projects lack problem, role, features, stack, result, and next-click clarity.</span></div>
+            <div class="problem-card reveal" style="--delay: 370ms"><strong>Stacked slides</strong><span>Sections have hard background seams and feel like PPT pages pasted together.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 3: CORE BEHAVIOR === -->
+      <section class="slide" data-title="Core behavior">
+        <div class="content split">
+          <div>
+            <div class="kicker reveal">Core behavior</div>
+            <h2 class="reveal" style="--delay: 70ms">A personal homepage must answer five questions.</h2>
+            <p class="lead reveal" style="--delay: 140ms">The Skill keeps the agent focused on identity, proof, trust, and the next click.</p>
+          </div>
+          <div class="checklist">
+            <div class="check-item reveal" style="--delay: 120ms"><h3>Who is this person?</h3><p>Name, nickname, role, and an immediate identity signal.</p></div>
+            <div class="check-item reveal" style="--delay: 170ms"><h3>What do they do?</h3><p>Clear positioning without generic SaaS marketing language.</p></div>
+            <div class="check-item reveal" style="--delay: 220ms"><h3>What proof supports it?</h3><p>Projects, writing, work history, demos, or honest placeholders.</p></div>
+            <div class="check-item reveal" style="--delay: 270ms"><h3>Why trust them?</h3><p>Credibility from real work, not invented metrics or fake testimonials.</p></div>
+            <div class="check-item reveal" style="--delay: 320ms"><h3>What should visitors click?</h3><p>GitHub, posts, contact, media accounts, project demos, or resume links.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 4: WORKFLOW === -->
+      <section class="slide" data-title="Workflow">
+        <div class="content">
+          <div class="kicker reveal">Agent workflow</div>
+          <h2 class="reveal" style="--delay: 70ms">From request to reviewed runnable homepage.</h2>
+          <div class="workflow">
+            <div class="step reveal" data-step="01" style="--delay: 120ms"><span class="mono">detect</span><h3>Recognize fit</h3><p>Use for personal homepages, portfolios, creator pages, resume sites, and person-led project pages.</p></div>
+            <div class="step reveal" data-step="02" style="--delay: 170ms"><span class="mono">reference</span><h3>Follow first</h3><p>If a template, site, screenshot, or detailed prompt exists, preserve its rhythm before inventing.</p></div>
+            <div class="step reveal" data-step="03" style="--delay: 220ms"><span class="mono">style</span><h3>Pick direction</h3><p>Use previews only when direction is unclear; previews must look like real hero sections.</p></div>
+            <div class="step reveal" data-step="04" style="--delay: 270ms"><span class="mono">structure</span><h3>Build IA</h3><p>Hero, About, Projects, Content, Contact, and only the sections that fit the person.</p></div>
+            <div class="step reveal" data-step="05" style="--delay: 320ms"><span class="mono">code</span><h3>Generate</h3><p>React or HTML output with accessible markup, profile data, motion fallbacks, and real CTAs.</p></div>
+            <div class="step reveal" data-step="06" style="--delay: 370ms"><span class="mono">review</span><h3>Check quality</h3><p>Run design review for identity, continuity, mobile readability, source boundaries, and no fake data.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 5: PRESET LIBRARY === -->
+      <section class="slide" data-title="Presets">
+        <div class="content">
+          <div class="kicker reveal">Visual preset library</div>
+          <h2 class="reveal" style="--delay: 70ms">Distinct directions, not endless generic templates.</h2>
+          <div class="preset-board">
+            <div class="preset reveal" style="--delay: 110ms; --preset-bg: linear-gradient(135deg, #08090b, #26323a);"><h3>Cinematic Scroll</h3><p>Dark premium personal brand with fixed video and sparse motion.</p></div>
+            <div class="preset reveal" style="--delay: 145ms; --preset-bg: linear-gradient(135deg, #f4ead8, #9ec6ff); color:#11151b;"><h3>Clean Developer</h3><p style="color:rgba(17,21,27,.72)">Light, friendly developer homepage inspired by clean personal sites.</p></div>
+            <div class="preset reveal" style="--delay: 180ms; --preset-bg: linear-gradient(135deg, #ff4e8b, #ffd447);"><h3>TOONHUB Carousel</h3><p>Character IP / playful creator hero with bold figure motion.</p></div>
+            <div class="preset reveal" style="--delay: 215ms; --preset-bg: linear-gradient(135deg, #eee2c8, #7b6d55);"><h3>Art Museum</h3><p>Curated portfolio for artists, photographers, and visual storytellers.</p></div>
+            <div class="preset reveal" style="--delay: 250ms; --preset-bg: linear-gradient(135deg, #071827, #0be7c4);"><h3>AI Dashboard</h3><p>Research-grid language for AI systems and technical credibility.</p></div>
+            <div class="preset reveal" style="--delay: 285ms; --preset-bg: linear-gradient(135deg, #101014, #b78cff);"><h3>3D Tech Portfolio</h3><p>Spatial cards and 3D identity objects for technical demos.</p></div>
+            <div class="preset reveal" style="--delay: 320ms; --preset-bg: linear-gradient(135deg, #17120d, #c94d2b);"><h3>Dark Editorial</h3><p>Magazine-like case study rhythm with image-led storytelling.</p></div>
+            <div class="preset reveal" style="--delay: 355ms; --preset-bg: linear-gradient(135deg, #10151b, #4f6dff);"><h3>Business Brand</h3><p>Consultant / founder homepage with services, cases, and booking CTA.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 6: CONTINUOUS WEBPAGE QUALITY === -->
+      <section class="slide" data-title="Continuity">
+        <div class="content">
+          <div class="kicker reveal">Continuous webpage quality</div>
+          <h2 class="reveal" style="--delay: 70ms">The page should feel like one real website, <span class="serif">not stacked slides</span>.</h2>
+          <div class="continuity-canvas reveal" style="--delay: 150ms">
+            <div class="wave one"></div>
+            <div class="wave two"></div>
+            <div class="site-strip"><div class="mini-line short"></div><div class="mini-line"></div><div class="mini-line"></div><div class="mini-box"></div></div>
+            <div class="site-strip"><div class="mini-line short"></div><div class="mini-line"></div><div class="mini-line"></div><div class="mini-box"></div></div>
+            <div class="site-strip"><div class="mini-line short"></div><div class="mini-line"></div><div class="mini-line"></div><div class="mini-box"></div></div>
+            <div class="site-strip"><div class="mini-line short"></div><div class="mini-line"></div><div class="mini-line"></div><div class="mini-box"></div></div>
+          </div>
+          <div class="chip-row reveal" style="--delay: 240ms">
+            <span class="chip">no hard background seams</span>
+            <span class="chip">shared texture</span>
+            <span class="chip">wave / gradient bridges</span>
+            <span class="chip">repeated visual grammar</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 7: OPEN-SOURCE FILE MAP === -->
+      <section class="slide" data-title="File map">
+        <div class="content">
+          <div class="kicker reveal">Open-source package</div>
+          <h2 class="reveal" style="--delay: 70ms">Documentation-first, easy to audit, easy to extend.</h2>
+          <div class="file-map">
+            <div class="file-column reveal" style="--delay: 140ms">
+              <div class="file-row"><span class="mono">SKILL.md</span><span>Main entrypoint and agent workflow.</span></div>
+              <div class="file-row"><span class="mono">STYLE_PRESETS.md</span><span>Visual library and best-fit guidance.</span></div>
+              <div class="file-row"><span class="mono">MOTION_PATTERNS.md</span><span>Animation, 3D, background, and fallbacks.</span></div>
+              <div class="file-row"><span class="mono">HOMEPAGE_SECTIONS.md</span><span>Section-level content rules.</span></div>
+              <div class="file-row"><span class="mono">DESIGN_REVIEW.md</span><span>Final QA checklist before completion.</span></div>
+            </div>
+            <div class="file-column reveal" style="--delay: 200ms">
+              <div class="file-row"><span class="mono">OPEN_SOURCE_PRD.md</span><span>GitHub release product requirements.</span></div>
+              <div class="file-row"><span class="mono">USER_STORIES.md</span><span>Backlog-ready stories and acceptance criteria.</span></div>
+              <div class="file-row"><span class="mono">TEST_SCENARIOS.md</span><span>Trigger, reference, placeholder, accessibility, and license tests.</span></div>
+              <div class="file-row"><span class="mono">CONTRIBUTING.md</span><span>Contribution rules and copyright boundaries.</span></div>
+              <div class="file-row"><span class="mono">examples / demo</span><span>Prompt library and this browser presentation.</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- === SLIDE 8: ROADMAP === -->
+      <section class="slide" data-title="Roadmap">
+        <div class="content">
+          <div class="kicker reveal">Roadmap</div>
+          <h2 class="reveal" style="--delay: 70ms">Release the Skill, then turn patterns into runnable examples.</h2>
+          <div class="roadmap">
+            <div class="road-card reveal" style="--delay: 130ms"><span class="mono">V1</span><h3>Documentation Skill</h3><ul><li>Skill entrypoint</li><li>Preset library</li><li>Motion patterns</li><li>Data schema</li><li>Review checklist</li><li>Demo deck</li></ul></div>
+            <div class="road-card reveal" style="--delay: 190ms"><span class="mono">V2</span><h3>Runnable templates</h3><ul><li>React + Tailwind example</li><li>Single-file HTML example</li><li>Next.js App Router example</li><li>Template Gallery expansion</li></ul></div>
+            <div class="road-card reveal" style="--delay: 250ms"><span class="mono">V3</span><h3>Validation automation</h3><ul><li>Markdown link checker</li><li>Homepage quality checker</li><li>Screenshot validation</li><li>Mobile and reduced-motion tests</li></ul></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    /* === SLIDE PRESENTATION CONTROLLER === */
+    class SlidePresentation {
+      constructor() {
+        this.slides = Array.from(document.querySelectorAll('.slide'));
+        this.currentSlide = 0;
+        this.stage = document.getElementById('deckStage');
+        this.setupStageScale();
+        this.setupKeyboardNav();
+        this.setupTouchNav();
+        this.showSlide(0);
+      }
+
+      setupStageScale() {
+        const scale = () => {
+          const factor = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+          const x = (window.innerWidth - 1920 * factor) / 2;
+          const y = (window.innerHeight - 1080 * factor) / 2;
+          this.stage.style.transform = `translate(${x}px, ${y}px) scale(${factor})`;
+        };
+        scale();
+        window.addEventListener('resize', scale);
+      }
+
+      setupKeyboardNav() {
+        window.addEventListener('keydown', (event) => {
+          if (['ArrowRight', ' ', 'PageDown'].includes(event.key)) {
+            event.preventDefault();
+            this.next();
+          }
+          if (['ArrowLeft', 'PageUp'].includes(event.key)) {
+            event.preventDefault();
+            this.previous();
+          }
+          if (event.key === 'Home') {
+            event.preventDefault();
+            this.showSlide(0);
+          }
+          if (event.key === 'End') {
+            event.preventDefault();
+            this.showSlide(this.slides.length - 1);
+          }
+        });
+      }
+
+      setupTouchNav() {
+        let startX = 0;
+        window.addEventListener('pointerdown', (event) => { startX = event.clientX; });
+        window.addEventListener('pointerup', (event) => {
+          const delta = event.clientX - startX;
+          if (Math.abs(delta) < 60) return;
+          if (delta < 0) this.next();
+          if (delta > 0) this.previous();
+        });
+      }
+
+      showSlide(index) {
+        this.currentSlide = Math.max(0, Math.min(index, this.slides.length - 1));
+        this.slides.forEach((slide, i) => {
+          slide.classList.toggle('active', i === this.currentSlide);
+          slide.classList.toggle('visible', i === this.currentSlide);
+          slide.style.setProperty('--progress', ((this.currentSlide + 1) / this.slides.length) * 100);
+          this.ensureProgress(slide, i);
+        });
+      }
+
+      ensureProgress(slide, index) {
+        let progress = slide.querySelector('.progress');
+        let pageNumber = slide.querySelector('.page-number');
+        if (!progress) {
+          progress = document.createElement('div');
+          progress.className = 'progress';
+          progress.innerHTML = '<span></span>';
+          slide.appendChild(progress);
+        }
+        if (!pageNumber) {
+          pageNumber = document.createElement('div');
+          pageNumber.className = 'page-number';
+          slide.appendChild(pageNumber);
+        }
+        pageNumber.textContent = `${String(index + 1).padStart(2, '0')} / ${String(this.slides.length).padStart(2, '0')}`;
+        progress.querySelector('span').style.width = `${((this.currentSlide + 1) / this.slides.length) * 100}%`;
+      }
+
+      next() { this.showSlide(this.currentSlide + 1); }
+      previous() { this.showSlide(this.currentSlide - 1); }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => new SlidePresentation());
+  </script>
+</body>
+</html>

@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Homepage Template Gallery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@700;900&family=Cormorant+Garamond:wght@700&family=DM+Serif+Display&family=Fraunces:opsz,wght@9..144,800&family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&family=Manrope:wght@700;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    /* === BASE === */
+    :root {
+      --bg: #0b0b0f;
+      --ink: #f8f4ec;
+      --muted: rgba(248, 244, 236, 0.68);
+      --line: rgba(255, 255, 255, 0.12);
+      --card: rgba(255, 255, 255, 0.055);
+      --paper: #f7f3ea;
+      font-family: "Inter", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(129, 92, 255, 0.22), transparent 32%),
+        radial-gradient(circle at 90% 10%, rgba(255, 184, 106, 0.14), transparent 30%),
+        linear-gradient(180deg, #0b0b0f 0%, #14131a 50%, #0b0b0f 100%);
+    }
+
+    button, a { -webkit-tap-highlight-color: transparent; }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+    }
+
+    /* === PAGE SHELL === */
+    .page {
+      width: min(1500px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 28px 0 52px;
+    }
+
+    .shell {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 34px;
+      background: var(--card);
+      box-shadow: 0 34px 120px rgba(0, 0, 0, 0.38);
+      backdrop-filter: blur(22px);
+    }
+
+    .hero {
+      position: relative;
+      isolation: isolate;
+      padding: clamp(28px, 4vw, 54px);
+      border-bottom: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(circle at 70% 15%, rgba(255, 255, 255, 0.14), transparent 28%),
+        radial-gradient(circle at 20% 20%, rgba(115, 66, 226, 0.28), transparent 24%);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr minmax(260px, 360px);
+      gap: 34px;
+      align-items: end;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 10px 15px;
+      color: rgba(255, 255, 255, 0.72);
+      font: 800 12px/1 "JetBrains Mono", monospace;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 930px;
+      margin: 0;
+      font: 900 clamp(3.1rem, 8vw, 7rem)/0.9 "Archivo", sans-serif;
+      letter-spacing: -0.075em;
+    }
+
+    .hero p {
+      max-width: 760px;
+      margin: 26px 0 0;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.5vw, 1.18rem);
+      line-height: 1.75;
+    }
+
+    .stat-panel {
+      display: grid;
+      gap: 12px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 18px;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 14px;
+    }
+
+    .stat-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .stat-row strong {
+      color: #fff;
+      font: 800 28px/1 "JetBrains Mono", monospace;
+    }
+
+    .note {
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.10);
+      padding: 12px;
+      font-size: 12px;
+      line-height: 1.65;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 34px;
+    }
+
+    .filter {
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 10px 16px;
+      color: rgba(255, 255, 255, 0.74);
+      font-weight: 800;
+      transition: border-color 0.22s ease, background 0.22s ease, color 0.22s ease, transform 0.22s ease;
+    }
+
+    .filter:hover { transform: translateY(-1px); }
+
+    .filter.active {
+      border-color: rgba(255, 255, 255, 0.7);
+      background: var(--ink);
+      color: #101015;
+    }
+
+    /* === CARD GRID === */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      padding: clamp(20px, 2.4vw, 34px);
+    }
+
+    .template-card {
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      border-radius: 32px;
+      background: rgba(255, 255, 255, 0.055);
+      padding: 16px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.24);
+      backdrop-filter: blur(18px);
+      opacity: 0;
+      transform: translateY(28px);
+      animation: card-enter 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .template-card.hidden { display: none; }
+
+    .preview-shell {
+      position: relative;
+      height: 268px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 28px;
+      background: #101015;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 24px 60px rgba(0, 0, 0, 0.24);
+    }
+
+    .preview-shell::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      background: linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.45), transparent 80%);
+      transform: translateX(-100%);
+      animation: preview-shine 4.8s ease-in-out infinite;
+      transition: opacity 0.25s ease;
+    }
+
+    .template-card:hover .preview-shell::after { opacity: 0.18; }
+
+    .noise {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.16;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 18px 18px;
+      mix-blend-mode: overlay;
+    }
+
+    .card-body { padding: 20px 4px 4px; }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .category {
+      margin: 0 0 10px;
+      color: rgba(255, 255, 255, 0.42);
+      font: 800 12px/1 "JetBrains Mono", monospace;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0;
+      color: #fff;
+      font: 900 25px/0.98 "Archivo", sans-serif;
+      letter-spacing: -0.045em;
+    }
+
+    .arrow {
+      display: grid;
+      width: 40px;
+      height: 40px;
+      flex: 0 0 auto;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.10);
+      color: var(--accent);
+      font-weight: 900;
+    }
+
+    .summary {
+      min-height: 56px;
+      margin: 16px 0 0;
+      color: rgba(255, 255, 255, 0.66);
+      font-size: 14px;
+      line-height: 1.75;
+    }
+
+    .best-for {
+      margin: 12px 0 0;
+      border-radius: 18px;
+      background: rgba(0, 0, 0, 0.22);
+      padding: 10px 12px;
+      color: rgba(255, 255, 255, 0.56);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .effects {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .effect {
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 6px 10px;
+      color: rgba(255, 255, 255, 0.62);
+      font-size: 12px;
+    }
+
+    /* === PREVIEW VISUALS === */
+    .pv-cinematic { background: #050507; font-family: "Manrope", sans-serif; }
+    .pv-cinematic .bg { position: absolute; inset: 0; background: radial-gradient(circle at 60% 35%, rgba(255,255,255,.16), transparent 20%), linear-gradient(130deg, #050507, #181821 55%, #050507); }
+    .pv-cinematic .label { position: absolute; left: 20px; top: 20px; font: 700 10px/1 "JetBrains Mono"; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.5); }
+    .pv-cinematic .title { position: absolute; bottom: 24px; left: 20px; max-width: 52%; font-size: 31px; font-weight: 900; line-height: .92; letter-spacing: -.06em; }
+    .pv-cinematic p { position: absolute; bottom: 22px; left: 20px; max-width: 52%; margin: 0; transform: translateY(60px); font-size: 12px; line-height: 1.6; color: rgba(255,255,255,.56); }
+    .pv-cinematic .cta { position: absolute; right: 20px; bottom: 20px; width: 92px; height: 92px; border: 1px solid rgba(255,255,255,.14); border-radius: 26px; background: rgba(255,255,255,.1); backdrop-filter: blur(18px); }
+
+    .pv-soft { background: #cfc8c5; color: #192837; }
+    .pv-soft .bg { position: absolute; inset: 0; background: radial-gradient(circle at 45% 65%, rgba(255,255,255,.58), transparent 28%), linear-gradient(135deg, #d7d0ca, #aab3b3); }
+    .pv-soft .nav { position: absolute; left: 20px; top: 18px; display: flex; gap: 13px; align-items: center; font-size: 12px; font-weight: 900; }
+    .pv-soft .pill { position: absolute; right: 20px; top: 18px; border-radius: 999px; background: #7342e2; padding: 10px 15px; color: #fff; font-size: 12px; font-weight: 900; }
+    .pv-soft .title { position: absolute; left: 50%; top: 52%; width: 78%; transform: translate(-50%, -50%); text-align: center; font: 900 34px/.98 "Archivo"; letter-spacing: -.055em; }
+    .pv-soft p { position: absolute; left: 50%; top: 63%; width: 260px; margin: 0; transform: translateX(-50%); text-align: center; font-size: 12px; line-height: 1.6; opacity: .7; }
+
+    .pv-toon { background: #f4845f; color: #111; }
+    .pv-toon .bg { position: absolute; inset: 0; background: radial-gradient(circle at 50% 45%, rgba(255,255,255,.42), transparent 34%), linear-gradient(180deg, rgba(255,255,255,.16), transparent 60%, rgba(0,0,0,.14)); }
+    .pv-toon .brand { position: absolute; left: 20px; top: 16px; font: 400 32px/.9 "Anton"; letter-spacing: -.04em; }
+    .pv-toon .ghost { position: absolute; left: 50%; top: 45%; width: 120%; transform: translate(-50%, -50%); text-align: center; font: 400 72px/.9 "Anton"; letter-spacing: -.06em; color: rgba(255,255,255,.28); mix-blend-mode: soft-light; }
+    .pv-toon .blob { position: absolute; left: 50%; top: 45%; width: 160px; height: 160px; transform: translate(-50%, -50%); border-radius: 42%; background: #f79b7f; opacity: .8; }
+    .pv-toon .side-a, .pv-toon .side-b, .pv-toon .center { position: absolute; border-radius: 36px; }
+    .pv-toon .side-a { left: 18%; top: 40%; width: 80px; height: 112px; transform: translateY(-50%) rotate(-6deg); background: #6bbf7a; opacity: .72; }
+    .pv-toon .side-b { right: 18%; top: 40%; width: 80px; height: 112px; transform: translateY(-50%) rotate(6deg); background: #e882b4; opacity: .72; }
+    .pv-toon .center { left: 50%; top: 47%; width: 112px; height: 160px; transform: translate(-50%, -50%); background: linear-gradient(180deg, #fff7e9, #f06b4f); box-shadow: 0 26px 42px rgba(0,0,0,.22); }
+    .pv-toon .copy { position: absolute; left: 20px; bottom: 20px; max-width: 230px; font: 400 34px/.86 "Anton"; letter-spacing: -.05em; }
+    .pv-toon .discover { position: absolute; right: 20px; bottom: 20px; border-radius: 999px; background: #000; color: #fff; padding: 10px 15px; font-size: 10px; font-weight: 900; letter-spacing: .16em; text-transform: uppercase; }
+
+    .pv-clean { background: #edf7ff; color: #17212f; }
+    .pv-clean .wave { position: absolute; left: -70px; right: -70px; bottom: -68px; height: 180px; border-radius: 50%; background: linear-gradient(90deg, #b7dcff, #f9fbff); transform: rotate(-3deg); }
+    .pv-clean .nav { position: absolute; inset: 18px 22px auto; display: flex; justify-content: space-between; font-size: 11px; font-weight: 900; color: rgba(23,33,47,.62); }
+    .pv-clean .hello { position: absolute; left: 32px; top: 72px; border-radius: 999px; background: #fff; padding: 8px 14px; font-size: 12px; font-weight: 900; box-shadow: 0 14px 30px rgba(80,140,200,.18); }
+    .pv-clean .title { position: absolute; left: 32px; top: 122px; max-width: 260px; font: 900 34px/.96 "Archivo"; letter-spacing: -.055em; }
+    .pv-clean .title span { color: #3279ff; }
+    .pv-clean .avatar { position: absolute; right: 46px; top: 78px; width: 138px; height: 138px; border-radius: 42% 58% 45% 55%; background: linear-gradient(135deg, #fff, #d7ecff); border: 2px solid rgba(50,121,255,.18); box-shadow: 0 24px 55px rgba(80,140,200,.2); }
+    .pv-clean .pill { position: absolute; right: 34px; bottom: 32px; border-radius: 999px; background: #fff; padding: 9px 14px; color: #3279ff; font-size: 12px; font-weight: 900; }
+
+    .pv-tech3d { background: #050d12; }
+    .pv-tech3d .bg { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(34,245,200,.16), transparent 38%), radial-gradient(circle at 80% 30%, rgba(34,245,200,.25), transparent 22%); }
+    .pv-tech3d .terminal { position: absolute; left: 24px; top: 24px; border: 1px solid rgba(110,231,183,.2); border-radius: 16px; background: rgba(0,0,0,.35); padding: 14px; color: rgba(167,243,208,.84); font: 500 10px/1.7 "JetBrains Mono"; }
+    .pv-tech3d .cube { position: absolute; right: 40px; top: 55px; width: 112px; height: 112px; transform: rotate(12deg); border: 1px solid rgba(167,243,208,.3); border-radius: 24px; background: rgba(110,231,183,.1); box-shadow: 0 0 50px rgba(34,245,200,.35); }
+    .pv-tech3d .title { position: absolute; left: 24px; bottom: 30px; font: 700 31px/.98 "Space Grotesk"; }
+
+    .pv-gradient { background: #180f2c; }
+    .pv-gradient .orb1, .pv-gradient .orb2, .pv-gradient .orb3 { position: absolute; border-radius: 999px; filter: blur(24px); }
+    .pv-gradient .orb1 { left: -60px; top: 8px; width: 190px; height: 190px; background: #ff7ac8; }
+    .pv-gradient .orb2 { right: 0; top: 24px; width: 176px; height: 176px; background: #5cf4ff; }
+    .pv-gradient .orb3 { left: 96px; bottom: -20px; width: 210px; height: 145px; background: #ffe15a; }
+    .pv-gradient .chip { position: absolute; left: 24px; top: 28px; border-radius: 999px; background: rgba(255,255,255,.15); padding: 9px 14px; font-size: 12px; font-weight: 900; }
+    .pv-gradient .title { position: absolute; left: 24px; bottom: 28px; max-width: 265px; font: 900 38px/.9 "Archivo"; letter-spacing: -.06em; }
+    .pv-gradient .icon { position: absolute; right: 24px; bottom: 28px; border-radius: 22px; background: rgba(255,255,255,.18); padding: 18px; }
+
+    .pv-magazine { background: #f4eadb; color: #201610; }
+    .pv-magazine .top { position: absolute; left: 20px; right: 20px; top: 20px; display: flex; justify-content: space-between; border-bottom: 1px solid rgba(0,0,0,.2); padding-bottom: 8px; font: 700 10px/1 "JetBrains Mono"; letter-spacing: .2em; text-transform: uppercase; }
+    .pv-magazine .title { position: absolute; left: 24px; top: 64px; font: 400 52px/.78 "DM Serif Display"; letter-spacing: -.05em; }
+    .pv-magazine .image { position: absolute; right: 20px; bottom: 20px; width: 128px; height: 145px; border-radius: 70px 70px 0 0; background: linear-gradient(160deg, #d85135, #f2b08b); }
+    .pv-magazine p { position: absolute; left: 24px; bottom: 24px; max-width: 170px; margin: 0; font-size: 12px; line-height: 1.6; }
+
+    .pv-terminal { background: #020503; color: #78ff9f; font-family: "JetBrains Mono"; }
+    .pv-terminal .panel { position: absolute; inset: 16px; border: 1px solid rgba(134,239,172,.2); border-radius: 18px; background: rgba(0,0,0,.55); padding: 20px; }
+    .pv-terminal .lights { display: flex; gap: 8px; margin-bottom: 18px; }
+    .pv-terminal .lights span { width: 10px; height: 10px; border-radius: 50%; }
+    .pv-terminal p { margin: 7px 0; font-size: 12px; }
+    .pv-terminal .white { color: rgba(255,255,255,.75); }
+
+    .pv-resume { background: #f8f5ed; color: #171717; }
+    .pv-resume .title { position: absolute; left: 28px; top: 28px; font: 800 38px/.92 "Fraunces"; letter-spacing: -.05em; }
+    .pv-resume .download { position: absolute; right: 24px; top: 28px; border: 1px solid rgba(0,0,0,.15); border-radius: 999px; padding: 10px 14px; font-size: 12px; font-weight: 900; }
+    .pv-resume .cards { position: absolute; left: 28px; right: 28px; bottom: 26px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .pv-resume .cards div { height: 66px; border: 1px solid rgba(0,0,0,.1); border-radius: 18px; background: rgba(255,255,255,.7); }
+
+    .pv-pixel { background: #ffe9ef; color: #322231; }
+    .pv-pixel .grid-bg { position: absolute; inset: 0; background-image: linear-gradient(#f8bdd0 1px, transparent 1px), linear-gradient(90deg, #f8bdd0 1px, transparent 1px); background-size: 18px 18px; }
+    .pv-pixel .avatar { position: absolute; left: 28px; top: 28px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; width: 80px; height: 80px; }
+    .pv-pixel .avatar span { background: #ff8fb4; }
+    .pv-pixel .title { position: absolute; left: 28px; bottom: 28px; font: 700 31px/.98 "Space Grotesk"; }
+    .pv-pixel .quest { position: absolute; right: 28px; top: 28px; border: 4px solid #322231; border-radius: 16px; background: #fff7b7; padding: 12px 16px; font-size: 12px; font-weight: 900; }
+
+    .pv-dashboard { background: #07111f; font-family: "JetBrains Mono"; }
+    .pv-dashboard .chip { position: absolute; left: 24px; top: 24px; border: 1px solid rgba(103,232,249,.2); border-radius: 14px; background: rgba(103,232,249,.1); padding: 12px; color: #cffafe; font-size: 12px; }
+    .pv-dashboard .core { position: absolute; left: 50%; top: 50%; display: grid; width: 96px; height: 96px; place-items: center; transform: translate(-50%, -50%); border: 1px solid rgba(165,243,252,.3); border-radius: 50%; background: rgba(103,232,249,.1); color: #cffafe; font-size: 12px; font-weight: 900; box-shadow: 0 0 55px rgba(85,215,255,.35); }
+    .pv-dashboard .node { position: absolute; width: 80px; height: 48px; border: 1px solid rgba(165,243,252,.2); border-radius: 14px; background: rgba(255,255,255,.05); }
+
+    .pv-bento { background: #15110a; }
+    .pv-bento .layout { position: absolute; inset: 16px; display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(3, 1fr); gap: 12px; }
+    .pv-bento .main { grid-column: span 2; grid-row: span 2; border-radius: 24px; background: #ffe15a; padding: 16px; color: #000; font: 900 25px/.96 "Archivo"; }
+    .pv-bento .tile { border-radius: 24px; background: rgba(255,255,255,.12); padding: 14px; font-size: 13px; }
+    .pv-bento .pink { background: #ff7ac8; }
+    .pv-bento .cyan { background: #5cf4ff; }
+    .pv-bento .wide { grid-column: span 2; }
+
+    .pv-dark { background: #080706; }
+    .pv-dark .title { position: absolute; left: 24px; top: 24px; color: #efe4cf; font: 700 52px/.78 "Cormorant Garamond"; }
+    .pv-dark .shapes { position: absolute; right: 20px; bottom: 20px; display: flex; gap: 12px; align-items: end; }
+    .pv-dark .shapes div:nth-child(1) { width: 80px; height: 145px; border-radius: 999px; background: #d7b46a; }
+    .pv-dark .shapes div:nth-child(2) { width: 96px; height: 145px; border-radius: 48px 48px 0 0; background: #46382a; }
+    .pv-dark .shapes div:nth-child(3) { width: 64px; height: 145px; border-radius: 999px; background: #efe4cf; }
+    .pv-dark .label { position: absolute; left: 28px; bottom: 28px; color: #d7b46a; font: 700 10px/1 "JetBrains Mono"; letter-spacing: .25em; text-transform: uppercase; }
+
+    .pv-museum { background: var(--paper); color: #211b16; }
+    .pv-museum .top { position: absolute; left: 20px; right: 20px; top: 16px; display: flex; justify-content: space-between; border-bottom: 1px solid rgba(0,0,0,.1); padding-bottom: 12px; font: 900 10px/1 "JetBrains Mono"; letter-spacing: .2em; text-transform: uppercase; }
+    .pv-museum .search { position: absolute; left: 24px; top: 64px; border: 1px solid rgba(0,0,0,.1); border-radius: 999px; background: rgba(255,255,255,.8); padding: 9px 14px; color: rgba(0,0,0,.55); font-size: 12px; }
+    .pv-museum .title { position: absolute; left: 24px; top: 112px; max-width: 230px; font: 700 42px/.82 "Cormorant Garamond"; letter-spacing: -.04em; }
+    .pv-museum .wall { position: absolute; right: 20px; top: 64px; display: grid; width: 130px; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .pv-museum .wall div { border-radius: 16px; }
+    .pv-museum .foot { position: absolute; left: 24px; bottom: 22px; display: flex; gap: 10px; color: rgba(0,0,0,.45); font: 900 10px/1 "JetBrains Mono"; letter-spacing: .16em; text-transform: uppercase; }
+
+    .pv-spatial { background: #090812; perspective: 700px; }
+    .pv-spatial .title { position: absolute; left: 28px; top: 28px; font: 900 31px/.98 "Archivo"; }
+    .pv-spatial .card3d { position: absolute; width: 145px; height: 112px; border: 1px solid rgba(196,181,253,.2); border-radius: 24px; background: rgba(167,139,250,.16); box-shadow: 0 24px 40px rgba(0,0,0,.25); }
+
+    .pv-business { background: #f5efe3; color: #0f2f54; }
+    .pv-business .title { position: absolute; left: 28px; top: 28px; max-width: 250px; font: 800 39px/.92 "Fraunces"; letter-spacing: -.05em; }
+    .pv-business .cta { position: absolute; left: 28px; bottom: 24px; border-radius: 999px; background: #0f2f54; padding: 13px 18px; color: #fff; font-size: 12px; font-weight: 900; }
+    .pv-business .proof { position: absolute; right: 28px; bottom: 24px; display: grid; gap: 8px; }
+    .pv-business .proof div { width: 115px; height: 40px; border: 1px solid rgba(15,47,84,.15); border-radius: 16px; background: rgba(255,255,255,.65); }
+
+    .pv-case { background: #111; }
+    .pv-case .title { position: absolute; left: 24px; top: 24px; font: 900 31px/.98 "Archivo"; }
+    .pv-case .steps { position: absolute; left: 24px; right: 24px; bottom: 24px; display: grid; gap: 11px; }
+    .pv-case .step { display: flex; align-items: center; gap: 12px; border-radius: 16px; background: rgba(255,255,255,.1); padding: 11px; font-size: 12px; }
+    .pv-case .step span { display: grid; width: 24px; height: 24px; place-items: center; border-radius: 50%; background: #ff6a3d; font-weight: 900; }
+
+    /* === ANIMATION / RESPONSIVE === */
+    @keyframes preview-shine {
+      0%, 55% { transform: translateX(-100%); }
+      85%, 100% { transform: translateX(100%); }
+    }
+
+    @keyframes card-enter {
+      from { opacity: 0; transform: translateY(28px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 1100px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 720px) {
+      .page { width: min(100vw - 20px, 1500px); padding-top: 10px; }
+      .hero { padding: 24px; }
+      .grid { grid-template-columns: 1fr; padding: 14px; }
+      .preview-shell { height: 246px; }
+      .toolbar { gap: 8px; }
+      .filter { padding: 9px 12px; font-size: 14px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="shell">
+      <header class="hero">
+        <div class="hero-grid">
+          <div>
+            <div class="eyebrow">✦ Personal Homepage Visual Library</div>
+            <h1>Homepage Template Gallery</h1>
+            <p>像模板市场一样快速比较 personal-homepage-skill 的内置视觉方向。这里集中展示技术、创作者、商务和艺术作品集模板；真实生成个人主页时会优先跟随用户给定参考，而不是强行套模板。</p>
+            <nav class="toolbar" aria-label="Template category filters"></nav>
+          </div>
+          <aside class="stat-panel" aria-label="Gallery summary">
+            <div class="stat-row"><span>Templates</span><strong id="templateCount">17</strong></div>
+            <div class="stat-row"><span>Categories</span><strong>4</strong></div>
+            <div class="note">包含 WISA 电影感、passer-by 清爽开发者主页、TOONHUB 手办轮播、Google Arts & Culture 策展式艺术主页等参考方向。只学习高层视觉模式，不复制第三方素材。</div>
+          </aside>
+        </div>
+      </header>
+
+      <section class="grid" id="templateGrid" aria-label="Built-in personal homepage templates"></section>
+    </section>
+  </main>
+
+  <template id="cardTemplate">
+    <article class="template-card" data-testid="template-card">
+      <div class="preview-shell"></div>
+      <div class="card-body">
+        <div class="card-top">
+          <div>
+            <p class="category"></p>
+            <h2></h2>
+          </div>
+          <span class="arrow">↗</span>
+        </div>
+        <p class="summary"></p>
+        <p class="best-for"></p>
+        <div class="effects"></div>
+      </div>
+    </article>
+  </template>
+
+  <script>
+    /* === TEMPLATE DATA === */
+    const categories = ['All', 'Tech', 'Creator', 'Business', 'Art'];
+    const templates = [
+      {
+        name: 'Cinematic Scroll Personal Brand',
+        category: 'Tech',
+        visual: 'cinematic',
+        summary: '暗黑电影感、固定视频背景、滚动叙事和玻璃入口。',
+        bestFor: 'AI 工程师 / founder / 高级个人品牌',
+        effects: ['Scroll video', 'Word reveal', 'Glass footer'],
+        accent: '#f7f1e7',
+      },
+      {
+        name: 'Soft Product Video Hero',
+        category: 'Creator',
+        visual: 'soft',
+        summary: '柔和产品视频、居中大标题、紫色 pill CTA。',
+        bestFor: 'AI 工具作者 / 产品创作者 / 个人工具入口',
+        effects: ['Looping video', 'Inline icons', 'Mobile sheet'],
+        accent: '#7342E2',
+      },
+      {
+        name: 'TOONHUB Figurine Carousel',
+        category: 'Creator',
+        visual: 'toon',
+        summary: 'Anton 潮玩标题、3D SHAPE ghost text、角色手办轮播和强色彩背景切换。',
+        bestFor: '潮玩 IP / 3D 角色 / 年轻创作者 / 产品视觉入口',
+        effects: ['Character carousel', '3D SHAPE', '650ms lock'],
+        accent: '#F4845F',
+      },
+      {
+        name: 'Clean Developer Homepage',
+        category: 'Tech',
+        visual: 'clean',
+        summary: '浅蓝白连续网页、简洁导航、头像/手绘形象、地点标签和项目卡片。',
+        bestFor: '前端开发者 / 开源作者 / 技术博客 / passer-by 风格参考',
+        effects: ['Soft wave', 'Portrait card', 'GitHub CTA'],
+        accent: '#3279ff',
+      },
+      {
+        name: '3D Tech Portfolio',
+        category: 'Tech',
+        visual: 'tech3d',
+        summary: '空间化项目卡、3D 几何体、代码窗和节点数据流。',
+        bestFor: 'AI / 前端 / Coding Agent 开发者',
+        effects: ['3D cards', 'Grid drift', 'Node pulses'],
+        accent: '#22f5c8',
+      },
+      {
+        name: 'Motion Gradient Brand',
+        category: 'Creator',
+        visual: 'gradient',
+        summary: '强烈渐变网格、品牌宣言、漂浮内容卡和磁性 CTA。',
+        bestFor: '创作者 / AI 产品探索者 / founder',
+        effects: ['Gradient mesh', 'Parallax cards', 'Magnetic CTA'],
+        accent: '#ff7ac8',
+      },
+      {
+        name: 'Magazine Portfolio',
+        category: 'Art',
+        visual: 'magazine',
+        summary: '杂志封面式排版，适合用图像和标题建立记忆点。',
+        bestFor: '设计师 / 艺术家 / 内容创作者',
+        effects: ['Cover layout', 'Image masks', 'Editorial reveal'],
+        accent: '#d85135',
+      },
+      {
+        name: 'Terminal Hacker Homepage',
+        category: 'Tech',
+        visual: 'terminal',
+        summary: '命令行身份面板、项目日志、repo 卡和扫描线。',
+        bestFor: '程序员 / 开源作者 / 安全研究 / Agent builder',
+        effects: ['Typing', 'Cursor blink', 'Log stream'],
+        accent: '#78ff9f',
+      },
+      {
+        name: 'Minimal Premium Resume',
+        category: 'Business',
+        visual: 'resume',
+        summary: '极简高级简历主页，强调可信、清晰、行动入口。',
+        bestFor: '求职 / 学生 / 顾问 / 商务个人页',
+        effects: ['Subtle reveal', 'Hover lift', 'Clean CTA'],
+        accent: '#2c5bff',
+      },
+      {
+        name: 'Cute Pixel Creator',
+        category: 'Creator',
+        visual: 'pixel',
+        summary: '像素贴纸、游戏 UI、任务卡片和轻快动效。',
+        bestFor: '年轻创作者 / 插画师 / 轻品牌',
+        effects: ['Sprite hover', 'Tiny bounce', 'Quest cards'],
+        accent: '#ff8fb4',
+      },
+      {
+        name: 'AI System Dashboard',
+        category: 'Tech',
+        visual: 'dashboard',
+        summary: '把个人能力表达成 AI 系统图、Agent pipeline 和输出面板。',
+        bestFor: 'LLM / Agent / AI 产品实践者',
+        effects: ['Edge flow', 'Skill nodes', 'Verifier panel'],
+        accent: '#55d7ff',
+      },
+      {
+        name: 'Creator Bento Homepage',
+        category: 'Creator',
+        visual: 'bento',
+        summary: '平台入口、内容主题、精选作品和合作 CTA 的 bento 聚合页。',
+        bestFor: '小红书 / 视频号 / 写作者 / 自媒体',
+        effects: ['Bento fly-in', 'Card expansion', 'Content preview'],
+        accent: '#ffe15a',
+      },
+      {
+        name: 'Dark Editorial Portfolio',
+        category: 'Art',
+        visual: 'dark',
+        summary: '暗黑画廊、巨型标题、项目大图和电影感留白。',
+        bestFor: '高级作品集 / 设计 / 创意技术',
+        effects: ['Mask reveal', 'Image parallax', 'Slow fade'],
+        accent: '#d7b46a',
+      },
+      {
+        name: 'Art Museum Portfolio',
+        category: 'Art',
+        visual: 'museum',
+        summary: '参考 Google Arts & Culture 的策展式浏览体验，适合艺术、美术、摄影个人主页。',
+        bestFor: '艺术家 / 摄影师 / 美术作品集 / 策展型创作者',
+        effects: ['Museum curation', 'Virtual gallery', 'Artwork wall'],
+        accent: '#b5422f',
+      },
+      {
+        name: 'Spatial Project Gallery',
+        category: 'Tech',
+        visual: 'spatial',
+        summary: '项目墙在空间中展开，重点展示多个 demo 和案例。',
+        bestFor: '项目很多的开发者 / 作品集型主页',
+        effects: ['CSS 3D', 'Hover depth', 'Project wall'],
+        accent: '#8f7cff',
+      },
+      {
+        name: 'Business Personal Brand',
+        category: 'Business',
+        visual: 'business',
+        summary: '可信、转化导向、服务定位清楚，适合商务个人品牌。',
+        bestFor: '顾问 / freelancer / founder / 服务提供者',
+        effects: ['Proof cards', 'Booking CTA', 'Trust microcopy'],
+        accent: '#0f2f54',
+      },
+      {
+        name: 'Case Study Portfolio',
+        category: 'Business',
+        visual: 'case',
+        summary: '以案例研究讲清问题、角色、过程、结果。',
+        bestFor: '求职 / PM / 产品设计 / 开发作品集',
+        effects: ['Progress timeline', 'Hover details', 'Evidence cards'],
+        accent: '#ff6a3d',
+      },
+    ];
+
+    /* === PREVIEW HTML FACTORY === */
+    const previewHtml = {
+      cinematic: '<div class="pv-cinematic preview-shell"><div class="bg"></div><div class="noise"></div><div class="label">WISA-style</div><div class="title">Curious AI Engineer</div><p>Scroll-driven video, sparse grid, premium statement.</p><div class="cta"></div></div>',
+      soft: '<div class="pv-soft preview-shell"><div class="bg"></div><div class="nav">▱ Vault Plans Help</div><div class="pill">Start Free</div><div class="title">Lock ✦ Down Your Work</div><p>Soft product video hero with one strong violet CTA.</p></div>',
+      toon: '<div class="pv-toon preview-shell"><div class="bg"></div><div class="noise"></div><div class="brand">TOONHUB</div><div class="blob"></div><div class="ghost">3D SHAPE</div><div class="side-a"></div><div class="side-b"></div><div class="center"></div><div class="copy">TOONHUB FIGURINES</div><div class="discover">Discover</div></div>',
+      clean: '<div class="pv-clean preview-shell"><div class="wave"></div><div class="nav"><span>xy.</span><span>About Projects GitHub</span></div><div class="hello">📍 Hangzhou / Remote</div><div class="title">Hi, I am a <span>frontend developer</span>.</div><div class="avatar"></div><div class="pill">Open GitHub ↗</div></div>',
+      tech3d: '<div class="pv-tech3d preview-shell"><div class="bg"></div><div class="noise"></div><div class="terminal"><div>$ stack --focus</div><div>LLM · Agent · UI</div><div>status: shipping</div></div><div class="cube"></div><div class="title">3D Tech<br>Portfolio</div></div>',
+      gradient: '<div class="pv-gradient preview-shell"><div class="orb1"></div><div class="orb2"></div><div class="orb3"></div><div class="chip">Motion Brand</div><div class="title">Build in motion. Launch with taste.</div><div class="icon">✦</div></div>',
+      magazine: '<div class="pv-magazine preview-shell"><div class="top"><span>Issue 01</span><span>Portfolio</span></div><div class="title">Visual<br>Stories</div><div class="image"></div><p>Editorial cover layout for image-led creators.</p></div>',
+      terminal: '<div class="pv-terminal preview-shell"><div class="panel"><div class="lights"><span style="background:#f87171"></span><span style="background:#fde047"></span><span style="background:#86efac"></span></div><p>&gt; whoami</p><p class="white">coding-agent-builder</p><p>&gt; projects --active</p><p class="white">browser pilot · eval loop · verifier</p><p>&gt; status █</p></div></div>',
+      resume: '<div class="pv-resume preview-shell"><div class="title">Minimal<br>Premium</div><div class="download">Download CV</div><div class="cards"><div></div><div></div><div></div></div></div>',
+      pixel: '<div class="pv-pixel preview-shell"><div class="grid-bg"></div><div class="avatar">' + Array.from({ length: 16 }, (_, i) => `<span style="opacity:${i % 3 === 0 ? 1 : 0.45}"></span>`).join('') + '</div><div class="quest">Quest!</div><div class="title">Cute Pixel<br>Creator</div></div>',
+      dashboard: '<div class="pv-dashboard preview-shell"><div class="noise"></div><div class="chip">INPUT → AGENT → OUTPUT</div><div class="core">YOU</div><div class="node" style="left:18%;bottom:68px"></div><div class="node" style="left:35%;bottom:36px"></div><div class="node" style="left:52%;bottom:68px"></div><div class="node" style="left:69%;bottom:36px"></div></div>',
+      bento: '<div class="pv-bento preview-shell"><div class="layout"><div class="main">Creator<br>Hub</div><div class="tile wide">XHS / Zhihu</div><div class="tile pink"></div><div class="tile cyan"></div><div class="tile wide">Latest content</div></div></div>',
+      dark: '<div class="pv-dark preview-shell"><div class="title">Dark<br>Editorial</div><div class="shapes"><div></div><div></div><div></div></div><div class="label">Gallery / 2026</div></div>',
+      museum: '<div class="pv-museum preview-shell"><div class="top"><span>Museum Portfolio</span><span>Explore</span></div><div class="search">What do you want to discover?</div><div class="title">Art Museum Portfolio</div><div class="wall"><div style="height:92px;background:#b5422f"></div><div style="height:66px;background:#e2b66e"></div><div style="height:92px;background:#2f4d67"></div><div style="height:66px;background:#d9d1c1"></div></div><div class="foot"><span>Virtual gallery</span><span>Artwork wall</span></div></div>',
+      spatial: '<div class="pv-spatial preview-shell"><div class="title">Spatial<br>Gallery</div><div class="card3d" style="right:90px;bottom:112px;transform:rotateY(-28deg) rotateZ(-8deg)"></div><div class="card3d" style="right:64px;bottom:82px;transform:rotateY(-20deg) rotateZ(-4deg)"></div><div class="card3d" style="right:38px;bottom:52px;transform:rotateY(-12deg)"></div><div class="card3d" style="right:12px;bottom:22px;transform:rotateY(-4deg) rotateZ(5deg)"></div></div>',
+      business: '<div class="pv-business preview-shell"><div class="title">Trusted personal brand for serious buyers.</div><div class="cta">Book a call</div><div class="proof"><div></div><div></div><div></div></div></div>',
+      case: '<div class="pv-case preview-shell"><div class="title">Case Study<br>Portfolio</div><div class="steps"><div class="step"><span>1</span>Problem</div><div class="step"><span>2</span>Role</div><div class="step"><span>3</span>Result</div></div></div>',
+    };
+
+    /* === RENDERING === */
+    const toolbar = document.querySelector('.toolbar');
+    const grid = document.getElementById('templateGrid');
+    const cardTemplate = document.getElementById('cardTemplate');
+    const templateCount = document.getElementById('templateCount');
+    let activeCategory = 'All';
+
+    templateCount.textContent = String(templates.length);
+
+    categories.forEach((category) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = `filter${category === activeCategory ? ' active' : ''}`;
+      button.textContent = category;
+      button.addEventListener('click', () => {
+        activeCategory = category;
+        render();
+      });
+      toolbar.appendChild(button);
+    });
+
+    function render() {
+      document.querySelectorAll('.filter').forEach((button) => {
+        button.classList.toggle('active', button.textContent === activeCategory);
+      });
+
+      grid.innerHTML = '';
+      templates
+        .filter((template) => activeCategory === 'All' || template.category === activeCategory)
+        .forEach((template, index) => {
+          const node = cardTemplate.content.cloneNode(true);
+          const card = node.querySelector('.template-card');
+          const preview = node.querySelector('.preview-shell');
+          const category = node.querySelector('.category');
+          const title = node.querySelector('h2');
+          const arrow = node.querySelector('.arrow');
+          const summary = node.querySelector('.summary');
+          const bestFor = node.querySelector('.best-for');
+          const effects = node.querySelector('.effects');
+
+          card.style.setProperty('--accent', template.accent);
+          card.style.animationDelay = `${index * 35}ms`;
+          card.dataset.category = template.category;
+          card.dataset.templateName = template.name;
+          preview.replaceWith(htmlToElement(previewHtml[template.visual]));
+          category.textContent = template.category;
+          title.textContent = template.name;
+          arrow.style.color = template.accent;
+          summary.textContent = template.summary;
+          bestFor.textContent = `适合：${template.bestFor}`;
+          template.effects.forEach((effect) => {
+            const pill = document.createElement('span');
+            pill.className = 'effect';
+            pill.textContent = effect;
+            effects.appendChild(pill);
+          });
+          grid.appendChild(node);
+        });
+    }
+
+    function htmlToElement(html) {
+      const wrap = document.createElement('div');
+      wrap.innerHTML = html.trim();
+      return wrap.firstElementChild;
+    }
+
+    render();
+  </script>
+</body>
+</html>
