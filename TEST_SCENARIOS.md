@@ -19,7 +19,7 @@ Feature specification for an AI Skill that generates personal homepages, portfol
 - mobile responsiveness
 - anti-template review
 - content quality
-- source reuse and license boundaries
+- reference and license boundaries
 
 ## Scenario 1: Skill triggers for technical personal homepage
 

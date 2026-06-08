@@ -1,17 +1,16 @@
-# Reference Products and Source Reuse Notes
+# Reference Products and Original Design Notes
 
-本文件记录 personal-homepage-skill 的参考产品、可借鉴点、源码复用边界和落地方式。
+本文件记录 personal-homepage-skill 的参考产品、可借鉴点、原创整合方式和授权边界。
 
 ## 1. 总原则
 
-用户允许参考和复制开源项目源码，但开发时必须遵守许可证和授权边界。
+本 Skill 是多来源参考后的原创整合：参考对象包括公开产品、作品集模板、设计网站、用户提供的视觉规格和已验证的个人主页案例。参考的目标是抽象信息架构、视觉节奏、交互模式和质量标准，而不是把某一个 Skill 或项目作为基础模板。
 
 ### 可以做
 
-- 复制 MIT / Apache / BSD 等宽松许可证下的源码片段。
-- 改写开源项目中的文件组织、CSS 动效、模板结构。
-- 学习公开可见产品的设计方法和交互模式。
-- 在文档中记录来源、许可证和改动说明。
+- 学习公开可见产品的设计方法、信息架构和交互模式。
+- 将多个来源的高层模式抽象为原创的风格预设、组件规则和审查标准。
+- 在文档中记录参考来源、可借鉴点、授权边界和原创落地方式。
 
 ### 不可以做
 
@@ -159,8 +158,8 @@ https://github.com/0xPrateek/Portfolio-Template
 
 - 当用户提供这些模板或类似 GitHub portfolio template 时，优先完全参照其信息架构、视觉节奏、组件组织和交互动效，再替换成用户内容。
 - 不要先让用户从 3 个自创视觉方向中选择。
-- 如需复用源码，先核对许可证；只复用许可证允许的代码，并保留来源说明。
-- 如果不联网核对源码，先只把它们作为设计参考 URL，不声称已经分析过源码或许可证。
+- 默认只作为设计参考 URL 使用，学习其信息架构、视觉节奏、组件组织和交互动效。
+- 如果未来确需使用第三方开源代码，必须先核对许可证，并按许可证要求保留版权声明和出处。
 
 ## 7. Password manager soft product hero reference
 
@@ -263,23 +262,25 @@ https://passer-by.com/
 - 不复制 passer-by.com 的源码、图片、头像、logo、项目数据或文案。
 - 如果需要类似头像，应使用用户自有照片、授权插画、AI 生成并确认可用的形象，或抽象身份符号。
 
-## 11. 推荐源码复用清单
+## 11. 推荐参考来源清单
 
-如果后续开发模板源码，可以优先复用或改写：
+后续扩展模板时，可以优先参考这些来源的高层设计模式：
 
-| 来源 | 可复用内容 | 注意事项 |
+| 来源 | 可借鉴内容 | 注意事项 |
 | --- | --- | --- |
-| beautiful-html-templates | HTML 视觉模板思路 | 遵守许可证，保留出处 |
-| claude-design-skill | Artifact 输出规范 | 仅复用规则结构，不照搬项目无关内容 |
+| beautiful-html-templates | HTML 视觉表达、杂志风和作品集风思路 | 只抽象设计模式；如使用代码需先核对许可证 |
+| claude-design-skill | Artifact 输出规范、设计说明结构 | 仅学习规则组织方式，不照搬项目无关内容 |
 
-## 12. 复制源码时的文件头建议
+## 12. 第三方授权记录建议
+
+如果未来确实使用了第三方开源代码或素材，记录格式建议如下：
 
 ```text
-This file includes adapted ideas or source snippets from: [project name]
+Reference: [project name]
 Source: [URL]
 License: [license]
-Adapted for: personal-homepage-skill
-Changes: [brief summary]
+Used for: [high-level design reference / licensed code / licensed asset]
+Notes: [brief summary]
 ```
 
 ## 13. 当前文档包的处理方式

@@ -149,5 +149,5 @@ Use short, clear titles:
 Add clean developer homepage preset
 Strengthen reference-first workflow
 Add art portfolio example prompts
-Improve source reuse boundaries
+Improve reference and license boundaries
 ```

@@ -49,7 +49,7 @@ A personal homepage is often a first impression. A weak page can make strong wor
 | KR3 | The template library includes at least 10 distinct visual presets with best-fit users, hero patterns, motion, and risks |
 | KR4 | The Skill documents reference-first behavior when users provide templates, prompts, screenshots, or reference sites |
 | KR5 | The package includes example prompts that cover engineers, creators, designers, students, founders, and artists |
-| KR6 | The package includes test scenarios for trigger behavior, reference following, placeholders, accessibility, and source reuse |
+| KR6 | The package includes test scenarios for trigger behavior, reference following, placeholders, accessibility, and reference boundaries |
 | KR7 | The package includes an open-source checklist and contribution guide before GitHub release |
 
 ## 5. Market Segments

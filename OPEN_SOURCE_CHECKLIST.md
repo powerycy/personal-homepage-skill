@@ -36,7 +36,7 @@ Use this checklist before publishing `personal-homepage-skill` to GitHub.
 
 - [ ] PRD.md explains internal product goal and target users.
 - [ ] OPEN_SOURCE_PRD.md explains GitHub release goal and value.
-- [ ] USER_STORIES.md covers discovery, style selection, content quality, code generation, review, and source reuse.
+- [ ] USER_STORIES.md covers discovery, style selection, content quality, code generation, review, and reference boundaries.
 - [ ] TEST_SCENARIOS.md covers trigger behavior, reference-first behavior, placeholders, React output, HTML output, accessibility, anti-slop, and license boundaries.
 - [ ] TASK_BREAKDOWN.md explains next development phases.
 - [ ] TECHNICAL_ROUTE.md explains default React, HTML, 3D, and review routes.
