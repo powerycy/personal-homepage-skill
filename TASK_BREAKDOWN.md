@@ -132,7 +132,7 @@ Acceptance:
 
 ### Task 10: Add reference-first visual routing workflow
 
-Borrow the idea from frontend-slides: show concrete options, not abstract style labels, but only when the user has not already provided a concrete reference.
+Show concrete visual directions, not abstract style labels, but only when the user has not already provided a concrete reference.
 
 Acceptance:
 

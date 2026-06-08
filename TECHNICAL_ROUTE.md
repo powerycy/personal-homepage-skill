@@ -118,36 +118,7 @@ vanilla JavaScript
 - 在 [SKILL.md](SKILL.md) 中定义触发条件与默认流程。
 - 在 [DESIGN_REVIEW.md](DESIGN_REVIEW.md) 中加入代码和视觉审查。
 
-### 3.2 frontend-slides
-
-本地已有参考结构：
-
-```text
-SKILL.md
-STYLE_PRESETS.md
-animation-patterns.md
-html-template.md
-viewport-base.css
-bold-template-pack/
-```
-
-借鉴点：
-
-- “Show, don't tell”：仅在用户没有具体参考时，先给视觉方向，而不是让用户抽象描述喜好。
-- “Reference first”：当用户提供模板、参考站点、截图描述、长 prompt 或 GitHub portfolio template 时，先严格迁移参考的信息架构、视觉节奏、组件组织、字体气质和动效模型。
-- “反 AI slop”：禁止通用紫色渐变、模板化布局、无上下文设计。
-- 风格库拆文件管理。
-- 动效模式单独管理。
-- HTML 单文件模板路线。
-- 渐进式读取：先读索引，再按需读完整设计。
-
-落地方式：
-
-- 本 Skill 使用 [STYLE_PRESETS.md](STYLE_PRESETS.md) 和 [MOTION_PATTERNS.md](MOTION_PATTERNS.md)。
-- 视觉方向预览改成个人主页方向，而不是 slide 预览，并且只在方向不明确时出现。
-- 不继承 16:9 固定舞台，因为个人主页必须响应式滚动。
-
-### 3.3 MotionSites
+### 3.2 MotionSites
 
 借鉴点：
 
@@ -163,7 +134,7 @@ bold-template-pack/
 - 抽象为 MotionSites-inspired design patterns。
 - 不复制其模板、付费 prompt、代码、文案、图片或具体模板结构。
 
-### 3.4 beautiful-html-templates
+### 3.3 beautiful-html-templates
 
 借鉴点：
 
@@ -175,7 +146,7 @@ bold-template-pack/
 
 - 将其风格语言抽象进 Magazine Portfolio、Dark Editorial Portfolio、Cute Pixel Creator、Terminal Hacker 等预设。
 
-### 3.5 claude-design-skill
+### 3.4 claude-design-skill
 
 借鉴点：
 

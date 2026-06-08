@@ -42,59 +42,7 @@ https://github.com/anthropics/skills/blob/main/skills/frontend-design/SKILL.md
 - 在 [DESIGN_REVIEW.md](DESIGN_REVIEW.md) 中加入 production-grade 检查。
 - 在 [COMPONENT_PATTERNS.md](COMPONENT_PATTERNS.md) 中沉淀可复用前端结构。
 
-## 3. frontend-slides
-
-参考地址：
-
-```text
-https://github.com/zarazhangrui/frontend-slides
-```
-
-本地可参考文件：
-
-```text
-.claude/skills/frontend-slides/SKILL.md
-.claude/skills/frontend-slides/STYLE_PRESETS.md
-.claude/skills/frontend-slides/animation-patterns.md
-.claude/skills/frontend-slides/html-template.md
-.claude/skills/frontend-slides/viewport-base.css
-```
-
-### 可直接借鉴的结构
-
-```text
-SKILL.md
-STYLE_PRESETS.md
-MOTION_PATTERNS.md
-HOMEPAGE_SECTIONS.md
-COMPONENT_PATTERNS.md
-DESIGN_REVIEW.md
-README.md
-```
-
-### 可借鉴的思想
-
-- 视觉发现阶段要“show, don't tell”，但只在用户没有提供具体参考时使用。
-- 方向不明确时给 2-3 个真实首页首屏预览方向，而不是抽象问用户喜欢什么风格；有模板、参考站点、截图描述、长 prompt 或 GitHub portfolio template 时，先严格跟随参考。
-- 建立风格库和动效库。
-- 视觉预览必须像真实成品，不把 A/B/C、优点/风险、workflow note、模板名放进画面里。
-- 强化字体、色彩、布局、背景、动效编排的质量要求，避免默认字体、安全渐变、section 堆叠和随机粒子。
-- 明确禁止 AI slop。
-- 单文件 HTML 输出要自包含。
-- 复杂模板可先读索引，再按需读完整设计，减少上下文浪费。
-
-### 需要改造的点
-
-frontend-slides 是 16:9 固定舞台演示文稿；personal-homepage-skill 是响应式网页。
-
-因此：
-
-- 不使用固定 1920×1080 舞台。
-- 不使用 slide 切换逻辑。
-- 保留视觉风格库、动效模式、反模板规则、单文件 HTML 思路。
-- 首页必须支持自然滚动、移动端重排和 SEO 语义结构。
-
-## 4. MotionSites
+## 3. MotionSites
 
 参考地址：
 
@@ -138,7 +86,7 @@ dynamic background layers
 - 不声称使用 MotionSites 官方模板。
 - 只学习公开可见的设计方向。
 
-## 5. beautiful-html-templates
+## 4. beautiful-html-templates
 
 参考地址：
 
@@ -167,7 +115,7 @@ Cute Pixel Creator
 Spatial Project Gallery
 ```
 
-## 6. claude-design-skill
+## 5. claude-design-skill
 
 参考地址：
 
@@ -198,7 +146,7 @@ https://github.com/jiji262/claude-design-skill
 设计审查总结
 ```
 
-## 7. Personal portfolio GitHub templates
+## 6. Personal portfolio GitHub templates
 
 用户明确认可以下两个 GitHub 个人主页模板可作为后续模板参考：
 
@@ -214,7 +162,7 @@ https://github.com/0xPrateek/Portfolio-Template
 - 如需复用源码，先核对许可证；只复用许可证允许的代码，并保留来源说明。
 - 如果不联网核对源码，先只把它们作为设计参考 URL，不声称已经分析过源码或许可证。
 
-## 8. Password manager soft product hero reference
+## 7. Password manager soft product hero reference
 
 用户明确认可 password manager landing page hero 的视觉风格可作为后续模板库参考。
 
@@ -236,7 +184,7 @@ https://github.com/0xPrateek/Portfolio-Template
 - 不声称来源许可证；如果后续复用第三方源码或素材，仍需单独核对授权。
 - 背景视频 URL 仅在用户明确提供或允许时使用，不要为用户编造外部视频资源。
 
-## 9. Google Arts & Culture art portfolio reference
+## 8. Google Arts & Culture art portfolio reference
 
 用户明确提出 Google Arts & Culture 可作为艺术、美术、摄影个人主页模板参考。
 
@@ -264,7 +212,7 @@ https://artsandculture.google.com/
 - 不复制 Google Arts & Culture 的源码、图片、艺术品素材、文案、馆藏数据或具体页面结构。
 - 如果后续使用任何艺术图片，必须使用用户提供素材或已确认授权的公开素材。
 
-## 10. TOONHUB character figurine carousel reference
+## 9. TOONHUB character figurine carousel reference
 
 用户明确认可 TOONHUB character-figurine carousel hero 可作为后续模板库参考。
 
@@ -286,7 +234,7 @@ https://artsandculture.google.com/
 - 不声称这些图片或 Figma 资源有可复用许可证；如果复用第三方素材，必须单独核对授权。
 - 该模式主要适合 playful / collectible / creator identity，不默认用于严肃求职简历页。
 
-## 11. Passer-by developer homepage reference
+## 10. Passer-by developer homepage reference
 
 用户明确提出 passer-by.com 的排版可学习，用作清爽个人开发者主页参考。
 
@@ -315,20 +263,16 @@ https://passer-by.com/
 - 不复制 passer-by.com 的源码、图片、头像、logo、项目数据或文案。
 - 如果需要类似头像，应使用用户自有照片、授权插画、AI 生成并确认可用的形象，或抽象身份符号。
 
-## 12. 推荐源码复用清单
+## 11. 推荐源码复用清单
 
 如果后续开发模板源码，可以优先复用或改写：
 
 | 来源 | 可复用内容 | 注意事项 |
 | --- | --- | --- |
-| frontend-slides/animation-patterns.md | CSS reveal、gradient mesh、grid、3D tilt 思路 | 需改成主页滚动触发和响应式 |
-| frontend-slides/STYLE_PRESETS.md | 风格库组织格式 | 需改成个人主页身份匹配 |
-| frontend-slides/html-template.md | 单文件 HTML 组织方式 | 去掉 slide controller，改成 homepage sections |
-| frontend-slides/bold-template-pack | preview/design 分离思想 | 不要全量读模板，按需读取 |
 | beautiful-html-templates | HTML 视觉模板思路 | 遵守许可证，保留出处 |
 | claude-design-skill | Artifact 输出规范 | 仅复用规则结构，不照搬项目无关内容 |
 
-## 13. 复制源码时的文件头建议
+## 12. 复制源码时的文件头建议
 
 ```text
 This file includes adapted ideas or source snippets from: [project name]
@@ -338,6 +282,6 @@ Adapted for: personal-homepage-skill
 Changes: [brief summary]
 ```
 
-## 14. 当前文档包的处理方式
+## 13. 当前文档包的处理方式
 
-本目录第一版主要是原创规划文档和 Skill 指令，吸收了用户给出的需求和本地 frontend-slides 的结构思想。未直接复制 MotionSites 的任何付费或专有内容。
+本目录第一版主要是原创规划文档和 Skill 指令，吸收了用户给出的需求。未直接复制 MotionSites 的任何付费或专有内容。
