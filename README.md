@@ -1,8 +1,8 @@
 # personal-homepage-skill
 
-一个用于生成高质量个人主页的 AI Skill。
+一个用于生成高质量个人主页与 HTML 演示文稿的 AI Skill。
 
-它不是普通的“主页生成器”，而是一套面向 AI Coding Agent 的个人主页质量控制工作流：帮助 Agent 生成个人品牌主页、作品集、简历主页、创作者主页、开发者主页、设计师主页、艺术 / 摄影作品主页，以及以个人项目为核心的展示页。
+它不是普通的“主页生成器”，而是一套面向 AI Coding Agent 的个人展示质量控制工作流：帮助 Agent 生成个人品牌主页、作品集、简历主页、创作者主页、开发者主页、设计师主页、艺术 / 摄影作品主页、HTML PPT，以及以个人项目为核心的展示页。
 
 > 如果这个项目帮助你生成了更好的个人主页、作品集、创作者主页或 HTML 演示文稿，欢迎点一个 ⭐ Star。
 
@@ -18,9 +18,9 @@
 - 项目卡片没有问题、角色、功能、结果
 - 编造虚假指标和虚假评价
 - 视觉参考被忽略
-- 页面像 PPT 一屏一屏堆起来，不像真实网页
+- 页面缺少统一的视觉系统和内容层次
 
-`personal-homepage-skill` 的目标是让 Agent 在生成个人主页时遵守更严格的规则：先理解人，再跟随参考，再组织信息架构，最后做视觉和内容质量检查。
+`personal-homepage-skill` 的目标是让 Agent 在生成个人主页或 HTML 演示文稿时遵守更严格的规则：先理解人和内容目标，再跟随参考，再组织信息架构，最后做视觉和内容质量检查。
 
 ## 核心原则
 
@@ -58,14 +58,9 @@
 4. 为什么访问者应该信任？
 5. 访问者下一步应该点击哪里？
 
-### 4. 页面必须像真实网页，不像 PPT 拼接
+### 4. 输出形式要匹配用户目标
 
-Skill 会检查：
-
-- 没有硬背景断层
-- 没有一屏一屏的 PPT 式断点
-- 没有每个 section 都换一块无关背景
-- 有统一的页面背景、纹理、动效和视觉语法
+Skill 同时支持连续网页和 HTML 演示文稿。Agent 需要先判断用户要的是个人主页、作品集页面，还是 16:9 演示文稿，再选择对应的信息密度、版式节奏、交互方式和质量检查标准。
 
 ## 内置模板预览
 
@@ -97,32 +92,6 @@ Skill 会检查：
 demo/template-gallery.html
 ```
 
-## 重点模板方向
-
-### Cinematic Scroll Personal Brand
-
-适合 AI 工程师、独立开发者、Founder、高级个人品牌主页。
-
-特点：暗黑电影感、固定视频背景、滚动驱动叙事、稀疏排版、Manrope + JetBrains Mono、玻璃质感 footer。
-
-### Clean Developer Homepage
-
-适合前端开发者、开源作者、技术博客作者。
-
-特点：浅蓝白连续网页、简洁导航、头像 / 手绘形象、地点标签、About、GitHub CTA、项目卡片。该方向学习 passer-by.com 的高层排版节奏，但不复制源码、头像、logo、文案或项目数据。
-
-### TOONHUB Figurine Carousel
-
-适合潮玩 IP、3D 角色、年轻创作者、强视觉产品入口。
-
-特点：Anton 大标题、`3D SHAPE` ghost text、手办角色轮播、强色彩背景切换、650ms 导航锁。
-
-### Art Museum Portfolio
-
-适合艺术、美术、摄影、策展式个人主页。
-
-特点：美术馆纸感背景、策展式作品墙、艺术家 / 媒介 / 地点 / 主题分类、搜索和故事入口。该方向只学习 Google Arts & Culture 的高层体验模式，不复制其作品、图片、文案、数据或页面结构。
-
 ## 文件结构
 
 | 文件 | 作用 |
@@ -145,12 +114,14 @@ demo/template-gallery.html
 | [OPEN_SOURCE_CHECKLIST.md](OPEN_SOURCE_CHECKLIST.md) | 开源发布检查清单 |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | 贡献指南 |
 | [DEMO_SCRIPT.md](DEMO_SCRIPT.md) | 演示讲稿 |
-| [examples/PROMPTS.md](examples/PROMPTS.md) | 示例 Prompt |
+| [examples/PROMPTS.md](examples/PROMPTS.md) | 使用示例 |
 | [demo/personal-homepage-skill-overview.html](demo/personal-homepage-skill-overview.html) | 自包含 HTML 演示 Deck |
 | [demo/template-gallery.html](demo/template-gallery.html) | 自包含模板 Gallery |
 | [assets/template-previews/](assets/template-previews/) | 17 张模板预览图片 |
 
-## 示例 Prompt
+## 使用示例：可直接复制给 Agent
+
+这些示例是给 Claude Code / Ducc / 其他 Coding Agent 的输入文本，用来快速触发 Skill 的不同生成模式。它们不是必须使用的固定模板，只是帮助用户理解应该怎样描述身份、内容、参考风格和交付形式。
 
 ### AI 工程师个人主页
 
@@ -173,6 +144,12 @@ demo/template-gallery.html
 帮我做一个前端开发者个人主页，参考 passer-by.com 那种清爽排版：浅蓝白背景、简洁导航、头像/手绘形象、地点标签、About、GitHub CTA、项目卡片。
 ```
 
+### HTML PPT / 项目演示文稿
+
+```text
+把我的项目介绍做成 16:9 HTML PPT，适合全屏演示。需要封面、问题背景、方案介绍、核心功能、案例展示、总结页，支持键盘翻页。
+```
+
 更多示例见：[examples/PROMPTS.md](examples/PROMPTS.md)
 
 ## 如何使用
@@ -183,9 +160,20 @@ demo/template-gallery.html
 .claude/skills/personal-homepage-skill/
 ```
 
-然后让 Agent 生成或优化个人主页即可。
+然后让 Agent 生成或优化个人主页、作品集页面或 HTML 演示文稿即可。
 
-这个仓库是 documentation-first Skill，不需要 `npm install`。
+如果只把它作为 Skill 使用，不需要 `npm install`。如果要运行可交互模板 Gallery 或校验脚本，可以使用仓库内的 `package.json`。
+
+## 本地运行与校验
+
+```bash
+npm install
+npm run dev
+npm run check
+```
+
+- `npm run dev`：打开可交互模板 Gallery。
+- `npm run check`：运行文档结构、模板注册表和构建检查。
 
 ## 演示材料
 
@@ -238,23 +226,24 @@ Deck 快捷键：
 - 数据结构
 - 设计检查清单
 - PM 文档
-- 示例 Prompt
+- 使用示例
 - 演示 Deck
 - 模板 Gallery
 - 模板预览图片
 
-### V2：可运行模板
+### V2：可运行模板与 Gallery
 
 - React + Tailwind 示例
 - 单文件 HTML 示例
-- Next.js App Router 示例
+- 16:9 HTML 演示文稿示例
+- 可交互模板 Gallery
 
 ### V3：自动化校验
 
-- Markdown 链接检查
-- 生成主页质量检查
-- 截图校验辅助工具
-- 移动端和 reduced-motion 检查
+- 模板注册表检查
+- Skill 文档结构检查
+- 静态视觉规则检查
+- 后续可继续补充截图校验、移动端和 reduced-motion 检查
 
 ## 贡献
 
