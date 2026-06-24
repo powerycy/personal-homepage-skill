@@ -130,9 +130,6 @@ npm run check
 demo/template-gallery.html
 ```
 
-<details>
-<summary>查看所有模板预览</summary>
-
 | 模板 | 预览 |
 | --- | --- |
 | Cinematic Scroll Personal Brand | ![Cinematic Scroll Personal Brand](assets/template-previews/cinematic-scroll-personal-brand.svg) |
@@ -153,32 +150,11 @@ demo/template-gallery.html
 | Business Personal Brand | ![Business Personal Brand](assets/template-previews/business-personal-brand.svg) |
 | Case Study Portfolio | ![Case Study Portfolio](assets/template-previews/case-study-portfolio.svg) |
 
-</details>
+## Demo links
 
-## 演示材料
-
-打开演示 Deck：
-
-```text
-demo/personal-homepage-skill-overview.html
-```
-
-打开模板 Gallery：
-
-```text
-demo/template-gallery.html
-```
-
-Deck 用于讲解 Skill 的目标、工作流和质量规则。Gallery 用于浏览所有内置模板方向。
-
-Deck 快捷键：
-
-- 右方向键 / Space：下一页
-- 左方向键：上一页
-- Home：第一页
-- End：最后一页
-
-演示讲稿：[DEMO_SCRIPT.md](DEMO_SCRIPT.md)
+- [Overview HTML deck](demo/personal-homepage-skill-overview.html) — explains the Skill workflow and quality rules.
+- [Template gallery](demo/template-gallery.html) — browse built-in visual directions.
+- [Demo script](DEMO_SCRIPT.md) — presentation notes for introducing the project.
 
 ## 文件结构
 
@@ -220,6 +196,9 @@ Deck 快捷键：
 
 ## 版权和素材边界
 
+<details>
+<summary>查看版权和素材使用边界</summary>
+
 这个 Skill 会学习公开设计模式和用户授权参考，但不会授予复制第三方资产的权限。
 
 规则：
@@ -231,6 +210,8 @@ Deck 快捷键：
 - 如果复用开源代码，必须检查许可证并保留署名。
 
 更多说明见：[REFERENCE_PRODUCTS.md](REFERENCE_PRODUCTS.md)
+
+</details>
 
 ## 路线图
 
