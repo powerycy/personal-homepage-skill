@@ -1,21 +1,70 @@
-MIT License
+Personal Homepage Skill Non-Commercial License
 
 Copyright (c) 2026 powerycy
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this project and associated documentation files, templates, prompts, examples,
+source code, visual presets, demo materials, and assets (collectively, the
+"Project"), to use, copy, modify, and share the Project for personal,
+educational, research, portfolio, evaluation, and other non-commercial purposes
+only, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Non-Commercial Use Only
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+The Project may not be used for any commercial purpose without prior written
+permission from the copyright holder.
+
+Commercial use includes, but is not limited to:
+
+- selling the Project, its templates, prompts, assets, examples, or derivatives
+  as a product or service;
+- using the Project or its templates in paid client work;
+- integrating the Project into a commercial SaaS, software product, platform,
+  marketplace, agency workflow, or paid service;
+- redistributing, repackaging, sublicensing, or reselling the Project or
+  derivative templates;
+- uploading the Project, templates, prompts, or assets to a paid template
+  marketplace or paid resource library;
+- using the Project to generate commercial deliverables at scale;
+- using the Project, its templates, prompts, documentation, examples, source
+  code, visual presets, demo materials, or assets to train, evaluate, benchmark,
+  fine-tune, distill, or improve commercial AI models, agents, products, or
+  services.
+
+2. Attribution
+
+If you share, modify, or publish non-commercial work based on the Project, you
+must provide reasonable attribution to the original project and author.
+
+Reasonable attribution may include a link to the original repository or a note
+such as:
+
+  Based on Personal Homepage Skill by powerycy.
+
+3. No Trademark Rights
+
+This license does not grant permission to use the names, logos, branding, or
+trademarks of the copyright holder except as required for reasonable attribution.
+
+4. Third-Party Materials
+
+The Project may reference third-party tools, libraries, fonts, frameworks, or
+services. Those materials remain subject to their own licenses and terms. You
+are responsible for complying with all applicable third-party licenses.
+
+5. Commercial Permission
+
+For commercial licensing, paid client use, commercial product integration,
+marketplace distribution, commercial AI training/evaluation, or any other
+commercial use, you must obtain explicit written permission from the copyright
+holder before use.
+
+6. No Warranty
+
+THE PROJECT IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM,
+OUT OF, OR IN CONNECTION WITH THE PROJECT OR THE USE OR OTHER DEALINGS IN THE
+PROJECT.

@@ -1,6 +1,6 @@
 # Design Review Checklist
 
-Run this checklist before saying a generated homepage is complete.
+Run this checklist before saying a generated homepage or PPT-style HTML presentation is complete.
 
 ## 1. Reference Fidelity
 
@@ -17,7 +17,23 @@ Use this section when the user provided a concrete template, reference site, scr
 - [ ] Is the person visible in the Hero through name, role, identity, or visual symbol?
 - [ ] Does the page answer who they are, what they do, why visitors should trust them, and what to do next?
 
-## 3. Hero Memory Point
+## 3. Chinese typography
+
+- [ ] Chinese typography uses a CJK-capable font stack.
+- [ ] Chinese body copy is not rendered in condensed Latin display fonts.
+- [ ] Long Chinese paragraphs stay at readable body size with controlled width and line height.
+- [ ] Title line breaks look intentional.
+- [ ] Punctuation and spacing are natural for Chinese or mixed Chinese/English copy.
+
+## 4. Hero section
+
+- [ ] The Hero section has one clear focal point.
+- [ ] Left and right columns or visual groups have balanced weight.
+- [ ] Large titles do not collide with images or controls.
+- [ ] Bottom edge has enough breathing room.
+- [ ] CTA and navigation are visible and not crowded.
+
+## 5. Hero Memory Point
 
 - [ ] Does the Hero have a distinctive composition?
 - [ ] Is it more than plain left-text-right-image?
@@ -87,7 +103,25 @@ Failure signals — all should be absent. Reject or revise if any signal is pres
 - [ ] Text remains readable over 3D/background.
 - [ ] Mobile experience is not broken.
 
-## 10. Accessibility
+## 10. Presentation Mode
+
+- [ ] Presentation Mode uses a fixed 1920×1080 16:9 stage.
+- [ ] Slide content does not reflow on phone or desktop.
+- [ ] Text, images, and controls remain inside the safe area.
+- [ ] Dense content is split into more slides instead of shrinking unreadably.
+- [ ] Keyboard navigation works.
+- [ ] Fullscreen behavior is available when requested.
+
+## 11. Images
+
+- [ ] Images are verified and accessible.
+- [ ] No broken images are present.
+- [ ] No important image is too small to understand.
+- [ ] Meaningful images have alt text.
+- [ ] Missing assets use polished placeholders.
+- [ ] Local assets use relative paths that survive moving/deploying the folder.
+
+## 12. Accessibility
 
 - [ ] Semantic sections are used.
 - [ ] Buttons and links have focus states.
@@ -113,6 +147,14 @@ Failure signals — all should be absent. Reject or revise if any signal is pres
 - [ ] No unreachable external assets.
 - [ ] No hard-coded personal copy deep in components.
 - [ ] Deployment instructions are included.
+
+## Verification record
+
+- [ ] Build/check commands were run when available.
+- [ ] Desktop width was inspected for Homepage Mode.
+- [ ] Mobile width was inspected for Homepage Mode.
+- [ ] 1920×1080 slide stage was inspected for Presentation Mode.
+- [ ] Any skipped check is named honestly in the delivery note.
 
 ## Final Decision
 

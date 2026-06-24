@@ -4,6 +4,10 @@
 
 它不是普通的“主页生成器”，而是一套面向 AI Coding Agent 的个人主页质量控制工作流：帮助 Agent 生成个人品牌主页、作品集、简历主页、创作者主页、开发者主页、设计师主页、艺术 / 摄影作品主页，以及以个人项目为核心的展示页。
 
+> 如果这个项目帮助你生成了更好的个人主页、作品集、创作者主页或 HTML 演示文稿，欢迎点一个 ⭐ Star。
+
+![Personal Homepage Skill 项目介绍](assets/project-intro.gif)
+
 ## 解决什么问题？
 
 很多 AI 生成的个人主页都会变成同一种廉价 SaaS 官网：
@@ -265,4 +269,4 @@ Deck 快捷键：
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+See [LICENSE](LICENSE) for usage terms.

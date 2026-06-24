@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>16:9 HTML Presentation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Serif+SC:wght@600;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --stage-w: 1920;
+      --stage-h: 1080;
+      --bg: #0b0b0f;
+      --ink: #f8f4ec;
+      --muted: rgba(248,244,236,.68);
+      --accent: #ff6a3d;
+      --font-body: 'Noto Sans SC', 'Microsoft YaHei', 'PingFang SC', sans-serif;
+      --font-serif: 'Noto Serif SC', 'Songti SC', serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+    }
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #050507; color: var(--ink); font-family: var(--font-body); }
+    .viewport { position: fixed; inset: 0; display: grid; place-items: center; background: radial-gradient(circle at 80% 10%, rgba(255,106,61,.22), transparent 30%), #050507; }
+    .stage { position: relative; width: calc(var(--stage-w) * 1px); height: calc(var(--stage-h) * 1px); transform: scale(var(--scale, 1)); transform-origin: center; overflow: hidden; background: var(--bg); box-shadow: 0 32px 120px rgba(0,0,0,.42); }
+    .slide { position: absolute; inset: 0; padding: 92px 104px; visibility: hidden; opacity: 0; pointer-events: none; transition: opacity .45s ease; background: var(--bg); }
+    .slide.active { visibility: visible; opacity: 1; pointer-events: auto; }
+    .kicker { font-family: var(--font-mono); font-size: 24px; letter-spacing: .18em; color: var(--accent); text-transform: uppercase; }
+    h1 { margin: 34px 0 0; max-width: 1280px; font-size: 128px; line-height: .95; letter-spacing: -.07em; text-wrap: balance; }
+    h2 { margin: 0; max-width: 1180px; font-size: 88px; line-height: 1.02; letter-spacing: -.055em; text-wrap: balance; }
+    p { margin: 0; color: var(--muted); font-size: 34px; line-height: 1.65; }
+    .lead { margin-top: 42px; max-width: 980px; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 60px; }
+    .card { min-height: 250px; border: 1px solid rgba(255,255,255,.13); border-radius: 34px; padding: 34px; background: rgba(255,255,255,.07); }
+    .card h3 { margin: 0 0 18px; font-size: 36px; }
+    .card p { font-size: 25px; line-height: 1.6; }
+    .counter { position: fixed; right: 28px; bottom: 24px; z-index: 10; font-family: var(--font-mono); color: rgba(255,255,255,.6); font-size: 13px; }
+    .hint { position: fixed; left: 28px; bottom: 24px; z-index: 10; color: rgba(255,255,255,.45); font-size: 13px; }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; } }
+  </style>
+</head>
+<body>
+  <div class="viewport">
+    <main class="stage" id="stage" aria-live="polite">
+      <section class="slide active" aria-label="Slide 1">
+        <div class="kicker">Project / 2026</div>
+        <h1>把项目讲成一套清楚的 16:9 演示</h1>
+        <p class="lead">这里放 1-2 句核心说明。长段中文不要做成巨大标题；需要更多信息时拆成下一页。</p>
+      </section>
+      <section class="slide" aria-label="Slide 2">
+        <h2>一页只承担一个主要观点</h2>
+        <div class="grid">
+          <article class="card"><h3>问题</h3><p>用短句说明背景和痛点。</p></article>
+          <article class="card"><h3>方案</h3><p>说明你的关键设计或实现。</p></article>
+          <article class="card"><h3>结果</h3><p>展示真实结果；没有数据就写待补充。</p></article>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div class="hint">← / → / Space 翻页，F 全屏</div>
+  <div class="counter" id="counter">01 / 02</div>
+  <script>
+    const stage = document.getElementById('stage');
+    const slides = [...document.querySelectorAll('.slide')];
+    const counter = document.getElementById('counter');
+    let index = 0;
+
+    function resize() {
+      const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+      stage.style.setProperty('--scale', String(scale));
+    }
+
+    function go(next) {
+      index = Math.max(0, Math.min(slides.length - 1, next));
+      slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
+      counter.textContent = `${String(index + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+      location.hash = `slide-${index + 1}`;
+    }
+
+    window.addEventListener('resize', resize);
+    document.addEventListener('keydown', (event) => {
+      if (['ArrowRight', 'ArrowDown', ' ', 'PageDown'].includes(event.key)) { event.preventDefault(); go(index + 1); }
+      if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(event.key)) { event.preventDefault(); go(index - 1); }
+      if (event.key === 'Home') go(0);
+      if (event.key === 'End') go(slides.length - 1);
+      if (event.key.toLowerCase() === 'f' && document.fullscreenEnabled) {
+        document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+      }
+    });
+
+    const match = location.hash.match(/slide-(\d+)/);
+    resize();
+    if (match) go(Number(match[1]) - 1);
+  </script>
+</body>
+</html>

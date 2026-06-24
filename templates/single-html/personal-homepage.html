@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>个人主页｜待补充</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Serif+SC:wght@500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0b0f;
+      --panel: rgba(255,255,255,0.08);
+      --text: #f8f4ec;
+      --muted: rgba(248,244,236,0.68);
+      --accent: #ff6a3d;
+      --font-body: 'Noto Sans SC', 'Microsoft YaHei', 'PingFang SC', sans-serif;
+      --font-serif: 'Noto Serif SC', 'Songti SC', serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; min-width: 320px; font-family: var(--font-body); color: var(--text); background: radial-gradient(circle at 80% 10%, rgba(255,106,61,.26), transparent 30%), var(--bg); }
+    a { color: inherit; }
+    .page { width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: 36px 0 64px; }
+    .nav { display: flex; justify-content: space-between; align-items: center; gap: 18px; color: var(--muted); }
+    .brand { font-weight: 900; color: var(--text); }
+    .links { display: flex; gap: 16px; flex-wrap: wrap; font-size: 14px; }
+    .hero { min-height: 76vh; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(280px, .8fr); align-items: center; gap: 48px; padding: 64px 0; }
+    .eyebrow { color: var(--accent); font-weight: 800; letter-spacing: .16em; text-transform: uppercase; font-size: 12px; }
+    h1 { margin: 18px 0 0; font-size: clamp(42px, 7vw, 92px); line-height: .98; letter-spacing: -.06em; text-wrap: balance; }
+    .lead { max-width: 680px; margin: 24px 0 0; color: var(--muted); font-size: clamp(17px, 2vw, 22px); line-height: 1.85; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+    .btn { border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 13px 18px; text-decoration: none; font-weight: 800; }
+    .btn.primary { background: var(--accent); color: #111; border-color: transparent; }
+    .portrait { min-height: 420px; border: 1px solid rgba(255,255,255,.12); border-radius: 32px; background: linear-gradient(145deg, rgba(255,255,255,.18), rgba(255,255,255,.04)); display: grid; place-items: center; color: var(--muted); text-align: center; padding: 28px; }
+    .section { padding: 56px 0; border-top: 1px solid rgba(255,255,255,.1); }
+    .section h2 { font-size: clamp(28px, 4vw, 52px); margin: 0 0 24px; line-height: 1.08; text-wrap: balance; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .card { border: 1px solid rgba(255,255,255,.1); border-radius: 24px; background: var(--panel); padding: 22px; min-height: 180px; }
+    .card p { color: var(--muted); line-height: 1.8; }
+    @media (max-width: 780px) { .hero, .grid { grid-template-columns: 1fr; } .hero { min-height: auto; gap: 28px; } .portrait { min-height: 260px; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="nav" aria-label="主导航">
+      <div class="brand">姓名待补充</div>
+      <div class="links"><a href="#projects">项目</a><a href="#skills">能力</a><a href="#contact">联系</a></div>
+    </nav>
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Role / 待补充</div>
+        <h1>把一句清楚的个人定位放在这里</h1>
+        <p class="lead">这里写 1-2 句可读的中文介绍。不要把长段正文做成巨大标题；如果内容很多，请拆到下方项目或关于区域。</p>
+        <div class="actions"><a class="btn primary" href="#projects">查看项目</a><a class="btn" href="#contact">联系我</a></div>
+      </div>
+      <div class="portrait" role="img" aria-label="个人头像或项目视觉占位">图片 / 作品 / 项目截图占位</div>
+    </section>
+    <section id="projects" class="section">
+      <h2>精选项目</h2>
+      <div class="grid">
+        <article class="card"><h3>项目名称</h3><p>问题、角色、功能、技术栈和结果待补充。</p></article>
+        <article class="card"><h3>项目名称</h3><p>问题、角色、功能、技术栈和结果待补充。</p></article>
+        <article class="card"><h3>项目名称</h3><p>问题、角色、功能、技术栈和结果待补充。</p></article>
+      </div>
+    </section>
+    <section id="skills" class="section"><h2>能力结构</h2><p class="lead">把技能按能力组展示，而不是堆满标签。</p></section>
+    <section id="contact" class="section"><h2>联系</h2><p class="lead">邮箱、社交主页或二维码待补充。</p></section>
+  </main>
+</body>
+</html>

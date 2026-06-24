@@ -1,0 +1,34 @@
+{
+  "name": "personal-homepage-skill",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "check": "npm run check:spec && npm run check:templates && npm run build",
+    "check:all": "npm run check:spec && npm run check:templates && npm run check:visual && npm run build",
+    "check:spec": "node scripts/check-spec.mjs",
+    "check:templates": "node scripts/check-templates.mjs",
+    "check:visual": "node scripts/check-visual.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "lucide-react": "^0.468.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.3",
+    "vite": "^5.4.21"
+  },
+  "license": "SEE LICENSE IN LICENSE"
+}

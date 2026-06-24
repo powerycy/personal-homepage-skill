@@ -1,0 +1,177 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@700;900&family=Cormorant+Garamond:wght@700&family=DM+Serif+Display&family=Fraunces:opsz,wght@9..144,800&family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&family=Manrope:wght@700&family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Serif+SC:wght@500;700;900&family=Space+Grotesk:wght@700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --gallery-bg: #0b0b0f;
+  --gallery-ink: #f8f4ec;
+  --museum-paper: #f7f3ea;
+  --muted: rgba(248, 244, 236, 0.68);
+  --font-body: 'Inter', 'Noto Sans SC', 'Microsoft YaHei', 'PingFang SC', sans-serif;
+  --font-cjk-sans: 'Noto Sans SC', 'Microsoft YaHei', 'PingFang SC', sans-serif;
+  --font-cjk-serif: 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
+  --font-display-condensed: 'Archivo', 'Anton', 'Noto Sans SC', sans-serif;
+  --font-display-editorial: 'Fraunces', 'Noto Serif SC', 'Cormorant Garamond', serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-family: var(--font-body);
+  color: var(--gallery-ink);
+  background: var(--gallery-bg);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(129, 92, 255, 0.22), transparent 32%),
+    radial-gradient(circle at 90% 10%, rgba(255, 184, 106, 0.14), transparent 30%),
+    linear-gradient(180deg, #0b0b0f 0%, #14131a 50%, #0b0b0f 100%);
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid rgba(248, 244, 236, 0.9);
+  outline-offset: 3px;
+}
+
+@layer utilities {
+  .font-cjk-sans { font-family: var(--font-cjk-sans); }
+  .font-cjk-serif { font-family: var(--font-cjk-serif); }
+  .font-display-condensed { font-family: var(--font-display-condensed); }
+  .font-display-editorial { font-family: var(--font-display-editorial); }
+  .font-mono { font-family: var(--font-mono); }
+}
+
+.balanced-title {
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+  word-break: auto-phrase;
+}
+
+.readable-copy {
+  font-family: var(--font-cjk-sans);
+  line-height: 1.85;
+  letter-spacing: 0.01em;
+  text-wrap: pretty;
+}
+
+.preview-title {
+  font-family: var(--font-cjk-sans);
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+.safe-bottom-space {
+  padding-bottom: 0.4rem;
+}
+
+.media-frame,
+.image-placeholder {
+  display: block;
+  overflow: hidden;
+  border-radius: 24px;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.04)),
+    rgba(255,255,255,0.08);
+}
+
+.media-frame > img,
+.media-frame > video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-shell {
+  position: relative;
+  min-height: 268px;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #101015;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 24px 60px rgba(0,0,0,0.24);
+}
+
+.template-card {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.055);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.24);
+  backdrop-filter: blur(18px);
+}
+
+.template-card:hover .preview-shell::after {
+  opacity: 0.18;
+}
+
+.preview-shell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,0.45), transparent 80%);
+  transform: translateX(-100%);
+  animation: preview-shine 4.8s ease-in-out infinite;
+  transition: opacity 0.25s ease;
+}
+
+.noise {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.16;
+  background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 18px 18px;
+  mix-blend-mode: overlay;
+}
+
+@keyframes preview-shine {
+  0%, 55% { transform: translateX(-100%); }
+  85%, 100% { transform: translateX(100%); }
+}
+
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 640px) {
+  .preview-shell {
+    min-height: 236px;
+    border-radius: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

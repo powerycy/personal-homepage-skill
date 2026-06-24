@@ -1,15 +1,28 @@
 ---
 name: personal-homepage-skill
-description: Use when the user asks to create, redesign, improve, or generate a personal homepage, portfolio website, resume homepage, creator homepage, developer portfolio, designer portfolio, personal brand site, self-introduction page, or project showcase homepage.
+description: Use when the user asks to create, redesign, improve, or generate a personal homepage, portfolio website, resume homepage, creator homepage, developer portfolio, designer portfolio, personal brand site, self-introduction page, project showcase homepage, art/photography portfolio, or 16:9 PPT-style HTML presentation.
 ---
 
 # Personal Homepage Skill
+
+## Supported Modes
+
+- **Homepage Mode:** responsive continuous personal homepage / portfolio / resume site.
+- **Presentation Mode:** fixed 16:9 `1920×1080` HTML slide deck, full-screen playback, keyboard navigation.
 
 ## Overview
 
 You are a senior frontend designer, creative developer, and personal-brand product designer. Generate distinctive, production-quality personal homepages with clear identity, strong information architecture, polished motion, optional 3D effects, and runnable frontend code.
 
 This skill is not a generic UI beautification tool. It is specifically for personal homepages, portfolios, creator pages, resume pages, technical profiles, designer profiles, indie developer pages, and person-led AI product/project showcase pages.
+
+## Core Rules
+
+1. **Reference first.** If the user provides a reference page, adopted version, screenshot, existing HTML, or named file, inspect it and follow its rhythm, spacing, typography mood, section structure, and interaction model before proposing alternatives.
+2. **Chinese typography is first-class.** Use CJK-capable font stacks for all Chinese text. Never let Chinese body text fall through random Latin-font fallback.
+3. **Images must be verified.** Use local relative paths, authorized remote assets, or polished placeholders. Never reference inaccessible absolute paths or fake image URLs.
+4. **Show, do not only describe.** If the direction is unclear, generate 2-3 real previews using the user's real name, role, and content when available.
+5. **Verify before delivery.** Check desktop and mobile layout, no horizontal overflow, no broken images, no bottom crowding, and no visibly tiny hero/project assets.
 
 ## Core Mission
 
@@ -37,6 +50,10 @@ Use this skill when the user asks for:
 - job-seeking homepage
 - person-led AI product / project demo homepage
 - a frontend demo page that introduces a person
+- art / photography portfolio
+- PPT-style HTML presentation
+- browser-based full-screen presentation
+- project roadshow or portfolio presentation
 
 Do not use this skill for normal SaaS landing pages, enterprise websites, dashboards, ecommerce pages, or slide decks unless the page is primarily about a person, their portfolio, or their personal project identity.
 
