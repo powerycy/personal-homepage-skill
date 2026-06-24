@@ -119,39 +119,6 @@ demo/template-gallery.html
 | [demo/template-gallery.html](demo/template-gallery.html) | 自包含模板 Gallery |
 | [assets/template-previews/](assets/template-previews/) | 17 张模板预览图片 |
 
-## 使用示例：可直接复制给 Agent
-
-这些示例是给 Claude Code / Ducc / 其他 Coding Agent 的输入文本，用来快速触发 Skill 的不同生成模式。它们不是必须使用的固定模板，只是帮助用户理解应该怎样描述身份、内容、参考风格和交付形式。
-
-### AI 工程师个人主页
-
-```text
-帮我生成一个个人主页。我是 AI 工程师，方向是 Agentic Search、Coding Agent 和 AI 产品实践。
-项目包括 Search Agent、SlidePage 和 BossHunter。
-页面要像高级数字名片，不要像 SaaS 官网。GitHub、小红书、公众号先用占位符。
-```
-
-### 严格跟随电影感参考
-
-```text
-严格按照这个视觉要求做个人主页：暗黑电影感、固定全屏视频背景、滚动驱动视频、Manrope + JetBrains Mono、稀疏排版、玻璃质感 footer。
-不要重新发明视觉风格。
-```
-
-### 清爽开发者主页
-
-```text
-帮我做一个前端开发者个人主页，参考 passer-by.com 那种清爽排版：浅蓝白背景、简洁导航、头像/手绘形象、地点标签、About、GitHub CTA、项目卡片。
-```
-
-### HTML PPT / 项目演示文稿
-
-```text
-把我的项目介绍做成 16:9 HTML PPT，适合全屏演示。需要封面、问题背景、方案介绍、核心功能、案例展示、总结页，支持键盘翻页。
-```
-
-更多示例见：[examples/PROMPTS.md](examples/PROMPTS.md)
-
 ## 如何使用
 
 把这个文件夹放到兼容的 skills 目录中，例如：
