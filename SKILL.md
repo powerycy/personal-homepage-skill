@@ -311,6 +311,29 @@ Backgrounds must support the person's identity and improve depth/readability. Us
 
 Before final delivery, check whether the page looks like a real deployable homepage: no overflow, no overlapping text, readable mobile hero, obvious CTA, working links/assets, and visual consistency across desktop and mobile.
 
+### HTML PPT / deck-like output QA
+
+When this skill is explicitly invoked to create a PPT-style HTML layout, slide deck demo, presentation page, or fixed-screen showcase, treat it as a deck-like deliverable even though the skill's primary domain is personal homepages. In that mode, the output must feel like a real HTML PPT, not a broken webpage or stacked homepage sections.
+
+Non-negotiable rules:
+
+- **Correct slide navigation:** Use one fixed 16:9 stage with stacked slides and true page-by-page switching. Do not make users scroll through a long page when they asked for an HTML PPT. Support Arrow keys, Space, PageUp/PageDown, Home/End, touch swipe, and an outside-stage page counter.
+- **One slide visible at a time:** Control visibility with active classes, opacity/visibility/pointer-events, or equivalent. Do not rely on `display: block` layout states that can be overridden by later flex/grid rules and reveal multiple slides.
+- **Typography must be calibrated, not blindly enlarged:** Compare against the reference/sample deck. Chinese titles usually need smaller visual size than Latin display text. If a template's Latin hero size is huge, adapt it for Chinese rather than forcing oversized fallback glyphs.
+- **Use the reference's font logic:** Preserve what type is used for headlines, body, labels, and numerals. If the reference uses distinctive numeral/display typography, make numbers a designed visual element instead of a small plain label.
+- **Reserve layout zones:** Title zones, content grids, screenshots, footer/chrome, and bottom color bars must have explicit safe space. Titles must not collide with cards. Bottom bars must not cover body text.
+- **Contrast is mandatory:** White/paper/light cards require dark text and/or visible borders. Dark/teal/blue/magenta cards require light text. Do not put low-contrast light text on light cards or pale accent text on pale backgrounds.
+- **No compression by illegibility:** If slide content does not fit, split into another slide, reduce item count, change the grid, or move screenshots/callouts. Do not solve it by shrinking text below comfortable reading size or allowing overlap.
+- **Rendered verification:** Check the actual rendered result slide-by-slide. DOM overflow checks are insufficient because visual overlap can happen without scroll overflow.
+
+Common failure cases to proactively prevent:
+
+- Page 2 style context cards where the big number/text lacks design hierarchy.
+- Page 6/8/10/11-type layouts where the title presses into the first row of color blocks.
+- Page 7-type dark layouts where body copy runs into bottom blocks or footer chrome.
+- Page 9-type layouts where a bottom callout bar covers screenshot captions or text.
+- Page 12-type layouts where paper/white cards have too little contrast against nearby text or the background.
+
 ## Anti-AI-Slop Rules
 
 Avoid:

@@ -10,6 +10,42 @@ Use this file for implementation-level component ideas. Components must serve pe
 - Use a Continuous Page Shell for multi-section homepages: define one page-level background system, connect sections with gradients, waves, masks, overlap, sticky media, or shared texture, and avoid hard section seam / background block breakpoints unless the reference intentionally uses them.
 - If a portrait, logo, QR code, or project screenshot is weak or missing, use a wordmark, nickname mark, abstract identity symbol, modal QR placeholder, or high-quality mockup placeholder instead of forcing a poor asset into the hero.
 - Keep social/platform CTAs visually obvious and easy to click on mobile.
+- For HTML PPT / deck-like outputs, use a Slide Stage Shell rather than the Continuous Page Shell: fixed 16:9 stage, stacked slides, one active slide, outside-stage controls, and page-by-page navigation.
+
+## 0A. Slide Stage Shell for HTML PPT Outputs
+
+Use only when the user explicitly asks this homepage skill for a PPT-style HTML file, deck demo, slide-based personal pitch, or fixed-screen showcase.
+
+Core components:
+
+```text
+DeckViewport
+DeckStage
+Slide
+SlideCounter
+SlideController
+EditableTextLayer optional
+```
+
+Rules:
+
+- `DeckViewport` fills the browser window and hides overflow.
+- `DeckStage` is fixed 16:9, typically 1920×1080, and scales uniformly to fit the viewport.
+- Slides are absolutely stacked inside the stage. Exactly one slide is active/visible.
+- Slide switching uses classes such as `.active` / `.visible` with `visibility`, `opacity`, `pointer-events`, and `z-index`; avoid `display` toggling for visibility.
+- Navigation supports ArrowRight/ArrowDown/PageDown/Space/Enter for next, ArrowLeft/ArrowUp/PageUp for previous, Home and End for bounds.
+- Touch swipe and debounced mouse wheel can be supported, but never hijack text editing or focused inputs.
+- Keep the page counter and editing controls outside the stage so they do not collide with slide content.
+
+Layout rules:
+
+- Define title, content, media, footer, and bottom-bar zones per slide. Do not place content first and hope it fits.
+- Use template/reference typography roles. Numerals, labels, headings, and body text should each have a distinct role.
+- For Chinese content, reduce oversized Latin display scales and use readable CJK display/body fonts.
+- Use large numerals as visual anchors when the reference does so; do not reduce them to small labels.
+- Give every card enough padding and preserve 28px+ gaps between cards/blocks.
+- For bottom bars, reserve their vertical band before laying out cards above.
+- If any slide risks overlap, split it or redesign the grid instead of shrinking text into illegibility.
 
 ## 0. Cinematic Scroll Shell
 

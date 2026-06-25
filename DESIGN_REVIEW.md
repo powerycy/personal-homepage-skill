@@ -138,7 +138,24 @@ Failure signals — all should be absent. Reject or revise if any signal is pres
 - [ ] No horizontal overflow.
 - [ ] Touch interactions do not require hover.
 
-## 12. Code Quality
+## 12. HTML PPT / Deck-like Deliverable Review
+
+Use this section when the user asks this skill for a PPT-style HTML file, deck demo, presentation layout, fixed-screen portfolio pitch, or any slide-like output.
+
+- [ ] The output uses true page-by-page slide navigation instead of long-page scrolling.
+- [ ] Arrow keys, Space, PageUp/PageDown, Home/End, touch swipe, and page counter work.
+- [ ] Only one slide is visible at a time; slide visibility cannot be broken by flex/grid `display` rules.
+- [ ] The deck keeps a fixed 16:9 stage and scales as a whole.
+- [ ] Title sizes are calibrated against the reference and do not overpower Chinese text.
+- [ ] Distinctive numeral typography/design from the reference is preserved or thoughtfully adapted.
+- [ ] Titles do not overlap color blocks, screenshots, cards, or body text.
+- [ ] Bottom bars/callouts do not cover text, captions, screenshots, or footer chrome.
+- [ ] White/paper/light cards use dark text and sufficient border/contrast.
+- [ ] Dark/teal/blue/magenta cards use high-contrast light text.
+- [ ] If content is dense, it is split or redesigned rather than shrunk into illegibility.
+- [ ] Rendered screenshots were inspected; `scrollHeight`/DOM overflow alone was not treated as enough.
+
+## 13. Code Quality
 
 - [ ] Code runs with stated dependencies.
 - [ ] Personal data is centralized.
