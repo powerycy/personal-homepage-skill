@@ -203,3 +203,25 @@ Each example includes the user prompt, expected routing, and quality notes. Do n
 
 - Auto-recommend the strongest fit if user does not choose.
 - Use placeholders for missing details.
+
+## 11. Orbis NFT / collectible project landing
+
+### Prompt
+
+```text
+把我提供的 Orbis.Nft 提示词做成一个可复用模板方向：暗色太空主题、CloudFront 视频背景、liquid glass UI、Anton + Condiment 字体、4 个 section，包括 hero、about、collection grid 和 final CTA。
+这个模板后续用于我的个人项目 / NFT collection / 数字藏品发布页，不是普通简历页。
+```
+
+### Expected routing
+
+- Reference-first behavior.
+- Use Orbis NFT Space Landing and `templates/orbis-nft/README.md`.
+- Treat the prompt as an authorized visual specification for a person-led project page.
+- Do not turn `personal-homepage-skill` into a generic NFT marketplace generator.
+
+### Quality notes
+
+- Preserve the four-section structure, dark navy / cream / neon palette, Anton display type, Condiment accent type, and liquid-glass CSS behavior.
+- Replace brand copy, rarity scores, social links, texture, and video URLs unless the user explicitly authorizes the provided assets.
+- Do not invent NFT metrics, prices, blockchain claims, or unavailable media URLs.

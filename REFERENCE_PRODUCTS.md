@@ -262,7 +262,30 @@ https://passer-by.com/
 - 不复制 passer-by.com 的源码、图片、头像、logo、项目数据或文案。
 - 如果需要类似头像，应使用用户自有照片、授权插画、AI 生成并确认可用的形象，或抽象身份符号。
 
-## 11. 推荐参考来源清单
+## 11. Orbis NFT space landing prompt template
+
+用户明确提供 `Orbis.Nft` 暗色太空 NFT landing page 提示词，并要求集成到本 Skill 的模板库中。
+
+### 可借鉴点
+
+- 四段式项目 landing page：视频 hero、视频 intro、collection grid、最终 CTA。
+- Anton display typography + Condiment neon script accent + monospace metadata 的强字体分工。
+- 深 navy 背景、cream 文本、neon green accent 的克制高对比色彩系统。
+- `.liquid-glass` 组件效果用于导航、社交按钮、NFT 卡片和卡片 overlay。
+- 固定 texture overlay、CloudFront 视频槽位、desktop/mobile 社交按钮布局和响应式 section sizing。
+
+### 落地方式
+
+沉淀为 [STYLE_PRESETS.md](STYLE_PRESETS.md) 中的 `Orbis NFT Space Landing`，完整模板规格记录在 [templates/orbis-nft/README.md](templates/orbis-nft/README.md)。适合个人项目发布、数字藏品、NFT collection、角色 IP 和艺术项目展示页；用于个人主页场景时，应把 collection 作为这个人的项目证明。
+
+### 边界
+
+- 该模板来自用户提供的详细视觉规格，可作为后续 prompt 模板和实现参考。
+- CloudFront 视频 URL、`/texture.png`、rarity scores、社交链接和 NFT 数据仅在用户明确授权当前项目使用时复用。
+- 不默认编造 NFT 价格、链上信息、藏品指标、社交链接或外部媒体 URL。
+- 不把该模板作为普通简历、求职主页或通用 SaaS landing page 的默认风格。
+
+## 12. 推荐参考来源清单
 
 后续扩展模板时，可以优先参考这些来源的高层设计模式：
 
@@ -271,7 +294,7 @@ https://passer-by.com/
 | beautiful-html-templates | HTML 视觉表达、杂志风和作品集风思路 | 只抽象设计模式；如使用代码需先核对许可证 |
 | claude-design-skill | Artifact 输出规范、设计说明结构 | 仅学习规则组织方式，不照搬项目无关内容 |
 
-## 12. 第三方授权记录建议
+## 13. 第三方授权记录建议
 
 如果未来确实使用了第三方开源代码或素材，记录格式建议如下：
 
@@ -283,6 +306,6 @@ Used for: [high-level design reference / licensed code / licensed asset]
 Notes: [brief summary]
 ```
 
-## 13. 当前文档包的处理方式
+## 14. 当前文档包的处理方式
 
 本目录第一版主要是原创规划文档和 Skill 指令，吸收了用户给出的需求。未直接复制 MotionSites 的任何付费或专有内容。

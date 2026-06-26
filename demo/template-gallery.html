@@ -6,7 +6,7 @@
   <title>Homepage Template Gallery</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@700;900&family=Cormorant+Garamond:wght@700&family=DM+Serif+Display&family=Fraunces:opsz,wght@9..144,800&family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&family=Manrope:wght@700;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@700;900&family=Condiment&family=Cormorant+Garamond:wght@700&family=DM+Serif+Display&family=Fraunces:opsz,wght@9..144,800&family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&family=Manrope:wght@700;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet" />
   <style>
     /* === BASE === */
     :root {
@@ -313,6 +313,21 @@
     .pv-soft .title { position: absolute; left: 50%; top: 52%; width: 78%; transform: translate(-50%, -50%); text-align: center; font: 900 34px/.98 "Archivo"; letter-spacing: -.055em; }
     .pv-soft p { position: absolute; left: 50%; top: 63%; width: 260px; margin: 0; transform: translateX(-50%); text-align: center; font-size: 12px; line-height: 1.6; opacity: .7; }
 
+    .pv-orbis { background: #010828; color: #eff4ff; }
+    .pv-orbis .bg { position: absolute; inset: 0; background: radial-gradient(circle at 58% 28%, rgba(72,104,210,.55), transparent 34%), radial-gradient(circle at 78% 20%, rgba(111,255,0,.12), transparent 24%), linear-gradient(145deg, #010828, #06165a 58%, #010828); }
+    .pv-orbis .brand { position: absolute; left: 20px; top: 20px; font: 400 22px/.9 "Anton"; text-transform: uppercase; letter-spacing: .08em; }
+    .pv-orbis .nav { position: absolute; left: 50%; top: 20px; transform: translateX(-50%); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; background: rgba(255,255,255,.04); padding: 11px 25px; font-size: 9px; font-weight: 900; letter-spacing: .22em; text-transform: uppercase; backdrop-filter: blur(8px); white-space: nowrap; }
+    .pv-orbis .social { position: absolute; right: 20px; top: 20px; display: grid; gap: 8px; }
+    .pv-orbis .social div { width: 36px; height: 36px; border: 1px solid rgba(255,255,255,.18); border-radius: 16px; background: rgba(255,255,255,.05); backdrop-filter: blur(8px); }
+    .pv-orbis .title { position: absolute; left: 24px; top: 86px; max-width: 265px; font: 400 38px/.92 "Anton"; text-transform: uppercase; letter-spacing: .01em; }
+    .pv-orbis .script { position: absolute; left: 48%; top: 103px; transform: rotate(-3deg); color: #6fff00; font: 400 31px/1 "Condiment"; opacity: .95; mix-blend-mode: screen; }
+    .pv-orbis .score { position: absolute; left: 24px; bottom: 22px; color: rgba(255,255,255,.48); font: 700 10px/1 "JetBrains Mono"; letter-spacing: .15em; text-transform: uppercase; }
+    .pv-orbis .bar { position: absolute; left: 24px; bottom: 44px; width: 112px; height: 6px; border-radius: 999px; background: #6fff00; }
+    .pv-orbis .cards { position: absolute; right: 24px; bottom: 40px; display: flex; align-items: end; gap: 12px; }
+    .pv-orbis .card { width: 80px; height: 96px; border: 1px solid rgba(255,255,255,.18); border-radius: 24px; background: rgba(255,255,255,.045); padding: 8px; backdrop-filter: blur(8px); }
+    .pv-orbis .card.big { width: 96px; height: 128px; }
+    .pv-orbis .media { height: 100%; border-radius: 18px; background: radial-gradient(circle at 50% 45%, rgba(111,255,0,.32), transparent 40%), #10266c; }
+
     .pv-toon { background: #f4845f; color: #111; }
     .pv-toon .bg { position: absolute; inset: 0; background: radial-gradient(circle at 50% 45%, rgba(255,255,255,.42), transparent 34%), linear-gradient(180deg, rgba(255,255,255,.16), transparent 60%, rgba(0,0,0,.14)); }
     .pv-toon .brand { position: absolute; left: 20px; top: 16px; font: 400 32px/.9 "Anton"; letter-spacing: -.04em; }
@@ -467,7 +482,7 @@
             <nav class="toolbar" aria-label="Template category filters"></nav>
           </div>
           <aside class="stat-panel" aria-label="Gallery summary">
-            <div class="stat-row"><span>Templates</span><strong id="templateCount">17</strong></div>
+            <div class="stat-row"><span>Templates</span><strong id="templateCount">18</strong></div>
             <div class="stat-row"><span>Categories</span><strong>4</strong></div>
             <div class="note">包含 WISA 电影感、passer-by 清爽开发者主页、TOONHUB 手办轮播、Google Arts & Culture 策展式艺术主页等参考方向。只学习高层视觉模式，不复制第三方素材。</div>
           </aside>
@@ -517,6 +532,15 @@
         bestFor: 'AI 工具作者 / 产品创作者 / 个人工具入口',
         effects: ['Looping video', 'Inline icons', 'Mobile sheet'],
         accent: '#7342E2',
+      },
+      {
+        name: 'Orbis NFT Space Landing',
+        category: 'Creator',
+        visual: 'orbis',
+        summary: '暗色太空视频、Anton 巨型标题、Condiment 霓虹手写字和 liquid-glass NFT 卡片。',
+        bestFor: 'NFT / 数字藏品 / 角色 IP / 艺术项目发布页',
+        effects: ['CloudFront video slots', 'Liquid glass', 'Texture overlay'],
+        accent: '#6FFF00',
       },
       {
         name: 'TOONHUB Figurine Carousel',
@@ -659,6 +683,7 @@
     const previewHtml = {
       cinematic: '<div class="pv-cinematic preview-shell"><div class="bg"></div><div class="noise"></div><div class="label">WISA-style</div><div class="title">Curious AI Engineer</div><p>Scroll-driven video, sparse grid, premium statement.</p><div class="cta"></div></div>',
       soft: '<div class="pv-soft preview-shell"><div class="bg"></div><div class="nav">▱ Vault Plans Help</div><div class="pill">Start Free</div><div class="title">Lock ✦ Down Your Work</div><p>Soft product video hero with one strong violet CTA.</p></div>',
+      orbis: '<div class="pv-orbis preview-shell"><div class="bg"></div><div class="noise"></div><div class="brand">Orbis.Nft</div><div class="nav">Home Gallery Buy NFT</div><div class="social"><div></div><div></div></div><div class="title">Beyond earth<br>and ( its )<br>boundaries</div><div class="script">Nft collection</div><div class="cards"><div class="card"><div class="media"></div></div><div class="card big"><div class="media"></div></div><div class="card"><div class="media"></div></div></div><div class="bar"></div><div class="score">Rarity score: 8.7 / 9.0 / 8.2</div></div>',
       toon: '<div class="pv-toon preview-shell"><div class="bg"></div><div class="noise"></div><div class="brand">TOONHUB</div><div class="blob"></div><div class="ghost">3D SHAPE</div><div class="side-a"></div><div class="side-b"></div><div class="center"></div><div class="copy">TOONHUB FIGURINES</div><div class="discover">Discover</div></div>',
       clean: '<div class="pv-clean preview-shell"><div class="wave"></div><div class="nav"><span>xy.</span><span>About Projects GitHub</span></div><div class="hello">📍 Hangzhou / Remote</div><div class="title">Hi, I am a <span>frontend developer</span>.</div><div class="avatar"></div><div class="pill">Open GitHub ↗</div></div>',
       tech3d: '<div class="pv-tech3d preview-shell"><div class="bg"></div><div class="noise"></div><div class="terminal"><div>$ stack --focus</div><div>LLM · Agent · UI</div><div>status: shipping</div></div><div class="cube"></div><div class="title">3D Tech<br>Portfolio</div></div>',

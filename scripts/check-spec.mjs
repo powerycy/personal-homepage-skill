@@ -13,6 +13,7 @@ const requiredFiles = [
   'DESIGN_REVIEW.md',
   'IMAGE_WORKFLOW.md',
   'PRESENTATION_WORKFLOW.md',
+  'templates/orbis-nft/README.md',
   'templates/presentation-html/README.md',
   'templates/presentation-html/presentation.html',
   'src/main.tsx',
@@ -30,6 +31,7 @@ const requiredFiles = [
   'src/previews/business.tsx',
   'src/previews/art.tsx',
   'src/previews/previewData.ts',
+  'assets/template-previews/orbis-nft-space-landing.svg',
   'vite.config.ts',
   'tsconfig.json',
 ];
@@ -51,12 +53,15 @@ const requiredTemplates = [
   'Case Study Portfolio',
   'Art Museum Portfolio',
   'TOONHUB Figurine Carousel',
+  'Clean Developer Homepage',
+  'Orbis NFT Space Landing',
 ];
 
 const requiredSnippets = {
   'SKILL.md': ['name: personal-homepage-skill', 'Homepage Mode', 'Presentation Mode', 'Reference first', 'Chinese typography', 'Images must be verified'],
   'HOMEPAGE_GENERATION_WORKFLOW.md': ['Mode detection', 'Reference-first behavior', 'Style previews', 'Verification'],
   'PRESENTATION_WORKFLOW.md': ['1920×1080', '16:9', 'keyboard navigation', 'Low density / speaker-led', 'High density / reading-first'],
+  'templates/orbis-nft/README.md': ['Orbis NFT Space Landing Prompt Template', 'liquid-glass', 'Anton', 'Condiment', 'CloudFront video slots'],
   'templates/presentation-html/presentation.html': ['--stage-w: 1920', '--stage-h: 1080', 'class="slide active"', 'ArrowRight', 'requestFullscreen'],
   'DESIGN_REVIEW.md': ['Chinese typography', 'Hero section', 'Presentation Mode', 'Images', 'Verification record'],
   'IMAGE_WORKFLOW.md': ['Classify roles', 'Evaluate usability', 'Missing image fallback'],

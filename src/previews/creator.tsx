@@ -19,6 +19,33 @@ function SoftProductPreview() {
   );
 }
 
+function OrbisNftPreview() {
+  return (
+    <div className="preview-shell overflow-hidden bg-[#010828] font-cjk-sans text-[#EFF4FF]">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_58%_28%,rgba(72,104,210,0.55),transparent_34%),radial-gradient(circle_at_78%_20%,rgba(111,255,0,0.12),transparent_24%),linear-gradient(145deg,#010828,#06165a_58%,#010828)]" />
+      <div className="noise opacity-25 mix-blend-lighten" />
+      <div className="absolute left-5 top-5 font-display-condensed text-[22px] uppercase tracking-[0.08em]">Orbis.Nft</div>
+      <div className="absolute left-1/2 top-5 -translate-x-1/2 rounded-full border border-white/18 bg-white/[0.04] px-7 py-3 text-[9px] font-black uppercase tracking-[0.22em] backdrop-blur-md">Home Gallery Buy NFT</div>
+      <div className="absolute right-5 top-5 grid gap-2">
+        {[0, 1].map((item) => <div key={item} className="h-9 w-9 rounded-2xl border border-white/18 bg-white/[0.05] backdrop-blur-md" />)}
+      </div>
+      <div className="absolute left-6 top-[86px] max-w-[265px]">
+        <div className="font-display-condensed text-[38px] uppercase leading-[0.92] tracking-[0.01em]">Beyond earth<br />and ( its )<br />boundaries</div>
+      </div>
+      <div className="absolute left-[48%] top-[103px] rotate-[-3deg] font-display-script text-[31px] text-[#6FFF00] opacity-95 mix-blend-screen">Nft collection</div>
+      <div className="absolute bottom-5 left-6 font-mono text-[10px] uppercase tracking-[0.15em] text-white/48">Rarity score: 8.7 / 9.0 / 8.2</div>
+      <div className="absolute bottom-10 right-6 flex items-end gap-3">
+        {[0, 1, 2].map((item) => (
+          <div key={item} className={`${item === 1 ? 'h-32 w-24' : 'h-24 w-20'} rounded-[24px] border border-white/18 bg-white/[0.045] p-2 backdrop-blur-md`}>
+            <div className="h-full rounded-[18px] bg-[radial-gradient(circle_at_50%_45%,rgba(111,255,0,0.32),transparent_40%),#10266c]" />
+          </div>
+        ))}
+      </div>
+      <div className="absolute bottom-5 left-6 h-1.5 w-28 rounded-full bg-[#6FFF00]" />
+    </div>
+  );
+}
+
 function ToonhubPreview() {
   return (
     <div className="preview-shell overflow-hidden bg-[#F4845F] font-cjk-sans text-[#111]">
@@ -77,8 +104,9 @@ function BentoPreview() {
   );
 }
 
-export const CreatorPreviews: Pick<Record<VisualKey, () => JSX.Element>, 'softProduct' | 'toonhub' | 'gradient' | 'pixel' | 'bento'> = {
+export const CreatorPreviews: Pick<Record<VisualKey, () => JSX.Element>, 'softProduct' | 'orbisNft' | 'toonhub' | 'gradient' | 'pixel' | 'bento'> = {
   softProduct: SoftProductPreview,
+  orbisNft: OrbisNftPreview,
   toonhub: ToonhubPreview,
   gradient: GradientPreview,
   pixel: PixelPreview,

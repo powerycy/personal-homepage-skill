@@ -21,6 +21,24 @@ function CinematicPreview() {
   );
 }
 
+function CleanDeveloperPreview() {
+  return (
+    <div className="preview-shell overflow-hidden bg-[#edf7ff] font-cjk-sans text-[#17212f]">
+      <div className="absolute -bottom-16 -left-14 h-44 w-[120%] -rotate-3 rounded-[50%] bg-[linear-gradient(90deg,#b7dcff,#f9fbff)]" />
+      <div className="absolute inset-x-5 top-5 flex justify-between text-[10px] font-black text-[#17212f]/62">
+        <span>xy.</span>
+        <span>About Projects GitHub</span>
+      </div>
+      <div className="absolute left-7 top-[72px] rounded-full bg-white px-4 py-2 text-[11px] font-black shadow-[0_14px_30px_rgba(80,140,200,0.18)]">Hangzhou / Remote</div>
+      <div className="absolute left-7 top-[122px] max-w-[260px] font-display-condensed text-[34px] font-black leading-[0.96] tracking-[-0.055em]">
+        Hi, I am a <span className="text-[#3279ff]">frontend developer</span>.
+      </div>
+      <div className="absolute right-10 top-[78px] h-[138px] w-[138px] rounded-[42%_58%_45%_55%] border-2 border-[#3279ff]/18 bg-[linear-gradient(135deg,#fff,#d7ecff)] shadow-[0_24px_55px_rgba(80,140,200,0.2)]" />
+      <div className="absolute bottom-8 right-8 rounded-full bg-white px-4 py-2 text-[11px] font-black text-[#3279ff]">Open GitHub</div>
+    </div>
+  );
+}
+
 function Tech3DPreview() {
   return (
     <div className="preview-shell bg-[#050d12] font-cjk-sans">
@@ -75,8 +93,9 @@ function SpatialPreview() {
   );
 }
 
-export const TechPreviews: Pick<Record<VisualKey, () => JSX.Element>, 'cinematic' | 'tech3d' | 'terminal' | 'dashboard' | 'spatial'> = {
+export const TechPreviews: Pick<Record<VisualKey, () => JSX.Element>, 'cinematic' | 'clean' | 'tech3d' | 'terminal' | 'dashboard' | 'spatial'> = {
   cinematic: CinematicPreview,
+  clean: CleanDeveloperPreview,
   tech3d: Tech3DPreview,
   terminal: TerminalPreview,
   dashboard: DashboardPreview,

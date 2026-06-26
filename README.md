@@ -122,7 +122,7 @@ npm run check
 
 ## 模板 Gallery
 
-项目内置 17 个视觉方向。实际生成时，Agent 会优先跟随用户给定参考；模板只在方向不清楚或用户主动选择时使用。
+项目内置 18 个视觉方向。实际生成时，Agent 会优先跟随用户给定参考；模板只在方向不清楚或用户主动选择时使用。
 
 更完整的可交互 Gallery：
 
@@ -134,6 +134,7 @@ demo/template-gallery.html
 | --- | --- |
 | Cinematic Scroll Personal Brand | ![Cinematic Scroll Personal Brand](assets/template-previews/cinematic-scroll-personal-brand.svg) |
 | Soft Product Video Hero | ![Soft Product Video Hero](assets/template-previews/soft-product-video-hero.svg) |
+| Orbis NFT Space Landing | ![Orbis NFT Space Landing](assets/template-previews/orbis-nft-space-landing.svg) |
 | TOONHUB Figurine Carousel | ![TOONHUB Figurine Carousel](assets/template-previews/toonhub-figurine-carousel.svg) |
 | Clean Developer Homepage | ![Clean Developer Homepage](assets/template-previews/clean-developer-homepage.svg) |
 | 3D Tech Portfolio | ![3D Tech Portfolio](assets/template-previews/3d-tech-portfolio.svg) |
@@ -189,7 +190,7 @@ demo/template-gallery.html
 | [demo/template-gallery.html](demo/template-gallery.html) | 自包含模板 Gallery |
 | [assets/template-previews/](assets/template-previews/) | 模板预览图片 |
 | [src/](src/) | React + Tailwind 模板 Gallery 源码 |
-| [templates/](templates/) | 可复用主页和 HTML 演示文稿模板 |
+| [templates/](templates/) | 可复用主页、HTML 演示文稿和用户授权 prompt 模板 |
 | [scripts/](scripts/) | 校验脚本 |
 
 </details>

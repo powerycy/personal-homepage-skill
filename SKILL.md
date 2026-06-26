@@ -65,6 +65,7 @@ Before generating a full homepage, use the relevant reference files:
 | --- | --- |
 | Visual style selection | [STYLE_PRESETS.md](STYLE_PRESETS.md) |
 | Cinematic WISA-style premium template | [CINEMATIC_SCROLL_TEMPLATE.md](CINEMATIC_SCROLL_TEMPLATE.md) |
+| Orbis NFT dark space landing prompt template | [templates/orbis-nft/README.md](templates/orbis-nft/README.md) |
 | Motion, 3D, background effects | [MOTION_PATTERNS.md](MOTION_PATTERNS.md) |
 | Section content rules | [HOMEPAGE_SECTIONS.md](HOMEPAGE_SECTIONS.md) |
 | Component implementation patterns | [COMPONENT_PATTERNS.md](COMPONENT_PATTERNS.md) |

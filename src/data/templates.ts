@@ -3,7 +3,9 @@ export type Category = 'All' | 'Tech' | 'Creator' | 'Business' | 'Art';
 export type VisualKey =
   | 'cinematic'
   | 'softProduct'
+  | 'orbisNft'
   | 'toonhub'
+  | 'clean'
   | 'tech3d'
   | 'gradient'
   | 'magazine'
@@ -138,6 +140,27 @@ export const templates: TemplateDefinition[] = [
     accent: '#7342E2',
   },
   {
+    id: 'orbis-nft-space-landing',
+    name: 'Orbis NFT Space Landing',
+    category: 'Creator',
+    visual: 'orbisNft',
+    summary: '暗色太空视频、Anton 巨型标题、Condiment 霓虹手写字和 liquid-glass NFT 卡片。',
+    bestFor: 'NFT / 数字藏品 / 角色 IP / 艺术项目发布页',
+    identityFits: ['creator', 'artist', 'designer', 'founder'],
+    densityModes: ['creator-hub', 'portfolio-standard'],
+    layoutGrammar: '四段式全屏视频叙事：hero、intro、collection grid、final CTA，卡片和导航使用液态玻璃。',
+    typography: { display: 'Anton', body: 'System Mono', cjk: 'Noto Sans SC', mono: 'System Mono' },
+    palette: { base: '#010828', text: '#EFF4FF', accent: '#6FFF00', secondary: '#7c3aed' },
+    heroPattern: '全屏太空视频 + 大写品牌宣言 + 霓虹手写 accent + 社交按钮。',
+    sectionPlan: ['Video hero', 'Video intro', 'Collection grid', 'Final CTA'],
+    motionPlan: ['looping space videos', 'liquid glass hover', 'neon script overlays'],
+    imagePolicy: '只使用用户授权的视频、纹理和藏品素材；缺失时用明确 placeholder，不能编造 CloudFront、texture 或 NFT 资源。',
+    generationNotes: ['适合用户明确提供 Orbis.Nft prompt 或类似 NFT 项目视觉参考。', '个人主页场景下要把 collection 作为个人项目证明，而不是匿名市场。'],
+    risks: ['不适合普通简历页；不要 invent rarity scores、链上数据、价格、社交链接或外部视频。'],
+    effects: ['CloudFront video slots', 'Liquid glass', 'Texture overlay'],
+    accent: '#6FFF00',
+  },
+  {
     id: 'toonhub-figurine-carousel',
     name: 'TOONHUB Figurine Carousel',
     category: 'Creator',
@@ -157,6 +180,27 @@ export const templates: TemplateDefinition[] = [
     risks: ['没有高质量图像时不建议使用；中英字体混用风险高。'],
     effects: ['character-figurine-carousel', '3D SHAPE', '650ms lock'],
     accent: '#F4845F',
+  },
+  {
+    id: 'clean-developer-homepage',
+    name: 'Clean Developer Homepage',
+    category: 'Tech',
+    visual: 'clean',
+    summary: '浅蓝白连续网页、简洁导航、头像/手绘形象、地点标签和项目卡片。',
+    bestFor: '前端开发者 / 开源作者 / 技术博客 / passer-by 风格参考',
+    identityFits: ['frontend-engineer', 'ai-engineer', 'photographer'],
+    densityModes: ['minimal-card', 'portfolio-standard'],
+    layoutGrammar: '清爽导航、居中身份 hero、头像/手绘视觉、波浪过渡、About 和项目网格自然衔接。',
+    typography: { display: 'Archivo', body: 'Noto Sans SC', cjk: 'Noto Sans SC' },
+    palette: { base: '#edf7ff', text: '#17212f', accent: '#3279ff' },
+    heroPattern: '问候语 + 高亮职业关键词 + 头像/地点标签 + 两个 CTA。',
+    sectionPlan: ['Clean hero', 'About split', 'GitHub CTA', 'Project grid'],
+    motionPlan: ['soft fade-up', 'wave transition', 'project hover overlay'],
+    imagePolicy: '优先使用用户头像、授权插画或抽象身份符号；不要复制 passer-by.com 头像、logo 或项目素材。',
+    generationNotes: ['适合希望页面清爽真实、不像产品官网的开发者。', '页面要连续，避免切成硬背景块。'],
+    risks: ['排版和间距弱时会显得普通；必须用项目网格和视觉记忆点补足辨识度。'],
+    effects: ['Soft wave', 'Portrait card', 'GitHub CTA'],
+    accent: '#3279ff',
   },
   {
     id: '3d-tech-portfolio',

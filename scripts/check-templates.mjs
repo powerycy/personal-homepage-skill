@@ -7,7 +7,7 @@ const failures = [];
 
 const allowedCategories = new Set(['Tech', 'Creator', 'Business', 'Art']);
 const allowedVisuals = new Set([
-  'cinematic', 'softProduct', 'toonhub', 'tech3d', 'gradient', 'magazine', 'terminal', 'resume',
+  'cinematic', 'softProduct', 'orbisNft', 'toonhub', 'clean', 'tech3d', 'gradient', 'magazine', 'terminal', 'resume',
   'pixel', 'dashboard', 'bento', 'darkEditorial', 'spatial', 'business', 'caseStudy', 'museum',
 ]);
 
@@ -45,7 +45,7 @@ for (const entry of entries) {
   }
 }
 
-if (entries.length < 16) failures.push(`Expected at least 16 templates, found ${entries.length}`);
+if (entries.length < 18) failures.push(`Expected at least 18 templates, found ${entries.length}`);
 
 if (failures.length) {
   console.error('Template registry check failed:');

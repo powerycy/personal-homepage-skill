@@ -12,7 +12,7 @@ Use this file to choose a visual direction based on user identity, goal, content
 | Creator / influencer / self-media | Cinematic Scroll Personal Brand, Motion Gradient Brand, Creator Bento Homepage, Cute Pixel Creator, TOONHUB Figurine Carousel |
 | Job seeker / student / intern | Minimal Premium Resume, Case Study Portfolio |
 | Consultant / freelancer / founder | Cinematic Scroll Personal Brand, Business Personal Brand, Minimal Premium Resume, Motion Gradient Brand |
-| Premium product / creator landing reference | Soft Product Video Hero, TOONHUB Figurine Carousel, Cinematic Scroll Personal Brand, Motion Gradient Brand |
+| Premium product / creator landing reference | Soft Product Video Hero, Orbis NFT Space Landing, TOONHUB Figurine Carousel, Cinematic Scroll Personal Brand, Motion Gradient Brand |
 
 ## 0. Cinematic Scroll Personal Brand
 
@@ -95,6 +95,26 @@ See [CINEMATIC_SCROLL_TEMPLATE.md](CINEMATIC_SCROLL_TEMPLATE.md).
 **Risks:** can look too plain if typography and spacing are weak. Use a continuous page shell, soft transitions, and a strong project grid so it feels like a real homepage, not stacked blocks.
 
 **Reference pattern:** Passer-by developer homepage: light personal developer site with logo nav, centered identity hero, sketch/avatar visual, location pill, wave divider, About module, GitHub CTA, and project cards.
+
+## 0E. Orbis NFT Space Landing
+
+**Best for:** creator NFT drops, collectible/IP projects, digital object portfolios, artist project launches, and users who explicitly provide the `Orbis.Nft` dark space landing prompt.
+
+**Vibe:** dark space, cinematic, collectible, liquid glass, high-contrast, poster-like.
+
+**Color:** `#010828` deep navy base, `#EFF4FF` cream text, `#6FFF00` neon script accents, with one restrained purple gradient only for collection card action buttons.
+
+**Typography:** Anton for headings, logo, navigation, and CTA display text; Condiment for cursive accent overlays; system monospace for uppercase descriptions, labels, and rarity metadata.
+
+**Hero:** full-viewport video with clipped rounded bottom corners, centered max-width container, liquid-glass nav, oversized Anton uppercase title, neon Condiment `Nft collection` accent, and separate desktop/mobile social icon placement.
+
+**Sections:** four-part landing sequence: video hero, video intro/about, solid-navy collection grid with video cards, and final video CTA.
+
+**Motion:** looping muted videos, hover glass states, subtle social button transitions, optional reveal animations that respect `prefers-reduced-motion`.
+
+**Risks:** this is not a default personal resume style. Use only for user-provided or authorized project/collectible references, and do not invent rarity scores, blockchain claims, social links, texture assets, or video URLs.
+
+**Reference pattern:** `templates/orbis-nft/README.md` records the full prompt template, including CloudFront video slots, liquid-glass CSS, texture overlay, responsive sizing, and adaptation rules.
 
 ## 1. 3D Tech Portfolio
 
