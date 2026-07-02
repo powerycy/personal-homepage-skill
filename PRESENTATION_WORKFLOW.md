@@ -32,12 +32,22 @@ If the user asks for a personal homepage and a PPT in the same task, ask which d
 - Canvas size: `1920px × 1080px`.
 - Aspect ratio: 16:9.
 - Each slide is one full-screen page during playback.
-- The stage scales as a whole to the viewport.
+- The stage scales as a whole to the viewport and must occupy the largest possible 16:9 rectangle. In a 1920×1080 viewport, the rendered stage should be exactly 1920×1080 with no reserved safe-area gap.
+- Do not subtract control bars, captions, edit panels, browser hints, or bottom safe areas from the stage scaling calculation. Presentation playback takes priority over visible controls.
 - Do not use responsive breakpoints to rearrange slide content.
 - Do not use normal webpage scrolling as the slide mechanism.
 - Use `.slide.active` / `.slide.visible` style visibility control rather than `display: none` when slide layout classes may override display.
+- Use a 16:9 wrapper/shell for layout and scale the internal 1920×1080 stage from the wrapper dimensions. Avoid centering a transformed 1920×1080 element directly in CSS grid/flex, because its unscaled layout box can push the rendered stage off-center.
 - Include `prefers-reduced-motion` support.
 - Provide keyboard navigation: ArrowLeft, ArrowRight, Space, PageUp, PageDown, Home, End, and F for fullscreen when available.
+
+## Controls and fullscreen chrome
+
+- Treat navigation controls, page counters, edit buttons, and helper hints as viewport overlays, not layout rows.
+- Controls may be fixed or absolutely positioned over the viewport with transparent styling, fade on idle, or hide in fullscreen.
+- Controls must not reduce `.stage` width, height, scale, or centering.
+- Never make a deck smaller just to keep controls outside the slide image. If controls collide with content during presentation, hide them or make them hover-only.
+- Verify with `scripts/verify-html-ppt-stage.mjs`; it should fail when a 16:9 viewport leaves unused margins caused by controls.
 
 ## Density modes
 

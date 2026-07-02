@@ -10,7 +10,8 @@
     "check:all": "npm run check:spec && npm run check:templates && npm run check:visual && npm run build",
     "check:spec": "node scripts/check-spec.mjs",
     "check:templates": "node scripts/check-templates.mjs",
-    "check:visual": "node scripts/check-visual.mjs"
+    "check:visual": "node scripts/check-visual.mjs",
+    "verify:ppt-stage": "node scripts/verify-html-ppt-stage.mjs"
   },
   "engines": {
     "node": ">=22"

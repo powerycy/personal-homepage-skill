@@ -20,6 +20,7 @@ Core components:
 
 ```text
 DeckViewport
+DeckStageShell
 DeckStage
 Slide
 SlideCounter
@@ -30,12 +31,14 @@ EditableTextLayer optional
 Rules:
 
 - `DeckViewport` fills the browser window and hides overflow.
-- `DeckStage` is fixed 16:9, typically 1920×1080, and scales uniformly to fit the viewport.
+- `DeckStageShell` occupies the largest possible 16:9 rectangle in the viewport.
+- `DeckStage` is authored at 1920×1080 and scales uniformly from the shell dimensions.
 - Slides are absolutely stacked inside the stage. Exactly one slide is active/visible.
 - Slide switching uses classes such as `.active` / `.visible` with `visibility`, `opacity`, `pointer-events`, and `z-index`; avoid `display` toggling for visibility.
 - Navigation supports ArrowRight/ArrowDown/PageDown/Space/Enter for next, ArrowLeft/ArrowUp/PageUp for previous, Home and End for bounds.
 - Touch swipe and debounced mouse wheel can be supported, but never hijack text editing or focused inputs.
-- Keep the page counter and editing controls outside the stage so they do not collide with slide content.
+- Keep the page counter and editing controls outside the authored stage content. They should be fixed viewport overlays, hover controls, or fullscreen-hidden chrome.
+- Do not reserve bottom, top, left, or right layout space for controls. A control bar must never shrink, offset, or letterbox a 1920×1080 presentation viewport.
 
 Layout rules:
 
