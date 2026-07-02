@@ -145,7 +145,12 @@ Use this section when the user asks this skill for a PPT-style HTML file, deck d
 - [ ] The output uses true page-by-page slide navigation instead of long-page scrolling.
 - [ ] Arrow keys, Space, PageUp/PageDown, Home/End, touch swipe, and page counter work.
 - [ ] Only one slide is visible at a time; slide visibility cannot be broken by flex/grid `display` rules.
+- [ ] Hidden slides are removed from painting through visibility/opacity/pointer-events/z-index or a non-overridable `display: none` strategy.
+- [ ] Whole-slide opacity crossfades are absent, or transition locking proves old and new slide text never paint at the same time.
+- [ ] Slides have opaque stage backgrounds; previous slide titles, numerals, cards, and footers cannot show through during navigation.
 - [ ] The deck keeps a fixed 16:9 stage and scales as a whole.
+- [ ] A 16:9 stage shell occupies the largest possible viewport rectangle and scales the internal `1920×1080` stage from shell dimensions.
+- [ ] At common presentation sizes such as `1280×720`, `1440×900`, and `1920×1080`, the rendered stage equals the expected maximum 16:9 rectangle.
 - [ ] Title sizes are calibrated against the reference and do not overpower Chinese text.
 - [ ] Distinctive numeral typography/design from the reference is preserved or thoughtfully adapted.
 - [ ] Titles do not overlap color blocks, screenshots, cards, or body text.
@@ -154,6 +159,9 @@ Use this section when the user asks this skill for a PPT-style HTML file, deck d
 - [ ] Dark/teal/blue/magenta cards use high-contrast light text.
 - [ ] If content is dense, it is split or redesigned rather than shrunk into illegibility.
 - [ ] Rendered screenshots were inspected; `scrollHeight`/DOM overflow alone was not treated as enough.
+- [ ] Rapid next/previous navigation was stress-tested for deck-like outputs; exactly one displayed slide and one active slide were present during/after navigation.
+- [ ] Outside-stage controls are fixed overlays, hover-only, or fullscreen-hidden; they do not reduce stage width, height, scale, or centering.
+- [ ] Stage scaling does not reserve a controls safe area; controls chrome never makes a 16:9 playback viewport render smaller than the maximum 16:9 rectangle.
 
 ## 13. Code Quality
 
@@ -171,6 +179,7 @@ Use this section when the user asks this skill for a PPT-style HTML file, deck d
 - [ ] Desktop width was inspected for Homepage Mode.
 - [ ] Mobile width was inspected for Homepage Mode.
 - [ ] 1920×1080 slide stage was inspected for Presentation Mode.
+- [ ] For HTML PPT outputs, stage-centering geometry was checked across at least three viewport sizes, manually or with `scripts/verify-html-ppt-stage.mjs`.
 - [ ] Any skipped check is named honestly in the delivery note.
 
 ## Final Decision

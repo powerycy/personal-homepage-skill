@@ -22,7 +22,7 @@
     .viewport { position: fixed; inset: 0; display: grid; place-items: center; overflow: hidden; background: radial-gradient(circle at 80% 10%, rgba(255,106,61,.22), transparent 30%), #050507; }
     .stage-shell { position: relative; width: min(100vw, calc(100vh * 16 / 9)); aspect-ratio: 16 / 9; overflow: hidden; }
     .stage { position: absolute; left: 0; top: 0; width: calc(var(--stage-w) * 1px); height: calc(var(--stage-h) * 1px); transform: scale(var(--scale, 1)); transform-origin: left top; overflow: hidden; background: var(--bg); box-shadow: 0 32px 120px rgba(0,0,0,.42); }
-    .slide { position: absolute; inset: 0; padding: 92px 104px; visibility: hidden; opacity: 0; pointer-events: none; transition: opacity .45s ease; background: var(--bg); }
+    .slide { position: absolute; inset: 0; padding: 92px 104px; visibility: hidden; opacity: 0; pointer-events: none; background: var(--bg); }
     .slide.active { visibility: visible; opacity: 1; pointer-events: auto; }
     .kicker { font-family: var(--font-mono); font-size: 24px; letter-spacing: 0; color: var(--accent); text-transform: uppercase; }
     h1 { margin: 34px 0 0; max-width: 1280px; font-size: 128px; line-height: .95; letter-spacing: 0; text-wrap: balance; }
