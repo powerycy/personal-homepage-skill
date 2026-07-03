@@ -13,7 +13,7 @@ An AI Skill + template gallery for generating polished personal homepages, portf
 
 ## Template demos
 
-Three representative outputs: space, collectible, and cinematic.
+精选 3 个代表性输出：星球空间、潮玩手办和电影感主页。
 
 ### 01 · Orbis NFT Space Landing
 
