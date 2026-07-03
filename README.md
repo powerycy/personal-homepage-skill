@@ -11,7 +11,13 @@ An AI Skill + template gallery for generating polished personal homepages, portf
 
 > 如果这个项目帮助你生成了更好的个人主页、作品集、创作者主页或 HTML 演示文稿，欢迎点一个 ⭐ Star。
 
-![Personal Homepage Skill 项目介绍](assets/project-intro.gif)
+## Template demos
+
+| 模板 | Demo |
+| --- | --- |
+| 01 Orbis NFT Space Landing | ![Orbis NFT Space Landing demo](assets/demo-orbis-nft-space-landing.gif) |
+| 02 TOONHUB Figurine Carousel | ![TOONHUB Figurine Carousel demo](assets/demo-toonhub-figurine-carousel.gif) |
+| 03 Cinematic Scroll Personal Brand | ![Cinematic Scroll Personal Brand demo](assets/demo-cinematic-scroll-personal-brand.gif) |
 
 ## 可以生成什么？
 
