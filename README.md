@@ -13,11 +13,19 @@ An AI Skill + template gallery for generating polished personal homepages, portf
 
 ## Template demos
 
-| 模板 | Demo |
-| --- | --- |
-| 01 Orbis NFT Space Landing | ![Orbis NFT Space Landing demo](assets/demo-orbis-nft-space-landing.gif) |
-| 02 TOONHUB Figurine Carousel | ![TOONHUB Figurine Carousel demo](assets/demo-toonhub-figurine-carousel.gif) |
-| 03 Cinematic Scroll Personal Brand | ![Cinematic Scroll Personal Brand demo](assets/demo-cinematic-scroll-personal-brand.gif) |
+Three representative outputs: space, collectible, and cinematic.
+
+### 01 · Orbis NFT Space Landing
+
+![Orbis NFT Space Landing demo](assets/demo-orbis-nft-space-landing.gif)
+
+### 02 · TOONHUB Figurine Carousel
+
+![TOONHUB Figurine Carousel demo](assets/demo-toonhub-figurine-carousel.gif)
+
+### 03 · Cinematic Scroll Personal Brand
+
+![Cinematic Scroll Personal Brand demo](assets/demo-cinematic-scroll-personal-brand.gif)
 
 ## 可以生成什么？
 
