@@ -468,6 +468,52 @@
         transition-duration: 0.01ms !important;
       }
     }
+
+    .edit-hotzone {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 84px;
+      height: 84px;
+      z-index: 10000;
+    }
+
+    .edit-toggle {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 10001;
+      opacity: 0;
+      pointer-events: none;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+      padding: 10px 14px;
+      color: var(--ink);
+      background: rgba(11, 11, 15, 0.66);
+      backdrop-filter: blur(16px);
+      font: 700 13px/1 "JetBrains Mono", monospace;
+      letter-spacing: 0.08em;
+      transition: opacity 0.22s ease, border-color 0.22s ease;
+      cursor: pointer;
+    }
+
+    .edit-toggle.show,
+    .edit-toggle.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .edit-toggle:hover,
+    .edit-toggle:focus-visible {
+      border-color: rgba(255, 255, 255, 0.72);
+      outline: 0;
+    }
+
+    body.editing [contenteditable="true"] {
+      outline: 2px dashed rgba(255, 184, 106, 0.9);
+      outline-offset: 5px;
+      cursor: text;
+    }
   </style>
 </head>
 <body>
@@ -510,6 +556,8 @@
       </div>
     </article>
   </template>
+  <div class="edit-hotzone" aria-hidden="true"></div>
+  <button class="edit-toggle" id="editToggle" title="编辑模式（E）" aria-label="编辑模式">编辑</button>
 
   <script>
     /* === TEMPLATE DATA === */
@@ -723,6 +771,7 @@
     });
 
     function render() {
+      if (window.inlineEditor?.isActive) window.inlineEditor.save();
       document.querySelectorAll('.filter').forEach((button) => {
         button.classList.toggle('active', button.textContent === activeCategory);
       });
@@ -759,6 +808,7 @@
           });
           grid.appendChild(node);
         });
+      window.inlineEditor?.refresh();
     }
 
     function htmlToElement(html) {
@@ -768,6 +818,170 @@
     }
 
     render();
+
+    class InlineEditor {
+      constructor() {
+        this.isActive = false;
+        this.key = `template-gallery-edits:${location.pathname}`;
+        this.toggle = document.getElementById('editToggle');
+        this.hotzone = document.querySelector('.edit-hotzone');
+        this.hideTimeout = null;
+        this.data = this.readData();
+        this.bind();
+        this.refresh();
+      }
+
+      editableNodes() {
+        return Array.from(document.querySelectorAll([
+          '.hero .eyebrow',
+          '.hero h1',
+          '.hero p',
+          '.stat-row span',
+          '.stat-row strong',
+          '.note',
+          '.template-card h2',
+          '.template-card .summary',
+          '.template-card .best-for',
+          '.template-card .effect',
+          '.preview-shell .label',
+          '.preview-shell .brand',
+          '.preview-shell .nav',
+          '.preview-shell .title',
+          '.preview-shell p',
+          '.preview-shell .script',
+          '.preview-shell .score',
+          '.preview-shell .copy',
+          '.preview-shell .discover',
+          '.preview-shell .hello',
+          '.preview-shell .pill',
+          '.preview-shell .chip',
+          '.preview-shell .terminal div',
+          '.preview-shell .white',
+          '.preview-shell .download',
+          '.preview-shell .quest',
+          '.preview-shell .core',
+          '.preview-shell .main',
+          '.preview-shell .tile',
+          '.preview-shell .top span',
+          '.preview-shell .search',
+          '.preview-shell .foot span',
+          '.preview-shell .cta',
+          '.preview-shell .step'
+        ].join(','))).filter((node) => !node.closest('.toolbar'));
+      }
+
+      bind() {
+        if (!this.toggle || !this.hotzone) return;
+        this.toggle.addEventListener('click', () => this.toggleEditMode());
+        this.hotzone.addEventListener('click', () => this.toggleEditMode());
+        this.hotzone.addEventListener('mouseenter', () => this.showToggle());
+        this.hotzone.addEventListener('mouseleave', () => this.scheduleHide());
+        this.toggle.addEventListener('mouseenter', () => this.showToggle());
+        this.toggle.addEventListener('mouseleave', () => this.scheduleHide());
+        document.addEventListener('keydown', (event) => {
+          if ((event.key === 'e' || event.key === 'E') && (!event.target.getAttribute || event.target.getAttribute('contenteditable') !== 'true')) {
+            event.preventDefault();
+            this.toggleEditMode();
+          }
+          if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 's') {
+            event.preventDefault();
+            this.save();
+          }
+        });
+      }
+
+      refresh() {
+        this.data = this.readData();
+        this.applyData();
+        this.editableNodes().forEach((node) => {
+          node.setAttribute('contenteditable', this.isActive ? 'true' : 'false');
+          node.setAttribute('spellcheck', 'false');
+        });
+      }
+
+      showToggle() {
+        clearTimeout(this.hideTimeout);
+        this.toggle.classList.add('show');
+      }
+
+      scheduleHide() {
+        this.hideTimeout = setTimeout(() => {
+          if (!this.isActive) this.toggle.classList.remove('show');
+        }, 420);
+      }
+
+      toggleEditMode() {
+        this.isActive = !this.isActive;
+        document.body.classList.toggle('editing', this.isActive);
+        this.toggle.classList.toggle('active', this.isActive);
+        this.toggle.textContent = this.isActive ? '编辑中' : '编辑';
+        this.refresh();
+        if (!this.isActive) this.save();
+      }
+
+      save() {
+        const data = this.readData();
+        this.editableNodes().forEach((node) => {
+          data[this.nodeKey(node)] = node.innerHTML;
+        });
+        localStorage.setItem(this.key, JSON.stringify(data));
+        this.data = data;
+        this.toggle.textContent = '已保存';
+        setTimeout(() => {
+          this.toggle.textContent = this.isActive ? '编辑中' : '编辑';
+        }, 900);
+      }
+
+      applyData() {
+        this.editableNodes().forEach((node) => {
+          const key = this.nodeKey(node);
+          if (this.data[key] !== undefined) node.innerHTML = this.data[key];
+        });
+      }
+
+      readData() {
+        try {
+          return JSON.parse(localStorage.getItem(this.key) || '{}');
+        } catch (error) {
+          localStorage.removeItem(this.key);
+          return {};
+        }
+      }
+
+      nodeKey(node) {
+        if (node.dataset.editId) return node.dataset.editId;
+        const card = node.closest('.template-card');
+        const scope = card ? `card-${card.dataset.templateName || 'template'}` : 'page';
+        const role = node.classList[0] || node.tagName.toLowerCase();
+        const text = node.textContent.trim().replace(/\s+/g, '').slice(0, 14) || 'text';
+        node.dataset.editId = `${scope}-${role}-${this.hash(text)}`.replace(/[^a-zA-Z0-9_-]+/g, '-').toLowerCase();
+        return node.dataset.editId;
+      }
+
+      hash(text) {
+        let value = 0;
+        for (const char of text) value = ((value * 31) + char.charCodeAt(0)) >>> 0;
+        return value.toString(36);
+      }
+
+      pathWithin(root, node) {
+        const parts = [];
+        let current = node;
+        while (current && current !== root) {
+          const parent = current.parentElement;
+          if (!parent) break;
+          const tag = current.tagName.toLowerCase();
+          const className = Array.from(current.classList).slice(0, 2).join('.');
+          const similar = Array.from(parent.children).filter((child) => child.tagName === current.tagName && child.className === current.className);
+          const index = similar.indexOf(current);
+          parts.unshift(`${tag}${className ? `.${className}` : ''}:${index}`);
+          current = parent;
+        }
+        return parts.join('>');
+      }
+    }
+
+    window.inlineEditor = new InlineEditor();
   </script>
 </body>
 </html>

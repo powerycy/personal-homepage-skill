@@ -41,7 +41,7 @@ Use this section when the user provided a concrete template, reference site, scr
 - [ ] Is the background visually rich but not distracting?
 - [ ] Is the Hero readable on mobile?
 
-## 4. Content Quality
+## 6. Content Quality
 
 - [ ] Is the bio specific and not generic?
 - [ ] Are fake metrics avoided?
@@ -49,7 +49,7 @@ Use this section when the user provided a concrete template, reference site, scr
 - [ ] Are skills described as capabilities with outputs?
 - [ ] Are projects described with problem, role, features, stack, and result?
 
-## 5. Project Persuasiveness
+## 7. Project Persuasiveness
 
 - [ ] Does each project explain what problem it solves?
 - [ ] Does each project show the user's role?
@@ -57,7 +57,7 @@ Use this section when the user provided a concrete template, reference site, scr
 - [ ] Does each project include result, learning, or placeholder?
 - [ ] Are project cards visually differentiated?
 
-## 6. Visual System Review
+## 8. Visual System Review
 
 - [ ] If visual previews were shown, did they look like real homepage hero sections rather than option cards?
 - [ ] Are option labels, pros/risks, workflow notes, template names, and file names absent from the visual composition?
@@ -69,7 +69,7 @@ Use this section when the user provided a concrete template, reference site, scr
 - [ ] Is there one primary motion system rather than scattered particle/hover effects?
 - [ ] Does the page look like a real deployable homepage, not a demo or planning artifact?
 
-## 7. Anti-Template Review
+## 9. Anti-Template Review
 
 Failure signals — all should be absent. Reject or revise if any signal is present.
 
@@ -86,7 +86,7 @@ Failure signals — all should be absent. Reject or revise if any signal is pres
 | over-rounded cards and excessive shadows | Yes / No | Reduce radius/shadows and sharpen layout system |
 | every section centered | Yes / No | Add asymmetry, grids, editorial rhythm, or spatial composition |
 
-## 8. Motion Review
+## 10. Motion Review
 
 - [ ] Motion supports hierarchy or interaction.
 - [ ] Important text does not move while being read.
@@ -95,7 +95,7 @@ Failure signals — all should be absent. Reject or revise if any signal is pres
 - [ ] No scroll hijacking.
 - [ ] No excessive particle density.
 
-## 9. 3D Review
+## 11. 3D Review
 
 - [ ] 3D is optional and has fallback.
 - [ ] No huge model is loaded by default.
@@ -103,7 +103,7 @@ Failure signals — all should be absent. Reject or revise if any signal is pres
 - [ ] Text remains readable over 3D/background.
 - [ ] Mobile experience is not broken.
 
-## 10. Presentation Mode
+## 12. Presentation Mode
 
 - [ ] Presentation Mode uses a fixed 1920×1080 16:9 stage.
 - [ ] Slide content does not reflow on phone or desktop.
@@ -112,7 +112,7 @@ Failure signals — all should be absent. Reject or revise if any signal is pres
 - [ ] Keyboard navigation works.
 - [ ] Fullscreen behavior is available when requested.
 
-## 11. Images
+## 13. Images
 
 - [ ] Images are verified and accessible.
 - [ ] No broken images are present.
@@ -121,7 +121,7 @@ Failure signals — all should be absent. Reject or revise if any signal is pres
 - [ ] Missing assets use polished placeholders.
 - [ ] Local assets use relative paths that survive moving/deploying the folder.
 
-## 12. Accessibility
+## 14. Accessibility
 
 - [ ] Semantic sections are used.
 - [ ] Buttons and links have focus states.
@@ -130,7 +130,16 @@ Failure signals — all should be absent. Reject or revise if any signal is pres
 - [ ] Decorative visuals are `aria-hidden`.
 - [ ] Keyboard navigation works for interactive elements.
 
-## 11. Responsive Design
+## 15. Inline Editing
+
+- [ ] Standalone HTML deliverables include the default left-top hidden edit affordance unless explicitly disabled by the user.
+- [ ] The edit control appears from the top-left hotzone, toggles edit mode, and uses a file-specific `localStorage` key.
+- [ ] `E` toggles edit mode when focus is not inside editable text; `Cmd/Ctrl+S` saves.
+- [ ] Common visible text is editable, but navigation/filter buttons that control page logic are not made editable.
+- [ ] For HTML PPT/deck outputs, slide navigation ignores keyboard events from `[contenteditable="true"]` so arrow keys move the text cursor while editing.
+- [ ] For dynamically rendered pages, edits are saved before filtering/re-rendering and restored after the DOM is refreshed.
+
+## 16. Responsive Design
 
 - [ ] Hero works on small screens.
 - [ ] Project cards stack cleanly.
@@ -138,7 +147,7 @@ Failure signals — all should be absent. Reject or revise if any signal is pres
 - [ ] No horizontal overflow.
 - [ ] Touch interactions do not require hover.
 
-## 12. HTML PPT / Deck-like Deliverable Review
+## 17. HTML PPT / Deck-like Deliverable Review
 
 Use this section when the user asks this skill for a PPT-style HTML file, deck demo, presentation layout, fixed-screen portfolio pitch, or any slide-like output.
 
@@ -162,8 +171,9 @@ Use this section when the user asks this skill for a PPT-style HTML file, deck d
 - [ ] Rapid next/previous navigation was stress-tested for deck-like outputs; exactly one displayed slide and one active slide were present during/after navigation.
 - [ ] Outside-stage controls are fixed overlays, hover-only, or fullscreen-hidden; they do not reduce stage width, height, scale, or centering.
 - [ ] Stage scaling does not reserve a controls safe area; controls chrome never makes a 16:9 playback viewport render smaller than the maximum 16:9 rectangle.
+- [ ] If inline editing is present, editing text with arrow keys does not change slides.
 
-## 13. Code Quality
+## 18. Code Quality
 
 - [ ] Code runs with stated dependencies.
 - [ ] Personal data is centralized.

@@ -36,11 +36,19 @@
     .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
     .card { border: 1px solid rgba(255,255,255,.1); border-radius: 24px; background: var(--panel); padding: 22px; min-height: 180px; }
     .card p { color: var(--muted); line-height: 1.8; }
+    .edit-hotzone { position: fixed; left: 0; top: 0; width: 92px; height: 72px; z-index: 1000; }
+    .edit-toggle { position: fixed; left: 18px; top: 16px; z-index: 1001; opacity: 0; transform: translateY(-6px); pointer-events: none; border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 9px 13px; background: rgba(12,12,16,.72); color: var(--text); font: 800 13px/1 var(--font-body); backdrop-filter: blur(12px); cursor: pointer; transition: opacity .18s ease, transform .18s ease; }
+    .edit-hotzone:hover + .edit-toggle, .edit-toggle:hover, .edit-toggle:focus-visible, body.editing .edit-toggle { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    body.editing [contenteditable="true"] { outline: 1px dashed rgba(255,106,61,.64); outline-offset: 4px; border-radius: 6px; cursor: text; }
+    body.editing [contenteditable="true"]:focus { outline: 2px solid rgba(255,106,61,.9); background: rgba(255,106,61,.08); }
     @media (max-width: 780px) { .hero, .grid { grid-template-columns: 1fr; } .hero { min-height: auto; gap: 28px; } .portrait { min-height: 260px; } }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
+    @media print { .edit-hotzone, .edit-toggle { display: none !important; } }
   </style>
 </head>
 <body>
+  <div class="edit-hotzone" aria-hidden="true"></div>
+  <button class="edit-toggle" type="button" aria-pressed="false">编辑</button>
   <main class="page">
     <nav class="nav" aria-label="主导航">
       <div class="brand">姓名待补充</div>
@@ -66,5 +74,87 @@
     <section id="skills" class="section"><h2>能力结构</h2><p class="lead">把技能按能力组展示，而不是堆满标签。</p></section>
     <section id="contact" class="section"><h2>联系</h2><p class="lead">邮箱、社交主页或二维码待补充。</p></section>
   </main>
+  <script>
+    class InlineEditor {
+      constructor() {
+        this.key = `personal-homepage-template-edits:${location.pathname}`;
+        this.button = document.querySelector('.edit-toggle');
+        this.nodes = [];
+        this.isActive = false;
+        this.load();
+        this.bind();
+      }
+
+      collect() {
+        this.nodes = [...document.querySelectorAll('.brand, .eyebrow, h1, .lead, .portrait, .section h2, .card h3, .card p')]
+          .filter((node) => !node.closest('.nav, .actions'));
+        const seen = {};
+        this.nodes.forEach((node) => {
+          if (node.dataset.editId) return;
+          const section = node.closest('section')?.id || node.closest('.hero')?.className || 'page';
+          const role = node.classList[0] || node.tagName.toLowerCase();
+          const base = `${section}-${role}`.replace(/[^a-zA-Z0-9_-]+/g, '-').toLowerCase();
+          const count = seen[base] || 0;
+          seen[base] = count + 1;
+          node.dataset.editId = count ? `${base}-${count + 1}` : base;
+        });
+      }
+
+      load() {
+        this.collect();
+        const saved = this.readData();
+        this.nodes.forEach((node) => {
+          if (typeof saved[node.dataset.editId] === 'string') node.innerHTML = saved[node.dataset.editId];
+        });
+      }
+
+      save() {
+        const data = {};
+        this.nodes.forEach((node) => { data[node.dataset.editId] = node.innerHTML; });
+        localStorage.setItem(this.key, JSON.stringify(data));
+        this.button.textContent = '已保存';
+        window.setTimeout(() => { this.button.textContent = this.isActive ? '编辑中' : '编辑'; }, 900);
+      }
+
+      readData() {
+        try {
+          const data = JSON.parse(localStorage.getItem(this.key) || '{}');
+          return data && !Array.isArray(data) ? data : {};
+        } catch (error) {
+          localStorage.removeItem(this.key);
+          return {};
+        }
+      }
+
+      setActive(active) {
+        this.isActive = active;
+        document.body.classList.toggle('editing', active);
+        this.button.setAttribute('aria-pressed', String(active));
+        this.button.textContent = active ? '编辑中' : '编辑';
+        this.nodes.forEach((node) => {
+          node.setAttribute('contenteditable', active ? 'true' : 'false');
+          node.setAttribute('spellcheck', 'false');
+        });
+        if (!active) this.save();
+      }
+
+      bind() {
+        this.button.addEventListener('click', () => this.setActive(!this.isActive));
+        this.nodes.forEach((node) => node.addEventListener('input', () => this.save()));
+        document.addEventListener('keydown', (event) => {
+          const editingText = event.target.closest && event.target.closest('[contenteditable="true"]');
+          if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 's') {
+            event.preventDefault();
+            this.save();
+          } else if (!editingText && event.key.toLowerCase() === 'e') {
+            event.preventDefault();
+            this.setActive(!this.isActive);
+          }
+        });
+      }
+    }
+
+    new InlineEditor();
+  </script>
 </body>
 </html>

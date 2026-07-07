@@ -35,10 +35,18 @@
     .card p { font-size: 25px; line-height: 1.6; }
     .counter { position: fixed; right: 28px; bottom: 24px; z-index: 10; font-family: var(--font-mono); color: rgba(255,255,255,.6); font-size: 13px; }
     .hint { position: fixed; left: 28px; bottom: 24px; z-index: 10; color: rgba(255,255,255,.45); font-size: 13px; }
+    .edit-hotzone { position: fixed; left: 0; top: 0; width: 96px; height: 72px; z-index: 1000; }
+    .edit-toggle { position: fixed; left: 18px; top: 16px; z-index: 1001; opacity: 0; transform: translateY(-6px); pointer-events: none; border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 9px 13px; background: rgba(12,12,16,.72); color: var(--ink); font: 800 13px/1 var(--font-body); backdrop-filter: blur(12px); cursor: pointer; transition: opacity .18s ease, transform .18s ease; }
+    .edit-hotzone:hover + .edit-toggle, .edit-toggle:hover, .edit-toggle:focus-visible, body.editing .edit-toggle { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    body.editing [contenteditable="true"] { outline: 2px dashed rgba(255,106,61,.72); outline-offset: 6px; border-radius: 6px; cursor: text; }
+    body.editing [contenteditable="true"]:focus { outline: 3px solid rgba(255,106,61,.9); background: rgba(255,106,61,.08); }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; } }
+    @media print { .edit-hotzone, .edit-toggle { display: none !important; } }
   </style>
 </head>
 <body>
+  <div class="edit-hotzone" aria-hidden="true"></div>
+  <button class="edit-toggle" type="button" aria-pressed="false">编辑</button>
   <div class="viewport">
     <div class="stage-shell" id="stageShell">
       <main class="stage" id="stage" aria-live="polite">
@@ -81,6 +89,7 @@
 
     window.addEventListener('resize', resize);
     document.addEventListener('keydown', (event) => {
+      if (event.target.closest && event.target.closest('[contenteditable="true"]')) return;
       if (['ArrowRight', 'ArrowDown', ' ', 'PageDown'].includes(event.key)) { event.preventDefault(); go(index + 1); }
       if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(event.key)) { event.preventDefault(); go(index - 1); }
       if (event.key === 'Home') go(0);
@@ -93,6 +102,87 @@
     const match = location.hash.match(/slide-(\d+)/);
     resize();
     if (match) go(Number(match[1]) - 1);
+
+    class InlineEditor {
+      constructor() {
+        this.key = `presentation-template-edits:${location.pathname}`;
+        this.button = document.querySelector('.edit-toggle');
+        this.nodes = [];
+        this.isActive = false;
+        this.load();
+        this.bind();
+      }
+
+      collect() {
+        this.nodes = [...document.querySelectorAll('.slide .kicker, .slide h1, .slide h2, .slide p, .slide h3')];
+        const seen = {};
+        this.nodes.forEach((node) => {
+          if (node.dataset.editId) return;
+          const slide = node.closest('.slide');
+          const slideId = String((slide ? slides.indexOf(slide) + 1 : 0) || 'page').padStart(2, '0');
+          const role = node.classList[0] || node.tagName.toLowerCase();
+          const base = `slide-${slideId}-${role}`.replace(/[^a-zA-Z0-9_-]+/g, '-').toLowerCase();
+          const count = seen[base] || 0;
+          seen[base] = count + 1;
+          node.dataset.editId = count ? `${base}-${count + 1}` : base;
+        });
+      }
+
+      load() {
+        this.collect();
+        const saved = this.readData();
+        this.nodes.forEach((node) => {
+          if (typeof saved[node.dataset.editId] === 'string') node.innerHTML = saved[node.dataset.editId];
+        });
+      }
+
+      save() {
+        const data = {};
+        this.nodes.forEach((node) => { data[node.dataset.editId] = node.innerHTML; });
+        localStorage.setItem(this.key, JSON.stringify(data));
+        this.button.textContent = '已保存';
+        window.setTimeout(() => { this.button.textContent = this.isActive ? '编辑中' : '编辑'; }, 900);
+      }
+
+      readData() {
+        try {
+          const data = JSON.parse(localStorage.getItem(this.key) || '{}');
+          return data && !Array.isArray(data) ? data : {};
+        } catch (error) {
+          localStorage.removeItem(this.key);
+          return {};
+        }
+      }
+
+      setActive(active) {
+        this.isActive = active;
+        document.body.classList.toggle('editing', active);
+        this.button.setAttribute('aria-pressed', String(active));
+        this.button.textContent = active ? '编辑中' : '编辑';
+        this.nodes.forEach((node) => {
+          node.setAttribute('contenteditable', active ? 'true' : 'false');
+          node.setAttribute('spellcheck', 'false');
+        });
+        if (!active) this.save();
+      }
+
+      bind() {
+        this.button.addEventListener('click', () => this.setActive(!this.isActive));
+        this.nodes.forEach((node) => node.addEventListener('input', () => this.save()));
+        document.addEventListener('keydown', (event) => {
+          const editingText = event.target.closest && event.target.closest('[contenteditable="true"]');
+          if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 's') {
+            event.preventDefault();
+            this.save();
+          } else if (!editingText && event.key.toLowerCase() === 'e') {
+            event.preventDefault();
+            this.setActive(!this.isActive);
+          }
+        });
+      }
+    }
+
+    new InlineEditor();
   </script>
 </body>
 </html>

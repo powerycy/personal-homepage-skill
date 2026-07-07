@@ -514,6 +514,53 @@
       text-transform: uppercase;
       pointer-events: none;
     }
+
+    .edit-hotzone {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 84px;
+      height: 84px;
+      z-index: 10000;
+    }
+
+    .edit-toggle {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 10001;
+      opacity: 0;
+      pointer-events: none;
+      border: 1px solid rgba(246, 239, 226, 0.22);
+      border-radius: 999px;
+      padding: 10px 14px;
+      color: var(--ink);
+      background: rgba(9, 11, 13, 0.64);
+      backdrop-filter: blur(14px);
+      font: 700 13px/1 "JetBrains Mono", monospace;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: opacity 0.22s var(--ease-out-expo), border-color 0.22s var(--ease-out-expo);
+      cursor: pointer;
+    }
+
+    .edit-toggle.show,
+    .edit-toggle.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .edit-toggle:hover,
+    .edit-toggle:focus-visible {
+      border-color: var(--gold);
+      outline: 0;
+    }
+
+    body.editing [contenteditable="true"] {
+      outline: 2px dashed rgba(243, 180, 92, 0.85);
+      outline-offset: 6px;
+      cursor: text;
+    }
   </style>
 </head>
 <body>
@@ -670,6 +717,8 @@
       </section>
     </main>
   </div>
+  <div class="edit-hotzone" aria-hidden="true"></div>
+  <button class="edit-toggle" id="editToggle" title="编辑模式（E）" aria-label="编辑模式">编辑</button>
 
   <script>
     /* === SLIDE PRESENTATION CONTROLLER === */
@@ -697,6 +746,7 @@
 
       setupKeyboardNav() {
         window.addEventListener('keydown', (event) => {
+          if (event.target && event.target.getAttribute && event.target.getAttribute('contenteditable') === 'true') return;
           if (['ArrowRight', ' ', 'PageDown'].includes(event.key)) {
             event.preventDefault();
             this.next();
@@ -759,7 +809,113 @@
       previous() { this.showSlide(this.currentSlide - 1); }
     }
 
-    window.addEventListener('DOMContentLoaded', () => new SlidePresentation());
+    class InlineEditor {
+      constructor() {
+        this.isActive = false;
+        this.key = `personal-homepage-skill-overview-edits:${location.pathname}`;
+        this.toggle = document.getElementById('editToggle');
+        this.hotzone = document.querySelector('.edit-hotzone');
+        this.hideTimeout = null;
+        this.load();
+        this.bind();
+      }
+
+      editableNodes() {
+        return Array.from(document.querySelectorAll(
+          '.slide h1,.slide h2,.slide h3,.slide p,.slide strong,.slide li,.slide .chip,.slide .kicker,.slide .mono,.slide .file-row span,.slide .problem-card span'
+        )).filter((node) => !node.closest('.progress,.page-number'));
+      }
+
+      prepareEditIds() {
+        const seen = {};
+        this.editableNodes().forEach((node) => {
+          if (node.dataset.editId) return;
+          const slide = node.closest('.slide');
+          const slideId = slide ? String([...document.querySelectorAll('.slide')].indexOf(slide) + 1).padStart(2, '0') : 'page';
+          const role = node.classList[0] || node.tagName.toLowerCase();
+          const base = `slide-${slideId}-${role}`.replace(/[^a-zA-Z0-9_-]+/g, '-').toLowerCase();
+          const count = seen[base] || 0;
+          seen[base] = count + 1;
+          node.dataset.editId = count ? `${base}-${count + 1}` : base;
+        });
+      }
+
+      bind() {
+        if (!this.toggle || !this.hotzone) return;
+        this.toggle.addEventListener('click', () => this.toggleEditMode());
+        this.hotzone.addEventListener('click', () => this.toggleEditMode());
+        this.hotzone.addEventListener('mouseenter', () => this.showToggle());
+        this.hotzone.addEventListener('mouseleave', () => this.scheduleHide());
+        this.toggle.addEventListener('mouseenter', () => this.showToggle());
+        this.toggle.addEventListener('mouseleave', () => this.scheduleHide());
+        document.addEventListener('keydown', (event) => {
+          if ((event.key === 'e' || event.key === 'E') && (!event.target.getAttribute || event.target.getAttribute('contenteditable') !== 'true')) {
+            event.preventDefault();
+            this.toggleEditMode();
+          }
+          if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 's') {
+            event.preventDefault();
+            this.save();
+          }
+        });
+      }
+
+      showToggle() {
+        clearTimeout(this.hideTimeout);
+        this.toggle.classList.add('show');
+      }
+
+      scheduleHide() {
+        this.hideTimeout = setTimeout(() => {
+          if (!this.isActive) this.toggle.classList.remove('show');
+        }, 420);
+      }
+
+      toggleEditMode() {
+        this.isActive = !this.isActive;
+        document.body.classList.toggle('editing', this.isActive);
+        this.toggle.classList.toggle('active', this.isActive);
+        this.toggle.textContent = this.isActive ? '编辑中' : '编辑';
+        this.editableNodes().forEach((node) => {
+          node.setAttribute('contenteditable', this.isActive ? 'true' : 'false');
+          node.setAttribute('spellcheck', 'false');
+        });
+        if (!this.isActive) this.save();
+      }
+
+      save() {
+        this.prepareEditIds();
+        const data = {};
+        this.editableNodes().forEach((node) => {
+          data[node.dataset.editId] = node.innerHTML;
+        });
+        localStorage.setItem(this.key, JSON.stringify(data));
+        this.toggle.textContent = '已保存';
+        setTimeout(() => {
+          this.toggle.textContent = this.isActive ? '编辑中' : '编辑';
+        }, 900);
+      }
+
+      load() {
+        this.prepareEditIds();
+        const raw = localStorage.getItem(this.key);
+        if (!raw) return;
+        try {
+          const data = JSON.parse(raw);
+          if (!data || Array.isArray(data)) return;
+          this.editableNodes().forEach((node) => {
+            if (typeof data[node.dataset.editId] === 'string') node.innerHTML = data[node.dataset.editId];
+          });
+        } catch (error) {
+          localStorage.removeItem(this.key);
+        }
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      new SlidePresentation();
+      new InlineEditor();
+    });
   </script>
 </body>
 </html>
