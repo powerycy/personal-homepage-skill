@@ -172,6 +172,13 @@ Use this section when the user asks this skill for a PPT-style HTML file, deck d
 - [ ] Outside-stage controls are fixed overlays, hover-only, or fullscreen-hidden; they do not reduce stage width, height, scale, or centering.
 - [ ] Stage scaling does not reserve a controls safe area; controls chrome never makes a 16:9 playback viewport render smaller than the maximum 16:9 rectangle.
 - [ ] If inline editing is present, editing text with arrow keys does not change slides.
+- [ ] Every slide has a unique semantic `data-slide-id`, a preserved `data-original-number`, and a current `data-slide-title`.
+- [ ] Current page number and total count come from the live slide DOM after deletion or reordering.
+- [ ] The slide requirement ledger is fully reconciled with evidence or an explicit approved omission.
+- [ ] `scripts/verify-html-ppt-stage.mjs` completed with exit code 0.
+- [ ] `scripts/capture-slides.mjs` produced one screenshot per slide and a readable `qa-report.json`.
+- [ ] Every full-size screenshot was reviewed with `PPT_VISUAL_QA.md`; measurements were treated as risk signals rather than automatic aesthetic approval.
+- [ ] Layout transforms remain on `.stage` / `data-layout-layer`; motion transforms are isolated on nested motion layers.
 
 ## 18. Code Quality
 
@@ -190,6 +197,7 @@ Use this section when the user asks this skill for a PPT-style HTML file, deck d
 - [ ] Mobile width was inspected for Homepage Mode.
 - [ ] 1920×1080 slide stage was inspected for Presentation Mode.
 - [ ] For HTML PPT outputs, stage-centering geometry was checked across at least three viewport sizes, manually or with `scripts/verify-html-ppt-stage.mjs`.
+- [ ] For HTML PPT outputs, Playwright and Chromium came from declared project dependencies; environment failures were not reported as deck failures or passes.
 - [ ] Any skipped check is named honestly in the delivery note.
 
 ## Final Decision

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    .viewport { position: fixed; inset: 0; display: grid; place-items: center; background: #111; }
+    .stage-shell { position: relative; width: min(100vw, calc(100vh * 16 / 9)); aspect-ratio: 16 / 9; }
+    .stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform: scale(var(--scale)); transform-origin: left top; }
+    .slide { position: absolute; inset: 0; visibility: hidden; opacity: 0; background: #17202a; color: white; }
+    .slide.current { visibility: visible; opacity: 1; }
+    .decorative { position: absolute; inset: 0; }
+    [data-qa-content] { position: absolute; left: 200px; top: 180px; width: 800px; height: 300px; }
+    .hidden-semantic { position: absolute; left: 1500px; top: 900px; opacity: 0; }
+    .visibility-parent { position: absolute; left: 1100px; top: 180px; visibility: hidden; }
+    .visibility-child { width: 300px; height: 120px; visibility: visible; }
+  </style>
+</head>
+<body>
+  <div class="viewport"><div class="stage-shell"><main class="stage">
+    <section class="slide active current" data-slide-id="first" data-original-number="01" data-slide-title="First"><div class="decorative" aria-hidden="true"></div><div data-qa-content><h1>First</h1><p>Actual content</p></div><div class="hidden-semantic"><div data-qa-content>Hidden content</div></div></section>
+    <section class="slide active" data-slide-id="second" data-original-number="02" data-slide-title="Second"><div class="decorative" aria-hidden="true"></div><div data-qa-content><h2>Second</h2></div></section>
+  </main></div></div>
+  <script>
+    const scenario = new URLSearchParams(location.search).get('scenario') || '';
+    const shell = document.querySelector('.stage-shell');
+    const stage = document.querySelector('.stage');
+    const slides = [...document.querySelectorAll('.slide')];
+    let index = 0;
+    if (scenario === 'content-measure') slides[1].classList.remove('active');
+    if (scenario === 'visibility-override') {
+      slides[1].classList.remove('active');
+      const parent = document.createElement('div');
+      parent.className = 'visibility-parent';
+      parent.innerHTML = '<div class="visibility-child" data-qa-content>Visible override</div>';
+      slides[0].appendChild(parent);
+    }
+    function resize() { stage.style.setProperty('--scale', shell.getBoundingClientRect().width / 1920); }
+    function go(next) {
+      index = Math.max(0, Math.min(slides.length - 1, next));
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('current', i === index);
+        if (['content-measure', 'visibility-override'].includes(scenario)) slide.classList.toggle('active', i === index);
+      });
+    }
+    addEventListener('resize', resize);
+    addEventListener('keydown', event => { if (event.key === 'Home') go(0); if (event.key === 'PageDown') go(index + 1); });
+    resize();
+  </script>
+</body>
+</html>
