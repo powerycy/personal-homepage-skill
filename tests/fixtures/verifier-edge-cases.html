@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #111; }
+    .viewport { position: fixed; inset: 0; display: grid; place-items: center; }
+    .stage-shell { position: relative; width: min(100vw, calc(100vh * 16 / 9)); aspect-ratio: 16 / 9; overflow: hidden; }
+    .stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform: scale(var(--scale)); transform-origin: left top; }
+    .slide { position: absolute; inset: 0; visibility: hidden; opacity: 0; pointer-events: none; background: #17202a; color: white; }
+    .slide.active { visibility: visible; opacity: 1; pointer-events: auto; z-index: 1; }
+    .slide.forced-visible { visibility: visible; opacity: 1; pointer-events: auto; z-index: 1; }
+    .slide.active.forced-hidden { visibility: hidden; opacity: 0; pointer-events: none; }
+    .stage.transparent-stage { opacity: 0; }
+    .slide.active [data-layout-layer].late-conflict { transform: translateX(80px); animation: late-motion 1s infinite alternate; }
+    @keyframes late-motion { to { transform: translateY(40px); } }
+  </style>
+</head>
+<body>
+  <div class="viewport"><div class="stage-shell"><main class="stage">
+    <section class="slide active" data-slide-id="opening" data-original-number="01" data-slide-title="Opening"><h1>Opening</h1></section>
+    <section class="slide" data-slide-id="evidence" data-original-number="02" data-slide-title="Evidence"><div data-layout-layer>Evidence</div></section>
+  </main></div></div>
+  <div class="counter">01 / 02</div>
+  <button class="edit-toggle" aria-pressed="false">编辑</button>
+  <script>
+    const scenario = new URLSearchParams(location.search).get('scenario') || '';
+    const shell = document.querySelector('.stage-shell');
+    const stage = document.querySelector('.stage');
+    let slides = [...document.querySelectorAll('.slide')];
+    const counter = document.querySelector('.counter');
+    let index = 0;
+    let lockedUntil = 0;
+
+    if (['single-valid', 'single-missing-special', 'single-missing-navigation'].includes(scenario)) { slides[1].remove(); slides = slides.slice(0, 1); counter.textContent = '01 / 01'; }
+    if (scenario === 'blank-metadata') {
+      slides[0].dataset.slideId = '   ';
+      slides[0].dataset.originalNumber = '\t';
+      slides[0].dataset.slideTitle = ' ';
+    }
+    if (scenario === 'missing-metadata') {
+      slides.forEach(slide => {
+        delete slide.dataset.slideId;
+        delete slide.dataset.originalNumber;
+        delete slide.dataset.slideTitle;
+      });
+    }
+    if (scenario === 'wrong-stage-size') { stage.style.width = '960px'; stage.style.height = '540px'; }
+    if (scenario === 'transparent-stage') stage.classList.add('transparent-stage');
+    if (scenario === 'later-transform') slides[1].querySelector('[data-layout-layer]').classList.add('late-conflict');
+    if (scenario === 'alternate-counter') counter.className = 'slide-counter';
+    if (scenario === 'painted-active-mismatch') {
+      slides[0].classList.remove('active');
+      slides[0].classList.add('forced-visible');
+      slides[1].classList.add('active', 'forced-hidden');
+    }
+
+    function resize() { stage.style.setProperty('--scale', String(shell.getBoundingClientRect().width / stage.offsetWidth)); }
+    function go(next) {
+      if (scenario === 'rapid-loss' && performance.now() < lockedUntil) return;
+      if (scenario === 'rapid-loss') lockedUntil = performance.now() + 20;
+      index = Math.max(0, Math.min(slides.length - 1, next));
+      if (scenario === 'metadata-drift' && index === 1) slides[1].dataset.slideId = 'changed-after-navigation';
+      slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
+      if (scenario !== 'stale-counter') counter.textContent = `${String(index + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+    }
+    function inField(target) { return target.closest?.('input, textarea, select, [contenteditable="true"]'); }
+    function setEditing(active) {
+      document.body.classList.toggle('editing', active);
+      document.querySelector('.edit-toggle').setAttribute('aria-pressed', String(active));
+      document.querySelectorAll('.slide h1, .slide [data-layout-layer]').forEach(node => node.contentEditable = active ? 'true' : 'false');
+    }
+
+    addEventListener('resize', resize);
+    document.addEventListener('keydown', event => {
+      if (scenario === 'fake-special' && ['f', 'e', 'escape', 's'].includes(event.key.toLowerCase())) { event.preventDefault(); return; }
+      if (scenario === 'single-missing-special') return;
+      if (scenario !== 'bad-edit-context' && inField(event.target) && !(event.metaKey || event.ctrlKey)) return;
+      if (scenario !== 'single-missing-navigation' && ['ArrowRight', 'ArrowDown', ' ', 'PageDown'].includes(event.key)) { event.preventDefault(); go(index + 1); }
+      if (scenario !== 'single-missing-navigation' && ['ArrowLeft', 'ArrowUp', 'PageUp'].includes(event.key)) { event.preventDefault(); go(index - 1); }
+      if (scenario !== 'single-missing-navigation' && event.key === 'Home') { event.preventDefault(); go(0); }
+      if (scenario !== 'single-missing-navigation' && event.key === 'End') { event.preventDefault(); go(slides.length - 1); }
+      if (event.key.toLowerCase() === 'f') {
+        event.preventDefault();
+        if (scenario === 'fullscreen-no-toggle') document.documentElement.requestFullscreen();
+        else document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+      }
+      if (event.key.toLowerCase() === 'e') { event.preventDefault(); setEditing(!document.body.classList.contains('editing')); }
+      if (event.key === 'Escape') { event.preventDefault(); setEditing(false); }
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 's') {
+        event.preventDefault();
+        localStorage.setItem('edge-case-save', document.querySelector('.slide.active')?.textContent || 'saved');
+      }
+    });
+    resize();
+  </script>
+</body>
+</html>

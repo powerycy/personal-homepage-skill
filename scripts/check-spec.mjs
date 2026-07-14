@@ -13,9 +13,12 @@ const requiredFiles = [
   'DESIGN_REVIEW.md',
   'IMAGE_WORKFLOW.md',
   'PRESENTATION_WORKFLOW.md',
+  'PPT_VISUAL_QA.md',
   'templates/orbis-nft/README.md',
   'templates/presentation-html/README.md',
   'templates/presentation-html/presentation.html',
+  'scripts/capture-slides.mjs',
+  'scripts/verify-html-ppt-stage.mjs',
   'src/main.tsx',
   'src/App.tsx',
   'src/index.css',
@@ -58,11 +61,14 @@ const requiredTemplates = [
 ];
 
 const requiredSnippets = {
-  'SKILL.md': ['name: personal-homepage-skill', 'Homepage Mode', 'Presentation Mode', 'Reference first', 'Chinese typography', 'Images must be verified'],
+  'SKILL.md': ['name: personal-homepage-skill', 'Homepage Mode', 'Presentation Mode', 'PRESENTATION_WORKFLOW.md', 'PPT_VISUAL_QA.md', '$SKILL_DIR', 'must not be applied to Homepage Mode', 'Reference first', 'Chinese typography', 'Images must be verified'],
   'HOMEPAGE_GENERATION_WORKFLOW.md': ['Mode detection', 'Reference-first behavior', 'Style previews', 'Verification'],
-  'PRESENTATION_WORKFLOW.md': ['1920×1080', '16:9', 'keyboard navigation', 'Low density / speaker-led', 'High density / reading-first'],
+  'PRESENTATION_WORKFLOW.md': ['1920×1080', '16:9', 'keyboard navigation', 'Eight-problem acceptance map', 'Requirement omission', 'Template fidelity', 'Asset selection', 'Visual balance', 'Sparse slides', 'Ineffective changes', 'Shortcut coverage', 'Deletion and numbering', 'Audit-only branch', 'SKILL_DIR', 'NODE_BIN', 'slide-requirements.json', 'template-decomposition.txt', 'visual-review.txt', 'slide requirement ledger', 'data-slide-id', 'verify-html-ppt-stage.mjs', 'capture-slides.mjs', 'Low density / speaker-led', 'High density / reading-first'],
+  'PPT_VISUAL_QA.md': ['two phases', 'Before authoring', 'After rendering', 'Template decomposition', 'Asset priority', 'Visual center', 'Low-text slides', 'Full-size screenshot review'],
   'templates/orbis-nft/README.md': ['Orbis NFT Space Landing Prompt Template', 'liquid-glass', 'Anton', 'Condiment', 'CloudFront video slots'],
-  'templates/presentation-html/presentation.html': ['--stage-w: 1920', '--stage-h: 1080', 'class="slide active"', 'ArrowRight', 'requestFullscreen'],
+  'templates/presentation-html/presentation.html': ['--stage-w: 1920', '--stage-h: 1080', 'class="slide active"', 'data-slide-id=', 'data-original-number=', 'data-slide-title=', 'ArrowRight', 'Escape', 'requestFullscreen'],
+  'scripts/capture-slides.mjs': ['qa-report.json', 'slide.dataset.slideId', 'titleBaseline', 'contentBoundingBox', 'bottomSafeZoneViolated'],
+  'scripts/verify-html-ppt-stage.mjs': ['duplicate data-slide-id', 'missing or ineffective shortcuts', 'broken images', 'layout/motion transform conflict'],
   'DESIGN_REVIEW.md': ['Chinese typography', 'Hero section', 'Presentation Mode', 'Images', 'Verification record'],
   'IMAGE_WORKFLOW.md': ['Classify roles', 'Evaluate usability', 'Missing image fallback'],
   'STYLE_PRESETS.md': requiredTemplates,
@@ -127,7 +133,7 @@ if (templateRegistry) {
   }
 }
 
-for (const doc of ['SKILL.md', 'README.md', 'STYLE_PRESETS.md', 'HOMEPAGE_GENERATION_WORKFLOW.md', 'PRESENTATION_WORKFLOW.md', 'DESIGN_REVIEW.md', 'IMAGE_WORKFLOW.md']) {
+for (const doc of ['SKILL.md', 'README.md', 'STYLE_PRESETS.md', 'HOMEPAGE_GENERATION_WORKFLOW.md', 'PRESENTATION_WORKFLOW.md', 'PPT_VISUAL_QA.md', 'DESIGN_REVIEW.md', 'IMAGE_WORKFLOW.md']) {
   const content = fileContents.get(doc);
   if (!content) continue;
   if (/\b(TODO|TBD|FIXME)\b/i.test(content)) {

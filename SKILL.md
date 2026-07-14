@@ -22,7 +22,7 @@ This skill is not a generic UI beautification tool. It is specifically for perso
 2. **Chinese typography is first-class.** Use CJK-capable font stacks for all Chinese text. Never let Chinese body text fall through random Latin-font fallback.
 3. **Images must be verified.** Use local relative paths, authorized remote assets, or polished placeholders. Never reference inaccessible absolute paths or fake image URLs.
 4. **Show, do not only describe.** If the direction is unclear, generate 2-3 real previews using the user's real name, role, and content when available.
-5. **Verify before delivery.** Check desktop and mobile layout, no horizontal overflow, no broken images, no bottom crowding, and no visibly tiny hero/project assets.
+5. **Verify before delivery.** In Homepage Mode, check desktop/mobile layout, overflow, assets, bottom spacing, and hero/project scale. In Presentation Mode, follow the mandatory workflow and its deterministic plus rendered QA instead of applying homepage responsiveness rules.
 
 ## Core Mission
 
@@ -71,6 +71,8 @@ Before generating a full homepage, use the relevant reference files:
 | Component implementation patterns | [COMPONENT_PATTERNS.md](COMPONENT_PATTERNS.md) |
 | Profile data structure | [DATA_SCHEMA.md](DATA_SCHEMA.md) |
 | Final review checklist | [DESIGN_REVIEW.md](DESIGN_REVIEW.md) |
+| Presentation Mode workflow and deterministic QA | [PRESENTATION_WORKFLOW.md](PRESENTATION_WORKFLOW.md) |
+| Presentation Mode rendered visual judgment | [PPT_VISUAL_QA.md](PPT_VISUAL_QA.md) |
 | PM and engineering context | [PRD.md](PRD.md), [TECHNICAL_ROUTE.md](TECHNICAL_ROUTE.md) |
 
 ## Default Workflow
@@ -318,97 +320,22 @@ Use one primary motion system plus small supporting interactions. Examples: scro
 
 Backgrounds must support the person's identity and improve depth/readability. Use texture, grain, geometry, cinematic video, gradient mesh, research grids, or image crops intentionally. Do not use random glowing balls as filler.
 
-### Visual QA
+### Homepage visual QA
 
 Before final delivery, check whether the page looks like a real deployable homepage: no overflow, no overlapping text, readable mobile hero, obvious CTA, working links/assets, and visual consistency across desktop and mobile.
 
-### HTML PPT / deck-like output QA
+### Presentation Mode mandatory workflow
 
-When this skill is explicitly invoked to create a PPT-style HTML layout, slide deck demo, presentation page, or fixed-screen showcase, treat it as a deck-like deliverable even though the skill's primary domain is personal homepages. In that mode, the output must feel like a real HTML PPT, not a broken webpage or stacked homepage sections.
+When the requested output is an HTML PPT, fixed 16:9 deck, browser presentation, roadshow, or slide-like showcase:
 
-Non-negotiable rules:
+1. Read [PRESENTATION_WORKFLOW.md](PRESENTATION_WORKFLOW.md) before authoring. Create its slide requirement ledger, decompose any reference template, use stable semantic slide metadata, and keep layout transforms separate from motion transforms.
+2. Read [PPT_VISUAL_QA.md](PPT_VISUAL_QA.md) before selecting assets and again when reviewing rendered slides.
+3. Resolve `$SKILL_DIR`, `$NODE_BIN`, and a scratch `$QA_ROOT` exactly as documented; never assume the deck working directory contains the Skill scripts.
+4. Run `$SKILL_DIR/scripts/verify-html-ppt-stage.mjs` for deterministic structure, stage, interaction, asset, numbering, and transform checks.
+5. Run `$SKILL_DIR/scripts/capture-slides.mjs` to capture every slide and produce `qa-report.json`; then inspect every screenshot at full size and reconcile the ledger.
+6. Treat dependency/invocation failures separately from deck failures. Do not claim a skipped or unavailable check passed.
 
-- **Correct slide navigation:** Use one fixed 16:9 stage with stacked slides and true page-by-page switching. Do not make users scroll through a long page when they asked for an HTML PPT. Support Arrow keys, Space, PageUp/PageDown, Home/End, touch swipe, and an outside-stage page counter.
-- **Full-size stage shell:** For PPT decks that scale a fixed `1920×1080` stage, use a 16:9 shell that occupies the largest possible viewport rectangle, then scale the internal stage from that shell. In a 1920×1080 viewport, the rendered stage must be exactly 1920×1080 with no reserved safe-area gap.
-- **Overlay-only controls:** Outside-stage counters and controls are presentation chrome. They may be fixed overlays, hover-only controls, or fullscreen-hidden controls, but they must not reduce `.stage` width, height, scale, or centering. Never shrink the deck just to keep controls outside the slide image.
-- **One slide visible at a time:** Control visibility with active classes, opacity/visibility/pointer-events, or equivalent. Do not rely on `display: block` layout states that can be overridden by later flex/grid rules and reveal multiple slides.
-- **PPT-only slide isolation:** When, and only when, the requested output is an HTML PPT / slide deck / fixed 16:9 presentation, hidden slides must be removed from painting. Use `visibility`, `opacity`, `pointer-events`, and `z-index`, or use `display: none` only when it cannot be overridden by slide layout classes.
-- **No whole-slide ghosting:** For PPT page switching only, do not use whole-slide opacity crossfades that allow previous and next slide text to paint at the same time. If animated slide transitions are required, use a transition lock, active/target-only rendering, or another implementation that guarantees old and new slide body text, titles, numerals, cards, and footers never overlap in rendered frames.
-- **Opaque slide stage:** For PPT page switching only, each slide must paint an opaque background over the stage so previous slide content cannot show through during navigation. This does not restrict transparent overlays or local visual effects inside ordinary homepage sections.
-- **Typography must be calibrated, not blindly enlarged:** Compare against the reference/sample deck. Chinese titles usually need smaller visual size than Latin display text. If a template's Latin hero size is huge, adapt it for Chinese rather than forcing oversized fallback glyphs.
-- **Use the reference's font logic:** Preserve what type is used for headlines, body, labels, and numerals. If the reference uses distinctive numeral/display typography, make numbers a designed visual element instead of a small plain label.
-- **Reserve layout zones:** Title zones, content grids, screenshots, footer/chrome, and bottom color bars must have explicit safe space. Titles must not collide with cards. Bottom bars must not cover body text.
-- **Contrast is mandatory:** White/paper/light cards require dark text and/or visible borders. Dark/teal/blue/magenta cards require light text. Do not put low-contrast light text on light cards or pale accent text on pale backgrounds.
-- **No compression by illegibility:** If slide content does not fit, split into another slide, reduce item count, change the grid, or move screenshots/callouts. Do not solve it by shrinking text below comfortable reading size or allowing overlap.
-- **Inline editing coexists with navigation:** If the default inline editor is present, slide keyboard navigation must ignore events originating inside `[contenteditable="true"]`, so text editing can use arrow keys without changing slides.
-- **Rendered verification:** Check the actual rendered result slide-by-slide. DOM overflow checks are insufficient because visual overlap can happen without scroll overflow.
-- **PPT navigation stress verification:** For HTML PPT / deck-like outputs only, test rapid next/previous navigation and inspect at least one screenshot during or immediately after navigation. Passing criteria: exactly one displayed slide, exactly one active slide, no ghost text from adjacent slides, and outside-stage controls do not cover slide content.
-
-Safe default PPT slide switching pattern:
-
-```css
-.slide {
-  visibility: hidden;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.slide.active {
-  visibility: visible;
-  opacity: 1;
-  pointer-events: auto;
-  z-index: 1;
-}
-```
-
-Safe default fixed-stage shell pattern:
-
-```css
-.deck-viewport {
-  position: fixed;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-}
-
-.stage-shell {
-  width: min(100vw, calc(100vh * 16 / 9));
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-}
-
-.stage {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 1920px;
-  height: 1080px;
-  transform-origin: left top;
-  transform: scale(var(--stage-scale, 1));
-}
-```
-
-```js
-const scale = stageShell.getBoundingClientRect().width / 1920;
-stage.style.setProperty("--stage-scale", Math.max(0.08, scale));
-```
-
-If the deck uses a different stage size, keep the same centering contract and update only the width, height, and scale divisors. This rule applies only to HTML PPT / fixed-screen presentation outputs, not normal scrolling homepages.
-
-If a deck uses animated transitions, the implementation must still satisfy the same one-painted-slide visual guarantee. Do not transfer this PPT switching constraint to Homepage Mode.
-
-Common failure cases to proactively prevent:
-
-- PPT transition ghosting where two slides visually overlap because whole-slide `opacity` fades, transparent slide backgrounds, or unlocked rapid navigation are used.
-- Fixed 16:9 stage appears visually off-center because a large unscaled stage is centered with grid/flex and then shrunk with `transform: scale(...)`.
-- Deck appears too small because the scale calculation subtracts a bottom controls safe area from a 16:9 presentation viewport.
-- Page 2 style context cards where the big number/text lacks design hierarchy.
-- Page 6/8/10/11-type layouts where the title presses into the first row of color blocks.
-- Page 7-type dark layouts where body copy runs into bottom blocks or footer chrome.
-- Page 9-type layouts where a bottom callout bar covers screenshot captions or text.
-- Page 12-type layouts where paper/white cards have too little contrast against nearby text or the background.
+These fixed-stage, slide-navigation, numbering, density, and PPT visual rules apply only to Presentation Mode and must not be applied to Homepage Mode. Homepage Mode keeps its responsive continuous-page workflow and existing review rules.
 
 ## Anti-AI-Slop Rules
 
@@ -498,4 +425,4 @@ personal-homepage-skill/
 
 ## Final Review
 
-Always run the checklist in [DESIGN_REVIEW.md](DESIGN_REVIEW.md) before claiming the homepage is complete.
+For Homepage Mode, always run [DESIGN_REVIEW.md](DESIGN_REVIEW.md) before claiming completion. For Presentation Mode, follow [PRESENTATION_WORKFLOW.md](PRESENTATION_WORKFLOW.md), [PPT_VISUAL_QA.md](PPT_VISUAL_QA.md), and the Presentation section of `DESIGN_REVIEW.md`; do not apply Homepage desktop/mobile criteria to the fixed stage.

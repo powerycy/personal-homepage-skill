@@ -1,17 +1,20 @@
 {
   "name": "personal-homepage-skill",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.3.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "check": "npm run check:spec && npm run check:templates && npm run build",
-    "check:all": "npm run check:spec && npm run check:templates && npm run check:visual && npm run build",
+    "check:all": "npm run check:spec && npm run check:templates && npm run check:visual && npm run test:ppt-qa && npm run test:homepage-regression && npm run build",
     "check:spec": "node scripts/check-spec.mjs",
     "check:templates": "node scripts/check-templates.mjs",
     "check:visual": "node scripts/check-visual.mjs",
-    "verify:ppt-stage": "node scripts/verify-html-ppt-stage.mjs"
+    "verify:ppt-stage": "node scripts/verify-html-ppt-stage.mjs",
+    "capture:ppt": "node scripts/capture-slides.mjs",
+    "test:ppt-qa": "node tests/verify-html-ppt-stage.test.mjs && node tests/capture-slides.test.mjs",
+    "test:homepage-regression": "node tests/homepage-regression.test.mjs"
   },
   "engines": {
     "node": ">=22"
@@ -27,6 +30,7 @@
     "@types/react-dom": "^18.3.7",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
+    "playwright": "^1.55.0",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.7.3",
     "vite": "^5.4.21"

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #111; }
+    .viewport { position: fixed; inset: 0; display: grid; place-items: center; }
+    .stage-shell { position: relative; width: min(100vw, calc(100vh * 16 / 9)); aspect-ratio: 16 / 9; overflow: hidden; }
+    .stage { position: absolute; inset: 0 auto auto 0; width: 1920px; height: 1080px; transform: scale(var(--scale)); transform-origin: left top; }
+    .slide { position: absolute; inset: 0; visibility: hidden; opacity: 0; pointer-events: none; background: #17202a; color: white; }
+    .slide.active { visibility: visible; opacity: 1; pointer-events: auto; z-index: 1; }
+    [data-layout-layer] { position: absolute; left: 120px; top: 120px; }
+    [data-motion-layer] { animation: enter 1ms both; }
+    @keyframes enter { from { opacity: .9; } to { opacity: 1; } }
+  </style>
+</head>
+<body>
+  <div class="viewport"><div class="stage-shell"><main class="stage">
+    <section class="slide active" data-slide-id="opening" data-original-number="01" data-slide-title="开场"><div data-layout-layer><div data-motion-layer>开场</div></div></section>
+    <section class="slide" data-slide-id="evidence" data-original-number="02" data-slide-title="证据"><img alt="测试图片" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="></section>
+  </main></div></div>
+  <div class="counter">01 / 02</div>
+  <button class="edit-toggle">编辑</button>
+  <script>
+    const shell = document.querySelector('.stage-shell');
+    const stage = document.querySelector('.stage');
+    const slides = [...document.querySelectorAll('.slide')];
+    const counter = document.querySelector('.counter');
+    let index = 0;
+    function inField(target) { return target.closest?.('input, textarea, select, [contenteditable="true"]'); }
+    function setEditing(active) {
+      document.body.classList.toggle('editing', active);
+      document.querySelector('.edit-toggle').setAttribute('aria-pressed', String(active));
+      document.querySelectorAll('.slide h1, .slide [data-layout-layer]').forEach(node => node.contentEditable = active ? 'true' : 'false');
+    }
+    function resize() { stage.style.setProperty('--scale', shell.getBoundingClientRect().width / 1920); }
+    function go(next) {
+      index = Math.max(0, Math.min(slides.length - 1, next));
+      slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
+      counter.textContent = `${String(index + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+    }
+    addEventListener('resize', resize);
+    document.addEventListener('keydown', event => {
+      if (inField(event.target) && !(event.metaKey || event.ctrlKey)) return;
+      if (['ArrowRight', 'ArrowDown', ' ', 'PageDown'].includes(event.key)) { event.preventDefault(); go(index + 1); }
+      if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(event.key)) { event.preventDefault(); go(index - 1); }
+      if (event.key === 'Home') { event.preventDefault(); go(0); }
+      if (event.key === 'End') { event.preventDefault(); go(slides.length - 1); }
+      if (event.key.toLowerCase() === 'f') { event.preventDefault(); document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+      if (event.key === 'Escape') { event.preventDefault(); setEditing(false); }
+      if (event.key.toLowerCase() === 'e') { event.preventDefault(); setEditing(!document.body.classList.contains('editing')); }
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 's') { event.preventDefault(); localStorage.setItem('fixture-save', document.querySelector('.slide.active')?.innerHTML || 'saved'); }
+    });
+    resize();
+  </script>
+</body>
+</html>

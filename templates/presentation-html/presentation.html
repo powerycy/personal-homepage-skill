@@ -50,12 +50,12 @@
   <div class="viewport">
     <div class="stage-shell" id="stageShell">
       <main class="stage" id="stage" aria-live="polite">
-        <section class="slide active" aria-label="Slide 1">
+        <section class="slide active" aria-label="Slide 1" data-slide-id="opening" data-original-number="01" data-slide-title="把项目讲成一套清楚的 16:9 演示">
           <div class="kicker">Project / 2026</div>
           <h1>把项目讲成一套清楚的 16:9 演示</h1>
           <p class="lead">这里放 1-2 句核心说明。长段中文不要做成巨大标题；需要更多信息时拆成下一页。</p>
         </section>
-        <section class="slide" aria-label="Slide 2">
+        <section class="slide" aria-label="Slide 2" data-slide-id="one-idea-per-slide" data-original-number="02" data-slide-title="一页只承担一个主要观点">
           <h2>一页只承担一个主要观点</h2>
           <div class="grid">
             <article class="card"><h3>问题</h3><p>用短句说明背景和痛点。</p></article>
@@ -89,12 +89,13 @@
 
     window.addEventListener('resize', resize);
     document.addEventListener('keydown', (event) => {
-      if (event.target.closest && event.target.closest('[contenteditable="true"]')) return;
+      if (event.target.closest && event.target.closest('input, textarea, select, [contenteditable="true"]')) return;
       if (['ArrowRight', 'ArrowDown', ' ', 'PageDown'].includes(event.key)) { event.preventDefault(); go(index + 1); }
       if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(event.key)) { event.preventDefault(); go(index - 1); }
-      if (event.key === 'Home') go(0);
-      if (event.key === 'End') go(slides.length - 1);
+      if (event.key === 'Home') { event.preventDefault(); go(0); }
+      if (event.key === 'End') { event.preventDefault(); go(slides.length - 1); }
       if (event.key.toLowerCase() === 'f' && document.fullscreenEnabled) {
+        event.preventDefault();
         document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
       }
     });
@@ -119,7 +120,7 @@
         this.nodes.forEach((node) => {
           if (node.dataset.editId) return;
           const slide = node.closest('.slide');
-          const slideId = String((slide ? slides.indexOf(slide) + 1 : 0) || 'page').padStart(2, '0');
+          const slideId = slide?.dataset.slideId || 'page';
           const role = node.classList[0] || node.tagName.toLowerCase();
           const base = `slide-${slideId}-${role}`.replace(/[^a-zA-Z0-9_-]+/g, '-').toLowerCase();
           const count = seen[base] || 0;
@@ -170,13 +171,16 @@
         this.button.addEventListener('click', () => this.setActive(!this.isActive));
         this.nodes.forEach((node) => node.addEventListener('input', () => this.save()));
         document.addEventListener('keydown', (event) => {
-          const editingText = event.target.closest && event.target.closest('[contenteditable="true"]');
+          const typingContext = event.target.closest && event.target.closest('input, textarea, select, [contenteditable="true"]');
           if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 's') {
             event.preventDefault();
             this.save();
-          } else if (!editingText && event.key.toLowerCase() === 'e') {
+          } else if (!typingContext && event.key.toLowerCase() === 'e') {
             event.preventDefault();
             this.setActive(!this.isActive);
+          } else if (event.key === 'Escape' && this.isActive) {
+            event.preventDefault();
+            this.setActive(false);
           }
         });
       }
