@@ -26,6 +26,8 @@ Gather missing inputs only when they materially affect the result:
 - Visual references.
 - Delivery format: single HTML or React/Tailwind.
 
+Create a lightweight homepage requirement checklist before coding. Keep it short, but map each important original request to known assets, the target section/component, expected interaction state, and acceptance evidence. Mark approved omissions explicitly instead of silently dropping requirements.
+
 ## 3. Reference-first behavior
 
 When a reference exists:
@@ -35,6 +37,8 @@ When a reference exists:
 - Match the reference’s density level.
 - Improve only where the user’s content needs adaptation.
 - Do not force a template-selection step unless the user asks for alternatives.
+- Write a structured template decomposition before coding: section rhythm, grid, type scale, media behavior, motion, component states, and density.
+- After implementation, run a desktop/mobile rendered comparison against the reference or adopted version and record the visible deltas.
 
 ## 4. Style previews
 
@@ -62,6 +66,8 @@ Choose density mode and section structure:
 - Creator: hero, platforms, content themes, featured posts, collaboration.
 - Art: hero, collections, artwork wall, statement, contact.
 
+For low-content pages, use a low-content homepage strategy instead of padding the page. Prefer a real large image, one single featured case, editorial whitespace, asymmetric composition, and a strong CTA. Do not fill space with meaningless cards, duplicate metrics, empty icon grids, or fake testimonials.
+
 ## 7. Generation rules
 
 - Centralize profile/content data.
@@ -79,9 +85,14 @@ Before delivery:
 
 - Run build/check scripts when available.
 - Inspect desktop and mobile widths.
+- Capture or inspect desktop/mobile screenshots when layout or style changed materially.
+- Check final computed styles for the elements that were changed, especially colors, transforms, display, position, z-index, overflow, and font values.
 - Check no horizontal overflow.
 - Check images load or placeholders are intentional.
+- Check assets and key interactions, including navigation, CTA links, filters, editing controls, hover/focus states, and reduced-motion behavior.
 - Check hero title wrapping.
 - Check bottom spacing.
 - Check visual balance between columns.
+- Separate positioning layers from animation layers only when needed to fix ineffective transforms or overridden motion; do not introduce this pattern as a default requirement.
+- Confirm that slide-id, page numbers, 1920×1080, presentation keyboard shortcuts, and bottom safe-zone rules must not be required for Homepage Mode.
 - Review against `DESIGN_REVIEW.md`.
