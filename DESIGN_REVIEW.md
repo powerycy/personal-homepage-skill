@@ -7,9 +7,17 @@ Run this checklist before saying a generated homepage or PPT-style HTML presenta
 Use this section when the user provided a concrete template, reference site, screenshot description, long visual prompt, or GitHub portfolio template.
 
 - [ ] Did the output treat the provided reference as the selected direction?
+- [ ] Was a structured template decomposition created before coding?
 - [ ] Did it preserve the reference's information architecture, visual rhythm, component organization, typography mood, spacing, and motion model?
+- [ ] Was a desktop/mobile rendered comparison completed after implementation?
 - [ ] Did it avoid replacing the reference with a generic self-generated style, bento layout, dashboard, terminal UI, or random cyber/particle effect?
 - [ ] If source code was reused, is the license checked or attribution recorded?
+
+## 1A. Homepage Requirement Coverage
+
+- [ ] Is there a lightweight homepage requirement checklist?
+- [ ] Does it map the original request, assets, target section/component, interaction state, and acceptance evidence?
+- [ ] Are missing assets, unavailable proof, or approved omissions named explicitly?
 
 ## 2. Personal Homepage Fit
 
@@ -68,6 +76,8 @@ Use this section when the user provided a concrete template, reference site, scr
 - [ ] Does the background create identity-specific atmosphere instead of using random glow/orb filler?
 - [ ] Is there one primary motion system rather than scattered particle/hover effects?
 - [ ] Does the page look like a real deployable homepage, not a demo or planning artifact?
+- [ ] If content is intentionally sparse, does it use a low-content homepage strategy: real large image, single featured case, editorial whitespace, asymmetric composition, and useful CTA?
+- [ ] Did the page avoid meaningless cards, empty icon walls, duplicate metrics, fake testimonials, or filler sections?
 
 ## 9. Anti-Template Review
 
@@ -195,6 +205,11 @@ Use this section when the user asks this skill for a PPT-style HTML file, deck d
 - [ ] Build/check commands were run when available.
 - [ ] Desktop width was inspected for Homepage Mode.
 - [ ] Mobile width was inspected for Homepage Mode.
+- [ ] Desktop/mobile screenshots were captured or inspected for Homepage Mode when layout changed.
+- [ ] Final computed styles were checked for changed Homepage elements.
+- [ ] Assets and key interactions were checked in the rendered page.
+- [ ] If transforms failed to take effect, positioning layers were separated from animation layers only when needed.
+- [ ] Slide-id, page numbers, 1920×1080, presentation keyboard shortcuts, and bottom safe-zone rules must not be required for Homepage Mode.
 - [ ] 1920×1080 slide stage was inspected for Presentation Mode.
 - [ ] For HTML PPT outputs, stage-centering geometry was checked across at least three viewport sizes, manually or with `scripts/verify-html-ppt-stage.mjs`.
 - [ ] For HTML PPT outputs, Playwright and Chromium came from declared project dependencies; environment failures were not reported as deck failures or passes.

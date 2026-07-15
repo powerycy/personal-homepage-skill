@@ -22,7 +22,7 @@ This skill is not a generic UI beautification tool. It is specifically for perso
 2. **Chinese typography is first-class.** Use CJK-capable font stacks for all Chinese text. Never let Chinese body text fall through random Latin-font fallback.
 3. **Images must be verified.** Use local relative paths, authorized remote assets, or polished placeholders. Never reference inaccessible absolute paths or fake image URLs.
 4. **Show, do not only describe.** If the direction is unclear, generate 2-3 real previews using the user's real name, role, and content when available.
-5. **Verify before delivery.** In Homepage Mode, check desktop/mobile layout, overflow, assets, bottom spacing, and hero/project scale. In Presentation Mode, follow the mandatory workflow and its deterministic plus rendered QA instead of applying homepage responsiveness rules.
+5. **Verify before delivery.** In Homepage Mode, check desktop/mobile layout, overflow, assets, bottom spacing, hero/project scale, computed styles, screenshots, and key interactions. In Presentation Mode, follow the mandatory workflow and its deterministic plus rendered QA instead of applying homepage responsiveness rules.
 
 ## Core Mission
 
@@ -335,7 +335,7 @@ When the requested output is an HTML PPT, fixed 16:9 deck, browser presentation,
 5. Run `$SKILL_DIR/scripts/capture-slides.mjs` to capture every slide and produce `qa-report.json`; then inspect every screenshot at full size and reconcile the ledger.
 6. Treat dependency/invocation failures separately from deck failures. Do not claim a skipped or unavailable check passed.
 
-These fixed-stage, slide-navigation, numbering, density, and PPT visual rules apply only to Presentation Mode and must not be applied to Homepage Mode. Homepage Mode keeps its responsive continuous-page workflow and existing review rules.
+These fixed-stage, slide-navigation, numbering, density, and PPT visual rules apply only to Presentation Mode and must not be applied to Homepage Mode. Homepage Mode keeps its responsive continuous-page workflow and existing review rules; slide-id, page numbers, 1920×1080, presentation keyboard shortcuts, and bottom safe-zone rules must not be required for Homepage Mode.
 
 ## Anti-AI-Slop Rules
 
