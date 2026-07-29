@@ -144,6 +144,8 @@ Failure signals — all should be absent. Reject or revise if any signal is pres
 
 - [ ] Standalone HTML deliverables include the default left-top hidden edit affordance unless explicitly disabled by the user.
 - [ ] The edit control appears from the top-left hotzone, toggles edit mode, and uses a file-specific `localStorage` key.
+- [ ] The top-left edit affordance includes `导出 HTML`, and the downloaded standalone file embeds current edits rather than depending on the source browser's `localStorage`.
+- [ ] Exported HTML uses a unique edit-version namespace, removes editing state, resets runtime-generated controls, and remains editable and re-exportable.
 - [ ] `E` toggles edit mode when focus is not inside editable text; `Cmd/Ctrl+S` saves.
 - [ ] Common visible text is editable, but navigation/filter buttons that control page logic are not made editable.
 - [ ] For HTML PPT/deck outputs, slide navigation ignores keyboard events from `[contenteditable="true"]` so arrow keys move the text cursor while editing.
