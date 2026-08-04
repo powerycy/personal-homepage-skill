@@ -1,0 +1,824 @@
+
+<!--
+  Personal Homepage Skill Lab — TRAE AI 创造力大赛 · 学习工作赛道 · 初赛 Demo
+  核心项目 personal-homepage-skill 由 powerycy 公开维护，已持续迭代。
+  本次参赛版的创意梳理、交互 Demo 设计与质量优化由 TRAE Work 完成。
+  纯单文件 HTML，CSS/JS/SVG 全内联，双击即可离线运行。
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个人主页 Skill 实验室 · 初赛 Demo</title>
+<style>
+  :root{
+    --bg:#0b0c10;--bg-2:#111318;--bg-3:#181b22;--card:#151821;
+    --border:#252a36;--border-hi:#3a4155;--text:#e6e9f0;--text-2:#a0a8bc;
+    --text-3:#6b7388;--accent:#7c5cff;--accent-2:#a78bfa;--accent-soft:rgba(124,92,255,0.14);
+    --cyan:#22d3ee;--cyan-soft:rgba(34,211,238,0.12);--green:#34d399;--green-soft:rgba(52,211,153,0.12);
+    --amber:#fbbf24;--amber-soft:rgba(251,191,36,0.12);--rose:#fb7185;--rose-soft:rgba(251,113,133,0.12);
+    --radius:10px;--radius-sm:6px;--mono:'SF Mono','JetBrains Mono',Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;
+    background:var(--bg);color:var(--text);line-height:1.65;font-size:14px;overflow-x:hidden;
+  }
+  a{color:var(--accent-2);text-decoration:none}a:hover{color:var(--accent)}
+  .container{max-width:1200px;margin:0 auto;padding:0 24px}
+  section{padding:56px 0;border-bottom:1px solid var(--border)}
+  section:last-child{border-bottom:none}
+  h1{font-size:34px;font-weight:700;letter-spacing:-0.4px;line-height:1.25}
+  h2{font-size:22px;font-weight:700;letter-spacing:-0.2px;margin-bottom:14px}
+  h3{font-size:15px;font-weight:600;margin-bottom:6px}
+  .section-label{display:inline-block;font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--accent-2);background:var(--accent-soft);padding:4px 10px;border-radius:999px;margin-bottom:10px}
+  .section-head{margin-bottom:28px}.section-head p{color:var(--text-2);max-width:640px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:var(--radius);font-weight:600;font-size:13px;border:1px solid transparent;cursor:pointer;transition:all .2s;background:none;color:var(--text)}
+  .btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}.btn-primary:hover{background:var(--accent-2);border-color:var(--accent-2);transform:translateY(-1px)}
+  .btn-ghost{border-color:var(--border-hi);background:var(--bg-2)}.btn-ghost:hover{border-color:var(--accent);color:var(--accent-2)}
+  .btn-sm{padding:7px 12px;font-size:11px}
+  .tag{font-size:11px;padding:3px 8px;border-radius:4px;background:var(--bg-3);border:1px solid var(--border);color:var(--text-3);display:inline-block}
+  .tag.active{background:var(--accent-soft);color:var(--accent-2);border-color:var(--accent)}
+
+  /* Top notice */
+  .top-notice{background:var(--amber-soft);border-bottom:1px solid rgba(251,191,36,0.2);padding:8px 0;text-align:center;font-size:12px;color:var(--amber)}
+
+  /* Nav */
+  .nav{position:sticky;top:0;z-index:100;background:rgba(11,12,16,0.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:52px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:14px}
+  .logo-mark{width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,var(--accent),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff}
+  .nav-links{display:flex;gap:3px}.nav-links a{font-size:12px;color:var(--text-2);padding:5px 10px;border-radius:var(--radius-sm);transition:all .2s}.nav-links a:hover{color:var(--text);background:var(--bg-3)}
+  .nav-cta{font-size:11px;padding:6px 12px;background:var(--accent);color:#fff;border-radius:var(--radius-sm);font-weight:600}.nav-cta:hover{background:var(--accent-2);color:#fff}
+
+  /* Hero */
+  .hero{padding:72px 0 56px;text-align:center;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;top:-180px;left:50%;transform:translateX(-50%);width:700px;height:500px;background:radial-gradient(ellipse,rgba(124,92,255,0.15),transparent 70%);pointer-events:none}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;font-size:11px;color:var(--green);background:var(--green-soft);padding:5px 12px;border-radius:999px;margin-bottom:18px;border:1px solid rgba(52,211,153,0.25)}
+  .hero h1{font-size:42px;margin-bottom:12px;position:relative;background:linear-gradient(135deg,#fff 30%,var(--accent-2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .hero-sub{font-size:16px;color:var(--text-2);margin-bottom:28px;max-width:600px;margin-left:auto;margin-right:auto}
+  .hero-ctas{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:40px}
+  .hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:680px;margin:0 auto}
+  .stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center}
+  .stat-num{font-size:22px;font-weight:700;color:var(--accent-2);font-family:var(--mono)}.stat-label{font-size:11px;color:var(--text-3);margin-top:3px}
+
+  /* Identity simulator */
+  .sim-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+  .sim-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);background:var(--bg-2)}
+  .sim-title{display:flex;align-items:center;gap:9px;font-weight:600;font-size:13px}
+  .sim-title .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+  .sim-body{display:grid;grid-template-columns:1fr 1fr;gap:0}
+  .sim-input{padding:20px;border-right:1px solid var(--border)}.sim-output{padding:20px;background:var(--bg-2)}
+
+  .form-group{margin-bottom:16px}.form-label{display:flex;align-items:center;justify-content:space-between;font-size:11px;font-weight:600;color:var(--text-2);margin-bottom:6px}.form-label .hint{font-weight:400;color:var(--text-3);font-size:10px}
+  .form-input{width:100%;padding:9px 11px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:12px;font-family:inherit;transition:border-color .2s}.form-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  textarea.form-input{resize:vertical;min-height:60px;line-height:1.5}
+
+  .option-grid{display:grid;gap:5px}.option-grid-2{grid-template-columns:1fr 1fr}.option-grid-4{grid-template-columns:repeat(2,1fr)}
+  .option-btn{padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:11px;color:var(--text-2);cursor:pointer;transition:all .15s;text-align:left;display:flex;align-items:center;gap:7px}.option-btn:hover{border-color:var(--border-hi);color:var(--text)}.option-btn.active{border-color:var(--accent);background:var(--accent-soft);color:var(--text)}
+  .option-btn .icon{font-size:13px;flex-shrink:0}.option-btn .name{font-weight:500;font-size:11px}.option-btn .desc{font-size:10px;color:var(--text-3);margin-top:1px}
+  .option-btn-text{flex-direction:column;align-items:flex-start;gap:1px}
+
+  /* Output panel in sim */
+  .output-tabs{display:flex;gap:2px;margin-bottom:14px;background:var(--bg);padding:3px;border-radius:var(--radius-sm)}
+  .output-tab{flex:1;padding:6px 6px;font-size:11px;font-weight:600;text-align:center;border-radius:4px;cursor:pointer;color:var(--text-3);transition:all .15s}.output-tab.active{background:var(--card);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,0.3)}
+  .output-panel{display:none}.output-panel.active{display:block;animation:fadeIn .2s ease}@keyframes fadeIn{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+  .task-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;margin-bottom:10px}
+  .task-card h4{font-size:11px;color:var(--accent-2);margin-bottom:6px;display:flex;align-items:center;gap:5px}
+  .task-steps{list-style:none;counter-reset:step}.task-steps li{counter-increment:step;position:relative;padding-left:22px;font-size:11px;color:var(--text-2);padding-bottom:6px;line-height:1.5}.task-steps li::before{content:counter(step);position:absolute;left:0;top:0;width:15px;height:15px;border-radius:50%;background:var(--accent-soft);color:var(--accent-2);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center}.task-steps li:last-child{padding-bottom:0}.task-steps li strong{color:var(--text);font-weight:500}
+  .code-block{background:#0d1117;border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px;font-family:var(--mono);font-size:10px;line-height:1.6;color:#c9d1d9;overflow-x:auto;position:relative}.code-block .copy-btn{position:absolute;top:6px;right:6px;padding:3px 7px;font-size:9px;background:var(--bg-3);border:1px solid var(--border);border-radius:3px;color:var(--text-2);cursor:pointer;font-family:inherit}.code-block .copy-btn:hover{color:var(--text);border-color:var(--border-hi)}.code-key{color:#79c0ff}.code-str{color:#a5d6ff}.code-comment{color:#8b949e}
+
+  /* Before/after */
+  .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .compare-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;position:relative}
+  .compare-card.bad{border-color:rgba(251,113,133,0.3)}.compare-card.good{border-color:rgba(52,211,153,0.3)}
+  .compare-badge{position:absolute;top:-1px;left:18px;padding:3px 10px;font-size:10px;font-weight:600;border-radius:0 0 var(--radius-sm) var(--radius-sm)}
+  .compare-card.bad .compare-badge{background:var(--rose-soft);color:var(--rose)}.compare-card.good .compare-badge{background:var(--green-soft);color:var(--green)}
+  .compare-card h3{margin-top:10px;font-size:14px}.compare-card p{font-size:12px;color:var(--text-3);line-height:1.6;margin-bottom:12px}
+  .compare-list{list-style:none}.compare-list li{font-size:11px;color:var(--text-2);padding:4px 0;display:flex;align-items:flex-start;gap:6px}.compare-list li .x{color:var(--rose);flex-shrink:0;font-weight:700}.compare-list li .check{color:var(--green);flex-shrink:0;font-weight:700}
+
+  /* Gallery */
+  .filter-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+  .filter-btn{padding:6px 12px;font-size:12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg-2);color:var(--text-2);cursor:pointer;transition:all .15s}.filter-btn:hover{border-color:var(--border-hi);color:var(--text)}.filter-btn.active{border-color:var(--accent);background:var(--accent-soft);color:var(--text)}
+  .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .gallery-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;transition:all .2s;cursor:pointer;position:relative;overflow:hidden}
+  .gallery-card:hover{border-color:var(--border-hi);transform:translateY(-2px)}
+  .gallery-card .cat{font-size:10px;color:var(--text-3);margin-bottom:6px}.gallery-card h3{font-size:13px;margin-bottom:4px}.gallery-card p{font-size:11px;color:var(--text-3);line-height:1.5}
+  .gallery-card .v-tag{font-size:9px;padding:2px 6px;border-radius:3px;background:var(--accent-soft);color:var(--accent-2);display:inline-block;margin-top:8px}
+  .gallery-card .v-icon{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px;background:var(--bg-3)}
+
+  /* Workflow */
+  .flow-steps{display:flex;align-items:stretch;gap:0;position:relative}
+  .flow-step{flex:1;padding:14px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);text-align:center;position:relative;z-index:1}
+  .flow-step::after{content:'→';position:absolute;right:-14px;top:50%;transform:translateY(-50%);color:var(--text-3);font-size:14px;font-weight:700;z-index:2}
+  .flow-step:last-child::after{display:none}
+  .flow-num{width:24px;height:24px;border-radius:50%;background:var(--accent-soft);color:var(--accent-2);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
+  .flow-step h4{font-size:12px;margin-bottom:4px}.flow-step p{font-size:11px;color:var(--text-3);line-height:1.5}
+
+  /* Project card compare */
+  .proj-compare{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .proj-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+  .proj-card .proj-tag{font-size:10px;padding:3px 8px;border-radius:4px;display:inline-block;margin-bottom:10px}
+  .proj-card h4{font-size:14px;margin-bottom:8px}.proj-card p{font-size:11px;color:var(--text-3);line-height:1.6;margin-bottom:10px}
+  .proj-fields{list-style:none}.proj-fields li{font-size:11px;padding:4px 0;border-bottom:1px dashed var(--border);display:flex;justify-content:space-between}.proj-fields li:last-child{border-bottom:none}.proj-fields .field-label{color:var(--text-3)}.proj-fields .field-val{color:var(--text-2)}.proj-fields .field-val.empty{color:var(--text-3);font-style:italic}
+
+  /* Viewport toggle */
+  .viewport-demo{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+  .viewport-tabs{display:flex;gap:4px;margin-bottom:16px;background:var(--bg);padding:3px;border-radius:var(--radius-sm);width:fit-content}
+  .viewport-tab{padding:6px 14px;font-size:12px;border-radius:4px;cursor:pointer;color:var(--text-3);transition:all .15s}.viewport-tab.active{background:var(--card);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,0.3)}
+  .mock-browser{background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;transition:width .3s ease}
+  .mock-browser.desktop{width:100%}.mock-browser.mobile{width:360px;margin:0 auto}
+  .mock-bar{height:28px;background:var(--bg-3);display:flex;align-items:center;padding:0 10px;gap:6px;border-bottom:1px solid var(--border)}
+  .mock-dot{width:8px;height:8px;border-radius:50%;background:var(--border-hi)}.mock-addr{flex:1;height:16px;background:var(--bg);border-radius:3px;margin-left:6px}
+  .mock-body{padding:16px}
+  .mock-hero{height:60px;background:linear-gradient(135deg,var(--accent-soft),transparent);border-radius:var(--radius-sm);margin-bottom:12px;display:flex;align-items:center;padding:0 14px;gap:10px}
+  .mock-avatar{width:32px;height:32px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:14px}
+  .mock-lines{flex:1}.mock-line{height:8px;background:var(--bg-3);border-radius:2px;margin-bottom:6px}.mock-line.s{width:60%}.mock-line.m{width:80%}
+  .mock-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.mock-card{height:50px;background:var(--bg-3);border-radius:var(--radius-sm)}
+
+  /* Checklist */
+  .checklist-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .check-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px;display:flex;align-items:flex-start;gap:10px;cursor:pointer;transition:all .15s}.check-item:hover{border-color:var(--border-hi)}.check-item.checked{border-color:var(--green);background:rgba(52,211,153,0.05)}
+  .check-box{width:18px;height:18px;border:2px solid var(--border-hi);border-radius:4px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;transition:all .15s}.check-item.checked .check-box{background:var(--green);border-color:var(--green)}
+  .check-text h4{font-size:12px;margin-bottom:2px}.check-text p{font-size:11px;color:var(--text-3);line-height:1.5}
+  .check-progress{display:flex;align-items:center;gap:10px;margin-top:16px;padding:14px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius)}
+  .progress-bar{flex:1;height:8px;background:var(--bg-3);border-radius:4px;overflow:hidden}.progress-fill{height:100%;background:var(--green);border-radius:4px;transition:width .3s ease}.progress-text{font-size:12px;font-weight:600;color:var(--green);font-family:var(--mono)}
+
+  /* GitHub card */
+  .github-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
+  .github-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .github-icon{width:36px;height:36px;border-radius:var(--radius-sm);background:#24292e;display:flex;align-items:center;justify-content:center;font-size:18px}
+  .repo-name{font-weight:600;font-size:13px}.repo-desc{font-size:11px;color:var(--text-3);margin-top:1px}
+  .repo-stats{display:flex;gap:14px;margin:12px 0;padding-top:12px;border-top:1px solid var(--border);font-size:11px;color:var(--text-2)}
+
+  /* Footer */
+  .credits{text-align:center;padding:40px 0}
+  .credits-badge{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);font-size:12px;color:var(--text-2)}
+  .credits p{font-size:11px;color:var(--text-3);margin-top:12px;line-height:1.7}
+
+  /* Responsive */
+  @media(max-width:900px){
+    h1{font-size:26px}.hero h1{font-size:28px}.hero-sub{font-size:14px}.hero-stats{grid-template-columns:repeat(2,1fr)}
+    .sim-body{grid-template-columns:1fr}.sim-input{border-right:none;border-bottom:1px solid var(--border)}
+    .compare-grid{grid-template-columns:1fr}.gallery-grid{grid-template-columns:repeat(2,1fr)}
+    .flow-steps{flex-direction:column;gap:10px}.flow-step::after{content:'↓';right:auto;top:auto;bottom:-14px;left:50%;transform:translateX(-50%)}
+    .flow-step:last-child::after{display:none}.proj-compare{grid-template-columns:1fr}.checklist-grid{grid-template-columns:1fr}
+    .nav-links{display:none}section{padding:40px 0}.container{padding:0 16px}
+  }
+  @media(max-width:480px){
+    .hero h1{font-size:22px}.gallery-grid{grid-template-columns:1fr}
+    .option-grid-2{grid-template-columns:1fr}.option-grid-4{grid-template-columns:1fr}
+    .hero-stats{grid-template-columns:1fr 1fr}.mock-browser.mobile{width:100%}
+  }
+  ::-webkit-scrollbar{width:7px;height:7px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border-hi);border-radius:3px}
+
+  /* Toast */
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--green);color:#000;padding:9px 18px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;opacity:0;pointer-events:none;transition:all .3s;z-index:9999}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+<script data-preview-injected src="https://lf3-static.bytednsdoc.com/obj/eden-cn/8011eh7nupenuvonuhd/previewer-tools.de3cd6a1.umd.js"></script></head>
+<body>
+
+<!-- Top Notice -->
+<div class="top-notice">
+  <div class="container">
+    <strong>声明：</strong>核心项目 <code>personal-homepage-skill</code> 由 powerycy 公开维护并持续迭代；本次参赛版的创意梳理、交互 Demo 与质量优化由 <strong>TRAE Work</strong> 完成。
+  </div>
+</div>
+
+<!-- Nav -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <div class="logo"><div class="logo-mark">H</div><span>个人主页 Skill 实验室</span></div>
+    <div class="nav-links">
+      <a href="#simulator">身份模拟</a><a href="#compare">前后对比</a><a href="#gallery">视觉方向</a><a href="#workflow">工作流程</a><a href="#checklist">设计审查</a>
+    </div>
+    <a href="#simulator" class="nav-cta">开始体验</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge"><span>🎯</span> TRAE AI 创造力大赛 · 学习工作赛道</div>
+    <h1>让每个人拥有一套<br>不撞衫、可上线的个人主页</h1>
+    <p class="hero-sub">personal-homepage-skill 是一套 AI Skill + 模板库，将"理解身份—参考优先—组织信息架构—生成可运行代码—设计与内容质检"整理成完整工作流。18 个视觉方向、双模式输出、18 项设计审查。</p>
+    <div class="hero-ctas">
+      <a href="#simulator" class="btn btn-primary"><span>🧪</span> 打开身份模拟器</a>
+      <a href="https://github.com/powerycy/personal-homepage-skill" target="_blank" class="btn btn-ghost"><span>📦</span> GitHub 项目</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-card"><div class="stat-num">18</div><div class="stat-label">视觉方向</div></div>
+      <div class="stat-card"><div class="stat-num">2</div><div class="stat-label">输出模式</div></div>
+      <div class="stat-card"><div class="stat-num">18</div><div class="stat-label">设计审查项</div></div>
+      <div class="stat-card"><div class="stat-num">100%</div><div class="stat-label">离线单文件</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Identity Simulator -->
+<section id="simulator">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-label">INTERACTIVE</span>
+      <h2>身份与参考模拟器</h2>
+      <p>选择你的身份类型，填写关键信息，实时查看 Skill 如何组织信息架构与生成方案。<br><strong style="color:var(--text-2)">这是一个方案模拟器，展示 Skill 的工作方式，不直接生成真实网页。</strong></p>
+    </div>
+    <div class="sim-card">
+      <div class="sim-head">
+        <div class="sim-title"><span class="dot"></span>身份与参考模拟器 · 实时生成方案</div>
+        <div style="font-size:10px;color:var(--text-3);font-family:var(--mono)">v0.1 · demo</div>
+      </div>
+      <div class="sim-body">
+        <div class="sim-input">
+          <div class="form-group">
+            <div class="form-label"><span>身份类型</span></div>
+            <div class="option-grid option-grid-2" id="roleOptions">
+              <button class="option-btn option-btn-text active" data-role="jobseeker"><span class="name">💼 求职者</span><span class="desc">简历 + 项目 + 技能</span></button>
+              <button class="option-btn option-btn-text" data-role="developer"><span class="name">💻 开发者</span><span class="desc">开源项目 + 技术栈</span></button>
+              <button class="option-btn option-btn-text" data-role="designer"><span class="name">🎨 设计师</span><span class="desc">作品集 + 案例研究</span></button>
+              <button class="option-btn option-btn-text" data-role="creator"><span class="name">✍️ 创作者</span><span class="desc">内容 + 平台 + 合作</span></button>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-label"><span>姓名 / 昵称</span><span class="hint">用于 Hero 标题</span></div>
+            <input id="nameInput" class="form-input" value="李明" placeholder="你的名字">
+          </div>
+          <div class="form-group">
+            <div class="form-label"><span>一句话定位</span><span class="hint">我是谁、做什么</span></div>
+            <input id="taglineInput" class="form-input" value="前端工程师，专注性能优化与开源工具" placeholder="一句话描述自己">
+          </div>
+          <div class="form-group">
+            <div class="form-label"><span>视觉参考</span><span class="hint">可选：参考站 URL 或风格描述</span></div>
+            <input id="refInput" class="form-input" value="干净开发者主页风格，米白底色" placeholder="例如：参考 awwwards.com 某作品">
+          </div>
+          <div class="form-group">
+            <div class="form-label"><span>输出模式</span></div>
+            <div class="option-grid option-grid-2" id="modeOptions">
+              <button class="option-btn active" data-mode="homepage"><span class="icon">🌐</span><span class="name">Homepage Mode</span></button>
+              <button class="option-btn" data-mode="presentation"><span class="icon">🎬</span><span class="name">16:9 Presentation</span></button>
+            </div>
+          </div>
+          <button id="generateBtn" class="btn btn-primary" style="width:100%;justify-content:center"><span>⚡</span> 生成信息架构方案</button>
+        </div>
+        <div class="sim-output">
+          <div class="output-tabs">
+            <div class="output-tab active" data-tab="arch">信息架构</div>
+            <div class="output-tab" data-tab="schema">数据 Schema</div>
+            <div class="output-tab" data-tab="cmd">调用指令</div>
+          </div>
+          <div class="output-panel active" id="tab-arch">
+            <div class="task-card"><h4>📋 页面结构</h4><div id="archContent" style="font-size:11px;color:var(--text-2);line-height:1.7"></div></div>
+            <div class="task-card"><h4>🎨 推荐视觉方向</h4><div id="styleContent" style="font-size:11px;color:var(--text-2);line-height:1.7"></div></div>
+          </div>
+          <div class="output-panel" id="tab-schema">
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">复制</button><pre id="schemaContent"></pre></div>
+          </div>
+          <div class="output-panel" id="tab-cmd">
+            <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">复制</button><pre id="cmdContent"></pre></div>
+            <div style="margin-top:10px;font-size:10px;color:var(--text-3);line-height:1.6">💡 在 Codex 中安装 Skill 后，粘贴上方指令即可触发对应工作流。项目卡片强制要求问题/角色/功能/结果结构。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Before/After -->
+<section id="compare">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-label">COMPARE</span>
+      <h2>Reference-first：前后对比</h2>
+      <p>展示普通 AI 生成个人主页的典型问题，与 Skill 工作流的质量差异。</p>
+    </div>
+    <div class="compare-grid">
+      <div class="compare-card bad">
+        <div class="compare-badge">❌ 普通 AI 生成</div>
+        <h3>千篇一律的"Passionate Developer"</h3>
+        <p>紫色渐变背景、发光装饰球、通用文案、一模一样的项目卡片，没有任何个人特色。</p>
+        <ul class="compare-list">
+          <li><span class="x">✕</span> Hero：紫色渐变 + 发光球 + "Passionate Developer"</li>
+          <li><span class="x">✕</span> Bio：空洞自传，无具体经历</li>
+          <li><span class="x">✕</span> 技能：Logo 墙，无能力描述</li>
+          <li><span class="x">✕</span> 项目：无问题/角色/结果，只有名称</li>
+          <li><span class="x">✕</span> 中文：默认西文字体，排版粗糙</li>
+          <li><span class="x">✕</span> 移动端：文字溢出，动效卡顿</li>
+          <li><span class="x">✕</span> 指标：虚假 Star 数、虚假评价</li>
+        </ul>
+      </div>
+      <div class="compare-card good">
+        <div class="compare-badge">✓ Skill 工作流</div>
+        <h3>基于身份与参考的差异化输出</h3>
+        <p>理解你是谁、参考什么风格、有什么真实证据，生成不撞衫、可信、可上线的页面。</p>
+        <ul class="compare-list">
+          <li><span class="check">✓</span> Hero：姓名 + 身份 + 价值主张 + 视觉记忆点</li>
+          <li><span class="check">✓</span> Bio：3-5 句具体定位，无空洞形容词</li>
+          <li><span class="check">✓</span> 技能：能力 + 工具 + 相关输出描述</li>
+          <li><span class="check">✓</span> 项目：问题、角色、功能、技术栈、结果</li>
+          <li><span class="check">✓</span> 中文：CJK 字体栈 + 混排规范 + 标题换行</li>
+          <li><span class="check">✓</span> 移动端：响应式断点 + 动效降级</li>
+          <li><span class="check">✓</span> 指标：真实数据或占位符，不伪造</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Gallery -->
+<section id="gallery">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-label">GALLERY</span>
+      <h2>18 个视觉方向</h2>
+      <p>覆盖电影感、技术感、编辑感、像素风、3D 空间等完整风格谱系。Agent 优先跟随用户参考，方向不明确时从库中选择。</p>
+    </div>
+    <div class="filter-bar" id="filterBar">
+      <button class="filter-btn active" data-filter="all">全部</button>
+      <button class="filter-btn" data-filter="tech">技术</button>
+      <button class="filter-btn" data-filter="creative">创意</button>
+      <button class="filter-btn" data-filter="professional">职业</button>
+      <button class="filter-btn" data-filter="playful">趣味</button>
+      <button class="filter-btn" data-filter="dark">暗黑</button>
+    </div>
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </div>
+</section>
+
+<!-- Workflow -->
+<section id="workflow">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-label">WORKFLOW</span>
+      <h2>从身份到上线的完整流程</h2>
+      <p>6 步工作流，每一步都有明确输入、输出与质检标准。</p>
+    </div>
+    <div class="flow-steps" id="flowSteps"></div>
+  </div>
+</section>
+
+<!-- Project Card Compare -->
+<section id="proj-compare">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-label">QUALITY</span>
+      <h2>项目卡片质量对比</h2>
+      <p>Skill 强制项目卡片包含"问题、个人角色、核心功能、结果与证据"四要素，避免空洞描述。</p>
+    </div>
+    <div class="proj-compare">
+      <div class="proj-card">
+        <span class="proj-tag" style="background:var(--rose-soft);color:var(--rose)">❌ 普通 AI 项目卡片</span>
+        <h4>电商平台前端重构</h4>
+        <p>使用 React 和 TypeScript 开发了一个电商网站。提升了用户体验和性能。</p>
+        <ul class="proj-fields">
+          <li><span class="field-label">问题</span><span class="field-val empty">未提及</span></li>
+          <li><span class="field-label">个人角色</span><span class="field-val empty">未提及</span></li>
+          <li><span class="field-label">核心功能</span><span class="field-val empty">仅写"使用 React"</span></li>
+          <li><span class="field-label">技术栈</span><span class="field-val">React, TypeScript</span></li>
+          <li><span class="field-label">结果/证据</span><span class="field-val empty">"提升了性能"无数据</span></li>
+        </ul>
+      </div>
+      <div class="proj-card">
+        <span class="proj-tag" style="background:var(--green-soft);color:var(--green)">✓ Skill 项目卡片</span>
+        <h4>电商平台前端重构</h4>
+        <p>原平台首屏加载 4.2s，移动端转化率低。主导重构核心交易链路，实现秒开体验。</p>
+        <ul class="proj-fields">
+          <li><span class="field-label">问题</span><span class="field-val">首屏 4.2s，移动端转化低</span></li>
+          <li><span class="field-label">个人角色</span><span class="field-val">前端负责人，3 人小组</span></li>
+          <li><span class="field-label">核心功能</span><span class="field-val">SSR + 懒加载 + 图片优化</span></li>
+          <li><span class="field-label">技术栈</span><span class="field-val">Next.js, React, Tailwind</span></li>
+          <li><span class="field-label">结果/证据</span><span class="field-val">首屏降至 0.8s，转化 +23%</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Responsive + Motion -->
+<section id="responsive">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-label">RESPONSIVE</span>
+      <h2>桌面 / 移动视图与动效降级</h2>
+      <p>预览页面在不同设备上的适配效果，以及 prefers-reduced-motion 的动效降级策略。</p>
+    </div>
+    <div class="viewport-demo">
+      <div class="viewport-tabs">
+        <button class="viewport-tab active" data-view="desktop">🖥️ 桌面端</button>
+        <button class="viewport-tab" data-view="mobile">📱 移动端</button>
+      </div>
+      <div class="mock-browser desktop" id="mockBrowser">
+        <div class="mock-bar"><div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-addr"></div></div>
+        <div class="mock-body">
+          <div class="mock-hero"><div class="mock-avatar">👤</div><div class="mock-lines"><div class="mock-line m"></div><div class="mock-line s"></div></div></div>
+          <div class="mock-grid" id="mockGrid"><div class="mock-card"></div><div class="mock-card"></div><div class="mock-card"></div><div class="mock-card"></div></div>
+        </div>
+      </div>
+      <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:16px" id="motionInfo">
+        <div style="font-size:12px;color:var(--text-2);line-height:1.7">
+          <strong style="color:var(--text)">桌面端策略：</strong><br>
+          · 完整动效：滚动揭示、视差、渐变网格、粒子场<br>
+          · 3D 交互：鼠标跟随旋转、悬停深度<br>
+          · 键盘导航完整支持
+        </div>
+        <div style="font-size:12px;color:var(--text-2);line-height:1.7">
+          <strong style="color:var(--text)">移动端策略：</strong><br>
+          · 重度动效降级或禁用（视差、复杂 3D）<br>
+          · 粒子数量减少，触摸交互不依赖悬停<br>
+          · 导航改为 sheet slide-in + backdrop blur
+        </div>
+      </div>
+      <div style="margin-top:14px;padding:12px;background:var(--bg-3);border-radius:var(--radius-sm);font-size:11px;color:var(--text-3);line-height:1.7;border:1px solid var(--border)">
+        <strong style="color:var(--amber)">⚠ prefers-reduced-motion 支持：</strong>全局 CSS 强制所有动画 duration 降至 0.01ms；滚动驱动视频显示静态 poster；打字机提供静态等效内容；渐变网格停止动画；幻灯片仅保留即时切换。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Checklist -->
+<section id="checklist">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-label">CHECKLIST</span>
+      <h2>设计审查清单</h2>
+      <p>18 项检查，逐项勾选，确保输出质量达标。每项都有明确的通过标准和常见失败模式。</p>
+    </div>
+    <div class="checklist-grid" id="checklistGrid"></div>
+    <div class="check-progress">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="progress-text" id="progressText">0/18</div>
+    </div>
+  </div>
+</section>
+
+<!-- GitHub + Credits -->
+<section id="github">
+  <div class="container">
+    <div class="section-head">
+      <span class="section-label">PROJECT</span>
+      <h2>开源项目与参赛声明</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div class="github-card">
+        <div class="github-head">
+          <div class="github-icon">📦</div>
+          <div><div class="repo-name">personal-homepage-skill</div><div class="repo-desc">powerycy · 公开维护中</div></div>
+        </div>
+        <p style="font-size:12px;color:var(--text-2);line-height:1.6">面向 Codex 的个人主页生成 Skill。18 个视觉方向、Reference-first 工作流、双模式输出、18 项设计审查、中文 CJK 排版、无障碍支持。</p>
+        <div class="repo-stats">
+          <span>📄 待补充真实数据</span>
+          <span>🐍 React + Tailwind + TS</span>
+          <span>🔓 开源</span>
+        </div>
+        <a href="https://github.com/powerycy/personal-homepage-skill" target="_blank" class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:4px"><span>🔗</span> 在 GitHub 上查看</a>
+      </div>
+      <div class="github-card" style="border-color:var(--amber);background:rgba(251,191,36,0.03)">
+        <div class="github-head">
+          <div class="github-icon" style="background:var(--amber-soft);color:var(--amber);font-size:20px">🏆</div>
+          <div><div class="repo-name">参赛版说明</div><div class="repo-desc">TRAE AI 创造力大赛 · 学习工作赛道</div></div>
+        </div>
+        <p style="font-size:12px;color:var(--text-2);line-height:1.6">
+          核心项目 <code>personal-homepage-skill</code> 由 <strong>powerycy</strong> 公开维护并持续迭代，README、PRD、模板、测试和质量检查文档齐全。<br><br>
+          本次参赛版的<strong>创意梳理</strong>、<strong>交互 Demo 设计</strong>与<strong>质量优化</strong>由 <strong>TRAE Work</strong> 完成。不声称核心项目从零到一全部由 TRAE 完成。
+        </p>
+        <div class="repo-stats">
+          <span>📅 2026-07-14</span>
+          <span>🎨 初赛 Demo</span>
+          <span>🧪 学习工作赛道</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<section class="credits">
+  <div class="container">
+    <div class="credits-badge">
+      <span>🏆</span>
+      <span>参赛作品 · 核心项目由 <strong>powerycy</strong> 维护 · 参赛版 Demo 由 <strong>TRAE Work</strong> 完成</span>
+    </div>
+    <p>
+      这是一个初赛 Demo 页面，用于展示 personal-homepage-skill 的工作方式与能力边界。<br>
+      所有能力描述均对应 GitHub 开源项目中的真实实现。无虚假用户数、Star 数、使用效果或获奖数据。<br>
+      <a href="https://github.com/powerycy/personal-homepage-skill" target="_blank">查看 GitHub 项目 →</a>
+    </p>
+  </div>
+</section>
+
+<!-- Toast -->
+<div class="toast" id="toast">已复制到剪贴板</div>
+
+<script>
+// ===== State =====
+const state = {role:'jobseeker',name:'李明',tagline:'前端工程师，专注性能优化与开源工具',ref:'干净开发者主页风格，米白底色',mode:'homepage'};
+
+// ===== Role Data =====
+const roles = {
+  jobseeker: {
+    name: '求职者', icon: '💼',
+    sections: ['Hero', 'About', 'Skills', 'Projects', 'Experience', 'Contact'],
+    recommend: ['Minimal Premium Resume', 'Case Study Portfolio', 'Clean Developer Homepage'],
+    bio: ['3年前端开发经验，主导过2个完整产品周期', '擅长React生态与性能优化', '正在寻找全栈/前端工程师岗位']
+  },
+  developer: {
+    name: '开发者', icon: '💻',
+    sections: ['Hero', 'Projects', 'Skills', 'Open Source', 'Content', 'Contact'],
+    recommend: ['3D Tech Portfolio', 'Terminal Hacker Homepage', 'Clean Developer Homepage'],
+    bio: ['开源工具作者，维护3个npm包', 'AI Agent与自动化工作流爱好者', '技术博客持续更新中']
+  },
+  designer: {
+    name: '设计师', icon: '🎨',
+    sections: ['Hero', 'Projects', 'Process', 'Skills', 'Testimonials', 'Contact'],
+    recommend: ['Magazine Portfolio', 'Dark Editorial Portfolio', 'Art Museum Portfolio'],
+    bio: ['产品设计师，擅长交互与视觉系统', '5年B端/C端产品设计经验', '关注设计系统与无障碍设计']
+  },
+  creator: {
+    name: '创作者', icon: '✍️',
+    sections: ['Hero', 'Content', 'Highlights', 'Projects', 'Collaboration', 'Contact'],
+    recommend: ['Creator Bento Homepage', 'Motion Gradient Brand', 'Soft Product Video Hero'],
+    bio: ['科技内容创作者，全平台10万+读者', '专注于AI工具评测与开发实践', '开放品牌合作与内容共创']
+  }
+};
+
+const modes = {
+  homepage: {name:'Homepage Mode', desc:'响应式连续网页，滚动+锚点导航'},
+  presentation: {name:'16:9 Presentation', desc:'固定1920×1080幻灯片组，键盘+触摸导航'}
+};
+
+// ===== Gallery Data =====
+const galleryData = [
+  {id:0, name:'Cinematic Scroll Personal Brand', cat:'dark', icon:'🎬', desc:'暗黑、电影感、极简、昂贵。纯黑底、白色主文字、固定全屏视频背景、12列网格。', tag:'AI工程师/创始人'},
+  {id:'0B', name:'Soft Product Video Hero', cat:'professional', icon:'🧴', desc:'柔和、干净、产品导向。暖中性视频背景、深蓝灰文字、紫/品牌色CTA。', tag:'SaaS/产品创作者'},
+  {id:'0C', name:'TOONHUB Figurine Carousel', cat:'playful', icon:'🧸', desc:'大胆、playful、收藏感。全视口角色轮播、Anton巨型幽灵文字、650ms切换纪律。', tag:'潮玩/IP艺术家'},
+  {id:'0D', name:'Clean Developer Homepage', cat:'tech', icon:'🧼', desc:'干净、友好、轻量。米白/淡蓝底、炭灰文字、果断蓝色CTA、波浪过渡。', tag:'前端开发者'},
+  {id:'0E', name:'Orbis NFT Space Landing', cat:'dark', icon:'🚀', desc:'深空、电影感、液态玻璃。深海军蓝底、奶油文字、霓虹手写体。', tag:'NFT创作者'},
+  {id:1, name:'3D Tech Portfolio', cat:'tech', icon:'🔷', desc:'暗黑、技术、空间、精准。黑/炭基底、青绿或橙色强调、浮动头像/3D几何体。', tag:'AI工程师/前端'},
+  {id:2, name:'Motion Gradient Brand', cat:'creative', icon:'🌈', desc:'大胆、流动、高冲击。2-3种强色、径向/圆锥渐变网格、磁性CTA、视差强调。', tag:'创作者/创始人'},
+  {id:3, name:'Magazine Portfolio', cat:'creative', icon:'📰', desc:'编辑感、策展感、表现力强。奶油/黑白、低饱和、杂志封面布局、水平项目滚动。', tag:'设计师/艺术家'},
+  {id:4, name:'Terminal Hacker Homepage', cat:'tech', icon:'💻', desc:'命令行、精准、黑客、可信。近黑底、终端绿/青、whoami打字机动画。', tag:'程序员/安全研究员'},
+  {id:5, name:'Minimal Premium Resume', cat:'professional', icon:'📄', desc:'克制、可信、清晰、高级。白/象牙底、炭灰文字、案例研究项目、技能分组。', tag:'求职者/学生'},
+  {id:6, name:'Cute Pixel Creator', cat:'playful', icon:'🎮', desc:'可爱、像素、贴纸感、游戏UI。低饱和pastel、像素头像/贴纸簇、小任务/成就。', tag:'年轻创作者/插画师'},
+  {id:7, name:'AI System Dashboard', cat:'tech', icon:'🤖', desc:'系统地图、模型界面、数据/控制平面。深海军蓝/黑、电青、身份作为AI系统图。', tag:'AI工程师/LLM研究者'},
+  {id:8, name:'Creator Bento Homepage', cat:'creative', icon:'🍱', desc:'模块化、社交感、energetic。强个人品牌色、Bento亮点、内容卡片、平台链接。', tag:'自媒体创作者'},
+  {id:9, name:'Dark Editorial Portfolio', cat:'dark', icon:'🖤', desc:'画廊、暗黑杂志、电影感、克制。黑色、暖灰、muted金/奶油强调、超大姓名。', tag:'高级作品集/设计师'},
+  {id:10, name:'Art Museum Portfolio', cat:'creative', icon:'🏛️', desc:'博物馆策展、精致发现、安静prestige。博物馆纸、暖白、墨黑、虚拟画廊、故事卡片。', tag:'艺术家/摄影师'},
+  {id:11, name:'Spatial Project Gallery', cat:'tech', icon:'🧊', desc:'3D画廊、项目墙、空间导航。暗中性底+明亮项目强调色、CSS 3D transforms、悬停深度。', tag:'多项目作品集'},
+  {id:12, name:'Business Personal Brand', cat:'professional', icon:'💼', desc:'高级、可信、转化导向。象牙/黑/海军蓝、解决的问题、服务CTA、证明卡片。', tag:'创始人/顾问'},
+  {id:13, name:'Case Study Portfolio', cat:'professional', icon:'📊', desc:'结构化、基于证据、清晰。案例研究项目卡片、角色/职责/结果、技能映射到工作。', tag:'求职者/产品设计师'}
+];
+
+// ===== Checklist Data =====
+const checklistData = [
+  {id:1, title:'Reference Fidelity', desc:'是否将用户参考视为已选方向？保留信息架构、视觉节奏、字体气质、间距、动效模型？'},
+  {id:2, title:'Personal Homepage Fit', desc:'是否明确介绍了一个人而非SaaS产品？Hero中是否可见此人？'},
+  {id:3, title:'Chinese Typography', desc:'CJK字体栈、正文可读性、标题换行、中英混排标点和间距是否正确？'},
+  {id:4, title:'Hero Section', desc:'单一焦点、左右平衡、大标题不碰撞、底部呼吸空间、CTA可见？'},
+  {id:5, title:'Hero Memory Point', desc:'是否有独特构图？是否超过plain left-text-right-image？'},
+  {id:6, title:'Content Quality', desc:'Bio是否具体？占位符是否清晰标记？技能是否描述为能力+输出？'},
+  {id:7, title:'Project Persuasiveness', desc:'每个项目是否解释了问题、角色、技术栈、结果？卡片是否视觉差异化？'},
+  {id:8, title:'Visual System Review', desc:'预览是否像真实homepage？字体是否有性格？背景是否创造身份特定氛围？'},
+  {id:9, title:'Anti-Template Review', desc:'无通用紫色渐变、发光球、廉价玻璃拟态、无意义图标墙、SaaS式Hero、Lorem ipsum'},
+  {id:10, title:'Motion Review', desc:'动效支持层级或交互；重要文字在阅读时不移动；有reduced-motion支持'},
+  {id:11, title:'3D Review', desc:'3D可选且有回退；不默认加载大模型；文字在3D/背景上保持可读；移动端不损坏'},
+  {id:12, title:'Presentation Mode', desc:'固定1920×1080舞台；内容不reflow；文本/图片/控件在安全区内'},
+  {id:13, title:'Images', desc:'图片已验证且可访问；无损坏图片；有意义图片有alt文本；缺失资源使用精致占位符'},
+  {id:14, title:'Accessibility', desc:'语义化section；按钮/链接有focus状态；颜色对比度充足；键盘导航工作'},
+  {id:15, title:'Inline Editing', desc:'单文件HTML交付物包含左上角隐藏行内编辑功能（contenteditable、localStorage）'},
+  {id:16, title:'Responsive Design', desc:'Hero在小屏幕工作；项目卡片整齐堆叠；无水平溢出；触摸交互不依赖悬停'},
+  {id:17, title:'HTML PPT Review', desc:'真分页导航；仅一个slide可见；隐藏slide从绘制中移除；无整页ghosting'},
+  {id:18, title:'Code Quality', desc:'代码可按声明依赖运行；个人数据集中；组件清晰分离；无不可达外部资源'}
+];
+
+// ===== Workflow Data =====
+const workflowSteps = [
+  {num:1, title:'理解身份', desc:'收集姓名、职业、一句话定位、项目、技能、经历、链接、视觉偏好'},
+  {num:2, title:'参考优先', desc:'用户提供的参考视为已选方向，保留布局节奏、排版、字体气质、组件关系'},
+  {num:3, title:'方向选择', desc:'无参考时输出2-3个真实Hero预览，使用用户真实姓名和内容'},
+  {num:4, title:'信息架构', desc:'描述页面结构：section标题、目的、展示内容、视觉组件、动效行为'},
+  {num:5, title:'代码生成', desc:'React+Tailwind默认栈；3D可选Three.js；简单交付可用纯HTML/CSS/JS'},
+  {num:6, title:'设计审查', desc:'对照18项DESIGN_REVIEW清单，检查桌面/移动端、无水平溢出、图片加载等'}
+];
+
+// ===== Init =====
+document.addEventListener('DOMContentLoaded', () => {
+  // Role options
+  document.querySelectorAll('#roleOptions .option-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#roleOptions .option-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.role = btn.dataset.role;
+      updateOutput();
+    });
+  });
+  // Mode options
+  document.querySelectorAll('#modeOptions .option-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#modeOptions .option-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.mode = btn.dataset.mode;
+      updateOutput();
+    });
+  });
+  // Inputs
+  ['nameInput','taglineInput','refInput'].forEach(id => {
+    document.getElementById(id).addEventListener('input', e => {
+      state[id.replace('Input','')] = e.target.value;
+    });
+  });
+  // Generate
+  document.getElementById('generateBtn').addEventListener('click', () => {
+    state.name = document.getElementById('nameInput').value;
+    state.tagline = document.getElementById('taglineInput').value;
+    state.ref = document.getElementById('refInput').value;
+    updateOutput();
+    showToast('方案已更新');
+  });
+  // Tabs
+  document.querySelectorAll('.output-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.output-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.output-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+    });
+  });
+  // Gallery filters
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderGallery(btn.dataset.filter);
+    });
+  });
+  // Viewport tabs
+  document.querySelectorAll('.viewport-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.viewport-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const mb = document.getElementById('mockBrowser');
+      const mg = document.getElementById('mockGrid');
+      if(tab.dataset.view === 'mobile') {
+        mb.classList.remove('desktop'); mb.classList.add('mobile');
+        mg.style.gridTemplateColumns = '1fr';
+      } else {
+        mb.classList.remove('mobile'); mb.classList.add('desktop');
+        mg.style.gridTemplateColumns = '1fr 1fr';
+      }
+    });
+  });
+  // Render initial
+  renderGallery('all');
+  renderFlow();
+  renderChecklist();
+  updateOutput();
+});
+
+// ===== Update Output =====
+function updateOutput() {
+  const role = roles[state.role];
+  const mode = modes[state.mode];
+  const name = state.name || '（待填写）';
+  const tagline = state.tagline || '（待填写）';
+
+  // Arch tab
+  document.getElementById('archContent').innerHTML = `
+    <strong style="color:var(--text)">身份：</strong>${role.icon} ${role.name}<br>
+    <strong style="color:var(--text)">姓名：</strong>${escapeHtml(name)}<br>
+    <strong style="color:var(--text)">定位：</strong>${escapeHtml(tagline)}<br>
+    <strong style="color:var(--text)">输出模式：</strong>${mode.name}<br>
+    <strong style="color:var(--text)">参考：</strong>${escapeHtml(state.ref || '无')}<br><br>
+    <strong style="color:var(--text)">页面 Sections：</strong><br>${role.sections.map((s,i) => `${i+1}. ${s}`).join('<br>')}<br><br>
+    <strong style="color:var(--text)">推荐视觉方向：</strong><br>${role.recommend.map(r => '· ' + r).join('<br>')}
+  `;
+
+  // Style tab
+  document.getElementById('styleContent').innerHTML = `
+    <strong style="color:var(--text)">首选：</strong>${role.recommend[0]}<br>
+    <strong style="color:var(--text)">备选：</strong>${role.recommend.slice(1).join('、')}<br><br>
+    <strong style="color:var(--text)">Bio 方向：</strong><br>${role.bio.map(b => '· ' + escapeHtml(b)).join('<br>')}<br><br>
+    <strong style="color:var(--text)">Hero 必须包含：</strong><br>
+    · 姓名/昵称<br>· 职业身份<br>· 一句话价值主张<br>· 头像/3D身份/抽象符号<br>· 主CTA + 次CTA<br>· 背景动效或空间分层
+  `;
+
+  // Schema tab
+  document.getElementById('schemaContent').innerHTML = `<span class="code-comment">// Profile Data Schema</span>
+<span class="code-key">name</span>: <span class="code-str">"${escapeHtml(name)}"</span>,
+<span class="code-key">tagline</span>: <span class="code-str">"${escapeHtml(tagline)}"</span>,
+<span class="code-key">bio</span>: [
+${role.bio.map(b => `  <span class="code-str">"${escapeHtml(b)}"</span>`).join(',\n')}
+],
+<span class="code-key">skills</span>: { <span class="code-comment">/* 按 category 分组，能力+工具+输出 */</span> },
+<span class="code-key">projects</span>: [
+  {
+    <span class="code-key">name</span>: <span class="code-str">"项目名"</span>,
+    <span class="code-key">problem</span>: <span class="code-str">"解决什么问题"</span>,
+    <span class="code-key">role</span>: <span class="code-str">"个人角色"</span>,
+    <span class="code-key">features</span>: <span class="code-str">"核心功能"</span>,
+    <span class="code-key">stack</span>: <span class="code-str">"技术栈"</span>,
+    <span class="code-key">result</span>: <span class="code-str">"结果/证据（或占位符）"</span>
+  }
+],
+<span class="code-key">mode</span>: <span class="code-str">"${state.mode}"</span>,
+<span class="code-key">sections</span>: [${role.sections.map(s => `<span class="code-str">"${s}"</span>`).join(', ')}]`;
+
+  // Cmd tab
+  const modeStr = state.mode === 'presentation' ? '生成一份 16:9 HTML 演示文稿' : '生成一个个人主页';
+  document.getElementById('cmdContent').innerHTML = `<span class="code-comment">// 在 Codex 中使用 Skill</span>
+<span class="code-key">@personal-homepage-skill</span>
+${modeStr}：
+<span class="code-key">姓名</span>: <span class="code-str">"${escapeHtml(name)}"</span>
+<span class="code-key">定位</span>: <span class="code-str">"${escapeHtml(tagline)}"</span>
+<span class="code-key">身份类型</span>: <span class="code-str">"${role.name}"</span>
+<span class="code-key">视觉参考</span>: <span class="code-str">"${escapeHtml(state.ref || '无')}"</span>
+<span class="code-key">输出模式</span>: <span class="code-str">"${mode.name}"</span>
+
+<span class="code-comment">// 要求</span>
+- 项目卡片必须包含：problem / role / features / stack / result
+- 不使用虚假指标或虚假评价
+- 中文排版使用CJK字体栈
+- 支持 prefers-reduced-motion`;
+}
+
+function renderGallery(filter) {
+  const grid = document.getElementById('galleryGrid');
+  const items = filter === 'all' ? galleryData : galleryData.filter(g => g.cat === filter);
+  grid.innerHTML = items.map(g => `
+    <div class="gallery-card" data-cat="${g.cat}">
+      <div class="v-icon">${g.icon}</div>
+      <div class="cat">${g.tag}</div>
+      <h3>${g.name}</h3>
+      <p>${g.desc}</p>
+      <span class="v-tag">#${g.cat}</span>
+    </div>
+  `).join('');
+}
+
+function renderFlow() {
+  document.getElementById('flowSteps').innerHTML = workflowSteps.map(s => `
+    <div class="flow-step">
+      <div class="flow-num">${s.num}</div>
+      <h4>${s.title}</h4>
+      <p>${s.desc}</p>
+    </div>
+  `).join('');
+}
+
+function renderChecklist() {
+  const grid = document.getElementById('checklistGrid');
+  grid.innerHTML = checklistData.map(item => `
+    <div class="check-item" data-id="${item.id}" onclick="toggleCheck(this)">
+      <div class="check-box"></div>
+      <div class="check-text">
+        <h4>${item.id}. ${item.title}</h4>
+        <p>${item.desc}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  const checked = document.querySelectorAll('.check-item.checked').length;
+  const total = checklistData.length;
+  document.getElementById('progressFill').style.width = (checked/total*100) + '%';
+  document.getElementById('progressText').textContent = checked + '/' + total;
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function copyCode(btn) {
+  const pre = btn.nextElementSibling;
+  const text = pre.textContent || pre.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '已复制 ✓';
+    setTimeout(() => btn.textContent = orig, 1500);
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    const orig = btn.textContent;
+    btn.textContent = '已复制 ✓';
+    setTimeout(() => btn.textContent = orig, 1500);
+  });
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2000);
+}
+</script>
+</body>
+</html>
