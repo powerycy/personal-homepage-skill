@@ -1,6 +1,6 @@
 # Personal Homepage Skill
 
-一个让 AI Agent 稳定生成高质量个人主页、作品集和 HTML PPT 的 Skill + 模板库；现在也提供评委和普通用户可直接操作的在线 Studio。
+一个让 AI Agent 稳定生成高质量个人主页、作品集和 HTML PPT 的 Skill + 模板库。
 
 An AI Skill + template gallery for generating polished personal homepages, portfolios, and HTML presentations with Claude Code / AI coding agents.
 
@@ -10,20 +10,6 @@ An AI Skill + template gallery for generating polished personal homepages, portf
 ![Skill](https://img.shields.io/badge/AI%20Skill-Claude%20Code%20%2F%20Ducc-8A2BE2)
 
 > 如果这个项目帮助你生成了更好的个人主页、作品集、创作者主页或 HTML 演示文稿，欢迎点一个 ⭐ Star。
-
-## 在线体验：AI Personal Homepage Studio
-
-**[直接打开 Studio](https://powerycy.github.io/personal-homepage-skill/)** · **[公开使用手册](https://powerycy.github.io/personal-homepage-skill/guide.html)**
-
-核心闭环不需要登录或本地部署：
-
-1. 输入姓名、定位、简介和真实项目证据；
-2. 在 4 种发布级视觉方向间切换；
-3. 同时检查桌面与手机预览；
-4. 直接在预览中编辑文字；
-5. 导出一个离线可打开、可继续编辑、可再次导出的独立 HTML。
-
-资料与生成过程都留在当前浏览器。Studio 不调用在线模型扩写经历，也不会自动编造指标、评价或工作经历。
 
 ## Template demos
 

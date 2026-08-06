@@ -24,11 +24,6 @@ const requiredFiles = [
   'src/index.css',
   'src/data/templates.ts',
   'src/data/profile-schema.ts',
-  'src/data/studio.ts',
-  'src/components/HomepagePreview.tsx',
-  'src/components/StudioFields.tsx',
-  'src/utils/exportHomepage.ts',
-  'public/guide.html',
   'src/components/GalleryHeader.tsx',
   'src/components/TemplateFilters.tsx',
   'src/components/TemplateGrid.tsx',
@@ -79,10 +74,14 @@ const requiredSnippets = {
   'STYLE_PRESETS.md': requiredTemplates,
   'src/index.css': [
     '@tailwind base;',
-    '.studio-grid',
-    '.homepage-preview',
-    'container-type: inline-size',
-    "'Noto Sans SC'",
+    '--gallery-bg: #0b0b0f;',
+    '--gallery-ink: #f8f4ec;',
+    '--museum-paper: #f7f3ea;',
+    '--font-cjk-sans:',
+    '--font-cjk-serif:',
+    'balanced-title',
+    'readable-copy',
+    'safe-bottom-space',
     'focus-visible',
     'prefers-reduced-motion',
   ],
@@ -95,9 +94,7 @@ const requiredSnippets = {
     'risks',
     'typography',
   ],
-  'src/App.tsx': ['HomepagePreview', 'downloadHomepage', 'stylePresets', 'localStorage', '编辑并导出'],
-  'src/utils/exportHomepage.ts': ['data-edit-version', 'data-edit-id', 'localStorage', '导出 HTML', 'prefers-reduced-motion'],
-  'public/guide.html': ['公开使用手册', '写入真实资料', '导出与发布', '隐私与限制'],
+  'src/App.tsx': ['GalleryHeader', 'TemplateFilters', 'TemplateGrid', 'templates.filter'],
 };
 
 const failures = [];
@@ -145,9 +142,9 @@ for (const doc of ['SKILL.md', 'README.md', 'STYLE_PRESETS.md', 'HOMEPAGE_GENERA
 }
 
 if (failures.length) {
-  console.error('Homepage Studio spec check failed:');
+  console.error('Homepage gallery spec check failed:');
   for (const failure of failures) console.error(`- ${failure}`);
   process.exit(1);
 }
 
-console.log('Homepage Studio spec check passed: public workflow, export logic, skill docs, CJK rules, and visual presets are present.');
+console.log('Homepage gallery spec check passed: dual homepage/presentation skill docs, source structure, CJK rules, and visual presets are present.');
