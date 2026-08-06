@@ -28,6 +28,7 @@
 | 字段 | 可提交内容 | 验证位置 |
 | --- | --- | --- |
 | 作品名 | AI Personal Homepage Studio——把真实经历变成可发布的个人品牌网站 | 本目录与产品页 |
+| 官方提交 | 已提交；唯一参赛凭证 ID `6a742d5f00388a11ea57`；2026-08-06 14:45（Asia/Shanghai） | 官方“我的提交”页面与编辑地址 |
 | 类型 | Web / H5、创作工具、个人品牌工具 | `src/App.tsx` |
 | 公网链接 | <https://powerycy.github.io/personal-homepage-skill/> | GitHub Pages 配置 |
 | 使用手册 | <https://powerycy.github.io/personal-homepage-skill/guide.html> | `public/guide.html` |

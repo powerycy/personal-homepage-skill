@@ -85,3 +85,13 @@ AI Coding 助手深度参与仓库审计、需求拆解、前端实现、测试�
 **知识产权 / 原创说明**
 
 项目由参赛人维护并公开在 `powerycy/personal-homepage-skill`。代码和文档遵循仓库 `LICENSE` 中的 Personal Homepage Skill Non-Commercial License；第三方依赖与字体分别遵循其自身许可证。项目不复制付费模板或许可证不明确的第三方素材。
+
+## 官方提交回执
+
+- 状态：已提交
+- 唯一参赛凭证 ID：`6a742d5f00388a11ea57`
+- 提交时间：2026-08-06 14:45（Asia/Shanghai）
+- 搭建平台：GitHub Pages
+- 作品分类：AI 原生应用
+- 图片材料：1 张封面、4 张作品快照
+- 小红书：官方自助报名表没有对应字段，因此未填入无关字段
