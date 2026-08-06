@@ -4,34 +4,31 @@ import { resolve } from 'node:path';
 const root = resolve(import.meta.dirname, '..');
 const css = readFileSync(resolve(root, 'src/index.css'), 'utf8');
 const app = readFileSync(resolve(root, 'src/App.tsx'), 'utf8');
-const card = readFileSync(resolve(root, 'src/components/TemplateCard.tsx'), 'utf8');
-const previews = ['tech', 'creator', 'business', 'art'].map((name) => readFileSync(resolve(root, `src/previews/${name}.tsx`), 'utf8')).join('\n');
+const preview = readFileSync(resolve(root, 'src/components/HomepagePreview.tsx'), 'utf8');
+const exporter = readFileSync(resolve(root, 'src/utils/exportHomepage.ts'), 'utf8');
 const failures = [];
 
 const checks = [
   [css.includes('overflow-x: hidden'), 'body should prevent horizontal overflow'],
-  [css.includes('aspect-ratio: 16 / 10'), 'preview shell should use aspect-ratio'],
-  [css.includes('min-height: 268px'), 'preview shell should keep readable minimum height'],
-  [css.includes('@media (max-width: 640px)'), 'mobile preview rule should exist'],
+  [css.includes('max-width: 1600px'), 'Studio shell should constrain maximum width'],
+  [css.includes('container-type: inline-size'), 'generated preview should use container-responsive rules'],
+  [css.includes('@container (max-width: 520px)'), 'mobile homepage preview rule should exist'],
+  [css.includes('@media (max-width: 640px)'), 'mobile Studio rule should exist'],
   [css.includes('prefers-reduced-motion'), 'reduced motion support should exist'],
-  [css.includes('--font-cjk-sans') && css.includes('--font-cjk-serif'), 'CJK font variables should exist'],
-  [card.includes('flex h-full flex-col'), 'cards should stretch consistently'],
-  [card.includes('safe-bottom-space'), 'cards should include bottom spacing guard'],
-  [card.includes('balanced-title'), 'cards should use balanced title wrapping'],
-  [card.includes('readable-copy'), 'cards should use readable copy rules'],
-  [app.includes('max-w-[1500px]'), 'gallery shell should constrain maximum width'],
-  [previews.includes('font-cjk-sans') || previews.includes('font-cjk-serif'), 'previews should use CJK font utilities'],
-  [!previews.includes('Option A') && !previews.includes('preview.md') && !previews.includes('template.html'), 'previews should not expose internal workflow labels'],
+  [css.includes("'Noto Sans SC'") && css.includes("'Noto Serif SC'"), 'CJK font stacks should exist'],
+  [app.includes("device === 'mobile'") && app.includes('移动端预览'), 'desktop/mobile preview switch should exist'],
+  [app.includes('写入真实资料') && app.includes('选择表达方式') && app.includes('编辑并导出'), 'three-step workflow should exist'],
+  [preview.includes('data-edit-id') && preview.includes('contentEditable'), 'preview should expose stable inline editing fields'],
+  [exporter.includes('data-edit-version') && exporter.includes('导出 HTML'), 'portable HTML export controls should exist'],
+  [!app.includes('Rarity score') && !preview.includes('Rarity score') && !exporter.includes('Rarity score'), 'public Studio should not contain invented scores'],
 ];
 
-for (const [ok, message] of checks) {
-  if (!ok) failures.push(message);
-}
+for (const [ok, message] of checks) if (!ok) failures.push(message);
 
 if (failures.length) {
-  console.error('Static visual guard failed:');
+  console.error('Static Studio visual guard failed:');
   for (const failure of failures) console.error(`- ${failure}`);
   process.exit(1);
 }
 
-console.log('Static visual guard passed: responsive shell, CJK utilities, card spacing, and preview authenticity rules are present.');
+console.log('Static Studio visual guard passed: responsive preview, CJK typography, editing, export, and anti-fake-data rules are present.');

@@ -13,9 +13,11 @@
     "check:visual": "node scripts/check-visual.mjs",
     "verify:ppt-stage": "node scripts/verify-html-ppt-stage.mjs",
     "capture:ppt": "node scripts/capture-slides.mjs",
+    "capture:studio": "node scripts/capture-studio.mjs",
     "test:ppt-qa": "node tests/verify-html-ppt-stage.test.mjs && node tests/capture-slides.test.mjs",
     "test:homepage-regression": "node tests/homepage-regression.test.mjs",
-    "test:homepage-qa-rules": "node tests/homepage-qa-rules.test.mjs"
+    "test:homepage-qa-rules": "node tests/homepage-qa-rules.test.mjs",
+    "test:studio": "node tests/studio-e2e.test.mjs"
   },
   "engines": {
     "node": ">=22"

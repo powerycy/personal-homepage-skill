@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="AI Personal Homepage Studio 公开使用手册" />
+  <title>使用手册 · AI Personal Homepage Studio</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono:wght@500;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
+    :root{--ink:#171713;--paper:#eee9dd;--accent:#ff4f2e;--signal:#d9ff43;--line:#aaa398;font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;color:var(--ink);background:var(--paper)}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0}a{color:inherit}a:focus-visible{outline:3px solid #175cff;outline-offset:3px}.wrap{width:min(1120px,calc(100% - 36px));margin:auto}.nav{min-height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.brand{font:900 15px/1 'Archivo Black','Noto Sans SC',sans-serif;text-decoration:none}.brand i{color:var(--accent);font-style:normal}.back{padding:10px 14px;border:1px solid var(--ink);text-decoration:none;font-size:12px;font-weight:800}.hero{padding:clamp(58px,9vw,120px) 0 65px;border-bottom:1px solid var(--line)}.eyebrow{font:700 11px/1.5 'JetBrains Mono',monospace;letter-spacing:.15em}.hero h1{max-width:950px;margin:24px 0 26px;font:900 clamp(54px,9vw,118px)/.86 'Archivo Black','Noto Sans SC',sans-serif;letter-spacing:-.075em}.hero h1 em{color:var(--accent);font-style:normal}.hero>p:last-child{max-width:720px;margin:0;color:#635e55;font-size:17px;line-height:1.9}.guide-grid{display:grid;grid-template-columns:250px 1fr;gap:64px;padding:70px 0 110px}.toc{position:sticky;top:24px;align-self:start;border-top:5px solid var(--ink);padding-top:18px}.toc strong{font:900 17px/1 'Archivo Black','Noto Sans SC',sans-serif}.toc a{display:block;padding:10px 0;border-bottom:1px solid #c8c1b5;color:#5f5a52;text-decoration:none;font-size:12px}.content{min-width:0}.section{padding:0 0 68px;margin:0 0 68px;border-bottom:1px solid var(--line)}.section:last-child{border:0}.number{color:var(--accent);font:700 12px/1 'JetBrains Mono',monospace}.section h2{margin:13px 0 23px;font:900 clamp(31px,5vw,58px)/.95 'Archivo Black','Noto Sans SC',sans-serif;letter-spacing:-.055em}.section p,.section li{color:#544f48;font-size:15px;line-height:1.9}.section ol,.section ul{padding-left:1.4em}.note{margin-top:25px;padding:20px 22px;border-left:5px solid var(--accent);background:#fff9ed}.note strong{display:block;margin-bottom:6px;color:var(--ink)}.kbd{display:inline-block;padding:2px 7px;border:1px solid #989186;background:#fff;font:700 12px/1.7 'JetBrains Mono',monospace;box-shadow:2px 2px 0 #989186}.checks{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:24px}.checks span{padding:14px;background:var(--signal);font-size:12px;font-weight:800}.footer{padding:45px 0;background:var(--ink);color:var(--paper)}.footer .wrap{display:flex;align-items:center;justify-content:space-between;gap:25px}.footer a{color:var(--signal)}@media(max-width:760px){.guide-grid{grid-template-columns:1fr;gap:35px}.toc{position:static}.checks{grid-template-columns:1fr}.footer .wrap{align-items:flex-start;flex-direction:column}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+  </style>
+</head>
+<body>
+  <header class="nav wrap"><a class="brand" href="./">HOMEPAGE STUDIO<i>/GUIDE</i></a><a class="back" href="./">← 返回 Studio</a></header>
+  <main>
+    <section class="hero wrap"><p class="eyebrow">PUBLIC USER GUIDE · 公开使用手册</p><h1>三步做完，<br /><em>拿走一个真网页。</em></h1><p>这个工具不替你编经历。它负责把真实资料变成有结构、有风格、能直接发布的个人主页，并把最后的 HTML 文件交到你手里。</p></section>
+    <div class="guide-grid wrap">
+      <nav class="toc" aria-label="手册目录"><strong>目录</strong><a href="#start">01 开始之前</a><a href="#profile">02 写资料</a><a href="#style">03 选风格</a><a href="#edit">04 在线编辑</a><a href="#export">05 导出与发布</a><a href="#privacy">06 隐私与限制</a></nav>
+      <div class="content">
+        <section class="section" id="start"><span class="number">01</span><h2>开始之前</h2><p>准备好姓名、身份、一句话定位、3—5 句个人简介，以及至少一个能证明能力的项目。项目最好能讲清它解决什么问题、你负责什么、做了哪些功能、用了什么方法，以及目前的真实状态。</p><div class="note"><strong>没有数字，也没关系。</strong>真实的“已开源”“正在内测”“完成可运行原型”，都比一个无法核对的漂亮数字更有说服力。</div></section>
+        <section class="section" id="profile"><span class="number">02</span><h2>写入真实资料</h2><ol><li>打开 Studio，停留在“写入真实资料”。</li><li>把示例姓名、身份、简介和邮箱替换为自己的信息。</li><li>在“项目证据”里补齐问题、角色、功能、技术/方法和结果。</li><li>右侧预览会实时更新，资料自动保存在当前浏览器。</li></ol><p>项目功能可以用中文顿号或逗号分隔，页面会自动把它们整理成可扫描的条目。</p></section>
+        <section class="section" id="style"><span class="number">03</span><h2>选择表达方式</h2><p>进入第二步，在四种风格间切换。同一份资料不会丢失：</p><ul><li><strong>Signal：</strong>开发者、AI 创作者、开源作者。</li><li><strong>Editorial：</strong>设计师、写作者、内容创作者。</li><li><strong>Sunlit：</strong>独立开发者、自由职业者、年轻创作者。</li><li><strong>Paper：</strong>求职者、顾问、产品与研究岗位。</li></ul><p>桌面/手机按钮可以立即检查不同宽度，不需要刷新。</p></section>
+        <section class="section" id="edit"><span class="number">04</span><h2>直接在预览里改</h2><p>第三步点击“开启在线编辑”，预览中带虚线的文字都能直接修改。失去焦点后，修改会回写到资料对象。</p><div class="note"><strong>导出的网页也能继续编辑。</strong>把鼠标移到导出网页左上角，会出现“编辑”和“导出 HTML”。按 <span class="kbd">E</span> 可切换编辑，按 <span class="kbd">Ctrl / Cmd + S</span> 保存。</div></section>
+        <section class="section" id="export"><span class="number">05</span><h2>导出与发布</h2><ol><li>点击“导出独立 HTML”。</li><li>浏览器会下载以姓名命名的 `.html` 文件。</li><li>双击即可离线打开；也可以上传到 GitHub Pages、Cloudflare Pages、Netlify 或任意静态网站空间。</li><li>需要改文案时，可在导出网页里继续编辑并再次导出。</li></ol><div class="checks"><span>✓ 单文件，无构建步骤</span><span>✓ 移动端响应式</span><span>✓ 编辑内容写进新文件</span><span>✓ 减少动效与键盘焦点</span></div></section>
+        <section class="section" id="privacy"><span class="number">06</span><h2>隐私与限制</h2><p>Studio 不要求登录，填写的数据只保存在当前浏览器的 localStorage，生成和导出都在本地完成。清理浏览器数据会删除草稿，请及时导出。</p><p>它不会调用在线 AI 模型替你扩写经历，也不会自动生成用户评价、工作经历或成就数字。头像和多项目管理暂未进入这个比赛版本；需要更多内容时，可以先导出，再在 HTML 中继续编辑。</p></section>
+      </div>
+    </div>
+  </main>
+  <footer class="footer"><div class="wrap"><strong>AI Personal Homepage Studio</strong><span>开源项目 · <a href="https://github.com/powerycy/personal-homepage-skill">GitHub 源码</a></span></div></footer>
+</body>
+</html>
