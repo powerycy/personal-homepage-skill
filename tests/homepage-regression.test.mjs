@@ -1,4 +1,5 @@
 import { createRequire } from 'node:module';
+import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -10,7 +11,8 @@ const viewports = [
   { name: 'mobile', width: 390, height: 844 },
 ];
 const failures = [];
-const browser = await chromium.launch({ headless: true });
+const chromePath = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const browser = await chromium.launch({ headless: true, ...(existsSync(chromePath) ? { executablePath: chromePath } : {}) });
 
 try {
   for (const viewport of viewports) {
