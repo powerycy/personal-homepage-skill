@@ -19,4 +19,3 @@
 - 产品：<https://powerycy.github.io/personal-homepage-skill/>
 - 使用手册：<https://powerycy.github.io/personal-homepage-skill/guide.html>
 - 代码：<https://github.com/powerycy/personal-homepage-skill>
-- 官方提交：已提交；唯一参赛凭证 ID `6a742d5f00388a11ea57`
