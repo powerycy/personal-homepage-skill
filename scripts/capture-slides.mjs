@@ -53,8 +53,7 @@ try {
 }
 let browser;
 try {
-  const chromePath = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
-  browser = await chromium.launch({ headless: true, ...(existsSync(chromePath) ? { executablePath: chromePath } : {}) });
+  browser = await chromium.launch({ headless: true });
 } catch (error) {
   console.error('Playwright could not launch Chromium. Run `playwright install chromium`.');
   console.error(error.message);

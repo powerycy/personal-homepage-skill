@@ -33,7 +33,7 @@ function OrbisNftPreview() {
         <div className="font-display-condensed text-[38px] uppercase leading-[0.92] tracking-[0.01em]">Beyond earth<br />and ( its )<br />boundaries</div>
       </div>
       <div className="absolute left-[48%] top-[103px] rotate-[-3deg] font-display-script text-[31px] text-[#6FFF00] opacity-95 mix-blend-screen">Nft collection</div>
-      <div className="absolute bottom-5 left-6 font-mono text-[10px] uppercase tracking-[0.15em] text-white/48">Metadata / supplied by creator</div>
+      <div className="absolute bottom-5 left-6 font-mono text-[10px] uppercase tracking-[0.15em] text-white/48">Rarity score: 8.7 / 9.0 / 8.2</div>
       <div className="absolute bottom-10 right-6 flex items-end gap-3">
         {[0, 1, 2].map((item) => (
           <div key={item} className={`${item === 1 ? 'h-32 w-24' : 'h-24 w-20'} rounded-[24px] border border-white/18 bg-white/[0.045] p-2 backdrop-blur-md`}>
