@@ -1,0 +1,2472 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI 的下一次机会，不在 AI 圈</title>
+  <meta name="description" content="固定 16:9 HTML 路演 PPT：AI 的下一次机会，不在 AI 圈。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Condiment&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #010828;
+      --bg-deep: #03041a;
+      --cream: #eff4ff;
+      --muted: rgba(239, 244, 255, 0.72);
+      --faint: rgba(239, 244, 255, 0.18);
+      --glass: rgba(255, 255, 255, 0.07);
+      --neon: #6fff00;
+      --sky: #4bb7ff;
+      --pink: #ff69d2;
+      --violet: #8b5cf6;
+      --gold: #ffe66f;
+      --font-cn: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Source Han Sans SC", sans-serif;
+      --font-display: "Anton", Impact, sans-serif;
+      --font-script: "Condiment", cursive;
+      --font-mono: "SFMono-Regular", "Cascadia Code", "Liberation Mono", Menlo, monospace;
+      --stage-scale: 1;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #00030d;
+      color: var(--cream);
+      font-family: var(--font-cn);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+      opacity: 0.35;
+      mix-blend-mode: screen;
+      background-image:
+        radial-gradient(circle at 22% 18%, rgba(255,255,255,0.38) 0 1px, transparent 1.6px),
+        radial-gradient(circle at 76% 28%, rgba(255,255,255,0.28) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 44% 82%, rgba(255,255,255,0.2) 0 1px, transparent 1.6px);
+      background-size: 140px 140px, 220px 220px, 310px 310px;
+    }
+
+    button,
+    a {
+      font: inherit;
+      color: inherit;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .deck-viewport {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(75,183,255,0.12), transparent 38%),
+        linear-gradient(180deg, #00030d, #01020a);
+    }
+
+    .stage-shell {
+      position: relative;
+      width: min(100vw, calc(100vh * 16 / 9));
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+    }
+
+    .stage {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      transform-origin: left top;
+      transform: scale(var(--stage-scale));
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      padding: 86px 110px 78px;
+      overflow: hidden;
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(circle at 15% 13%, rgba(111,255,0,0.13), transparent 23%),
+        radial-gradient(circle at 88% 16%, rgba(75,183,255,0.22), transparent 28%),
+        linear-gradient(180deg, #031147 0%, var(--bg) 52%, #02051f 100%);
+      isolation: isolate;
+    }
+
+    .slide.active {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+      z-index: 2;
+    }
+
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(115deg, rgba(255,255,255,0.05), transparent 34%, rgba(255,255,255,0.03)),
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.028) 0 1px, transparent 1px 132px),
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.022) 0 1px, transparent 1px 132px);
+      mask-image: radial-gradient(circle at 50% 44%, #000, transparent 78%);
+    }
+
+    .slide::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle at 16% 26%, rgba(255,255,255,0.32) 0 1.2px, transparent 1.7px),
+        radial-gradient(circle at 68% 18%, rgba(255,255,255,0.22) 0 1px, transparent 1.6px),
+        radial-gradient(circle at 38% 76%, rgba(255,255,255,0.18) 0 1px, transparent 1.7px);
+      background-size: 118px 118px, 184px 184px, 270px 270px;
+      opacity: 0.62;
+    }
+
+    .content {
+      position: relative;
+      z-index: 3;
+      height: 100%;
+    }
+
+    .liquid {
+      position: relative;
+      overflow: hidden;
+      border-radius: 34px;
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow:
+        inset 0 1px 1px rgba(255,255,255,0.2),
+        0 26px 60px rgba(0,0,0,0.28);
+    }
+
+    .liquid::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1.4px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.48), rgba(255,255,255,0.12) 30%, transparent 52%, rgba(255,255,255,0.32));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .deck-label {
+      position: absolute;
+      left: 110px;
+      top: 54px;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: rgba(239,244,255,0.72);
+      font-family: var(--font-mono);
+      font-size: 18px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .deck-label::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--neon);
+      box-shadow: 0 0 24px rgba(111,255,0,0.86);
+    }
+
+    .page-no {
+      position: absolute;
+      right: 110px;
+      top: 46px;
+      z-index: 5;
+      font-family: var(--font-display);
+      font-size: 54px;
+      line-height: 1;
+      color: rgba(239,244,255,0.92);
+      text-shadow: 0 12px 32px rgba(0,0,0,0.32);
+    }
+
+    .script {
+      font-family: var(--font-script);
+      font-weight: 400;
+      color: var(--neon);
+      text-shadow: 0 4px 0 rgba(123,50,255,0.66);
+      letter-spacing: 0;
+    }
+
+    .nowrap {
+      white-space: nowrap;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    .cn-title {
+      font-family: var(--font-cn);
+      font-weight: 900;
+      letter-spacing: 0;
+      line-height: 1.06;
+      text-wrap: balance;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 800px;
+      align-items: center;
+      gap: 44px;
+      height: 100%;
+    }
+
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 34px;
+      padding: 14px 20px;
+      border-radius: 999px;
+      color: rgba(239,244,255,0.78);
+      font-family: var(--font-mono);
+      font-size: 19px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .hero-title {
+      max-width: 980px;
+      font-size: 82px;
+    }
+
+    .accent-pill {
+      display: inline-block;
+      white-space: nowrap;
+      margin: 0 10px;
+      padding: 0 20px 9px;
+      border-radius: 22px;
+      color: #071017;
+      background: linear-gradient(135deg, var(--neon), #fff070);
+      box-shadow: 0 18px 42px rgba(111,255,0,0.24), inset 0 -5px 0 rgba(1,8,40,0.12);
+      transform: rotate(-2deg) translateY(-2px);
+    }
+
+    .hero-subtitle {
+      margin-top: 34px;
+      font-size: 42px;
+      line-height: 1.24;
+      color: rgba(239,244,255,0.82);
+      font-weight: 700;
+    }
+
+    .hero-phrase {
+      position: relative;
+      display: inline-block;
+      margin-left: 12px;
+      font-size: 86px;
+      transform: rotate(-7deg) translateY(12px);
+    }
+
+    .avatar-wrap {
+      position: relative;
+      height: 820px;
+      transform: translateX(-225px);
+    }
+
+    .avatar-motion {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+    }
+
+    .avatar-halo {
+      position: absolute;
+      width: 560px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      margin-left: 200px;
+      background:
+        radial-gradient(circle at 36% 28%, rgba(255,255,255,0.38), transparent 9%),
+        conic-gradient(from 10deg, transparent, rgba(111,255,0,0.54), rgba(75,183,255,0.1), rgba(255,105,210,0.5), transparent);
+      animation: halo-spin 15s linear infinite;
+      filter: drop-shadow(0 0 28px rgba(75,183,255,0.26));
+    }
+
+    .avatar {
+      position: relative;
+      z-index: 2;
+      width: 1180px;
+      max-width: none;
+      transform-origin: 50% 72%;
+      animation: hero-float 3.1s cubic-bezier(.42,0,.18,1) infinite;
+      filter: drop-shadow(0 36px 42px rgba(0,0,0,0.38));
+    }
+
+    .earth {
+      position: absolute;
+      z-index: 1;
+      width: 720px;
+      aspect-ratio: 1;
+      right: -250px;
+      top: 84px;
+      background: url("./assets/template/cartoon-earth-transparent.png") center / contain no-repeat;
+      opacity: 0.62;
+      filter: drop-shadow(0 0 50px rgba(75,183,255,0.4));
+      animation: earth-spin 28s linear infinite;
+    }
+
+    .hero-earth {
+      width: 1950px;
+      right: -820px;
+      top: -430px;
+      opacity: 0.84;
+    }
+
+    .final-earth {
+      width: 1950px;
+      right: -820px;
+      top: -430px;
+      opacity: 0.84;
+    }
+
+    .editable-earth {
+      width: 760px;
+      right: -190px;
+      top: auto;
+      bottom: -260px;
+      opacity: 0.42;
+      z-index: 1;
+    }
+
+    .lesson-earth {
+      width: 1040px;
+      right: -420px;
+      top: -470px;
+      opacity: 0.32;
+      z-index: 1;
+    }
+
+    .planet,
+    .ambient-planet,
+    .mini-orbit {
+      position: absolute;
+      z-index: 2;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .planet {
+      width: var(--size);
+      height: var(--size);
+      left: var(--x);
+      top: var(--y);
+      background:
+        radial-gradient(circle at 34% 24%, rgba(255,255,255,0.86) 0 10%, transparent 11%),
+        linear-gradient(145deg, var(--a), var(--b));
+      box-shadow: inset -12px -12px 0 rgba(0,0,0,0.16), 0 18px 34px rgba(0,0,0,0.22);
+      animation: floaty calc(var(--time) * 1s) ease-in-out infinite alternate;
+    }
+
+    .ambient-planet {
+      width: var(--size, 46px);
+      height: var(--size, 46px);
+      left: var(--x, auto);
+      right: var(--right, auto);
+      top: var(--y, auto);
+      bottom: var(--bottom, auto);
+      opacity: var(--opacity, 0.86);
+      background:
+        radial-gradient(circle at 30% 24%, rgba(255,255,255,0.9) 0 12%, transparent 13%),
+        linear-gradient(145deg, var(--a, #ffca5f), var(--b, #ff69d2));
+      box-shadow: inset -10px -10px 0 rgba(0,0,0,0.15), 0 14px 30px rgba(0,0,0,0.24);
+      animation: floaty calc(var(--time, 5) * 1s) ease-in-out infinite alternate;
+    }
+
+    .planet::after {
+      content: "";
+      position: absolute;
+      left: -34%;
+      top: 42%;
+      width: 168%;
+      height: 18%;
+      border-radius: 999px;
+      border: 3px solid rgba(239,244,255,0.45);
+      transform: rotate(-14deg);
+    }
+
+    .ambient-planet::after {
+      content: "";
+      position: absolute;
+      left: -36%;
+      top: 43%;
+      width: 172%;
+      height: 17%;
+      border-radius: 999px;
+      border: 2px solid rgba(239,244,255,0.44);
+      transform: rotate(-14deg);
+    }
+
+    .mini-orbit {
+      left: var(--x);
+      top: var(--y);
+      width: var(--size);
+      height: calc(var(--size) * 0.42);
+      border: 2px dashed rgba(239,244,255,0.25);
+      transform: rotate(var(--r));
+      animation: orbit-wobble calc(var(--time) * 1s) ease-in-out infinite alternate;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 52px;
+      align-items: stretch;
+      height: calc(100% - 86px);
+      padding-top: 116px;
+    }
+
+    .two-col.centered {
+      align-items: center;
+      padding-top: 72px;
+    }
+
+    .standard-content {
+      padding-top: 138px;
+    }
+
+    .slide-title {
+      max-width: 1100px;
+      font-size: 70px;
+    }
+
+    .slide-title .script {
+      display: inline-block;
+      margin-left: 18px;
+      font-size: 86px;
+      transform: rotate(-8deg) translateY(12px);
+    }
+
+    .lead {
+      margin-top: 28px;
+      max-width: 790px;
+      color: var(--muted);
+      font-size: 31px;
+      line-height: 1.55;
+      font-weight: 600;
+    }
+
+    .profile-card {
+      padding: 44px;
+      display: grid;
+      align-content: end;
+      min-height: 630px;
+      background:
+        linear-gradient(180deg, rgba(1,8,40,0.04), rgba(1,8,40,0.35)),
+        url("./assets/template/about-orbital-world-clean.png") center / cover no-repeat;
+    }
+
+    .profile-visual {
+      position: relative;
+      min-height: 620px;
+      overflow: visible;
+    }
+
+    .profile-visual.profile-lowered {
+      min-height: 690px;
+      transform: translateY(44px);
+    }
+
+    .profile-visual .profile-card {
+      position: absolute;
+      inset: 72px 20px 40px 0;
+      min-height: auto;
+    }
+
+    .profile-visual.profile-lowered .profile-card {
+      inset: 354px 18px -4px 0;
+      overflow: visible;
+    }
+
+    .profile-visual.profile-lowered .profile-card::before {
+      content: "";
+      position: absolute;
+      left: 26px;
+      right: 26px;
+      top: -3px;
+      height: 6px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(111,255,0,0.08), rgba(239,244,255,0.48), rgba(75,183,255,0.08));
+      box-shadow: 0 -7px 24px rgba(239,244,255,0.18), 0 8px 26px rgba(0,0,0,0.32);
+      z-index: 3;
+    }
+
+    .profile-visual > .big-stat {
+      position: absolute;
+      left: 46px;
+      bottom: 72px;
+      z-index: 5;
+    }
+
+    .profile-visual.profile-lowered > .big-stat {
+      bottom: 42px;
+    }
+
+    .sitting-avatar {
+      position: absolute;
+      right: -34px;
+      bottom: -8px;
+      z-index: 4;
+      width: 660px;
+      filter: drop-shadow(0 34px 38px rgba(0,0,0,0.36));
+      animation: avatar-small 3.3s ease-in-out infinite;
+    }
+
+    .profile-visual.profile-lowered .sitting-avatar {
+      right: 72px;
+      bottom: 116px;
+      width: 486px;
+    }
+
+    .big-stat {
+      display: grid;
+      gap: 8px;
+    }
+
+    .big-stat strong {
+      font-family: var(--font-display);
+      font-size: 126px;
+      line-height: 0.88;
+      color: var(--neon);
+      text-shadow: 0 8px 0 rgba(123,50,255,0.64);
+    }
+
+    .big-stat span {
+      color: rgba(239,244,255,0.84);
+      font-family: var(--font-mono);
+      font-size: 21px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .bullet-grid {
+      display: grid;
+      gap: 20px;
+      align-content: center;
+    }
+
+    .bullet {
+      position: relative;
+      padding: 28px 32px 28px 76px;
+      border-radius: 28px;
+      background: rgba(255,255,255,0.075);
+      color: rgba(239,244,255,0.9);
+      font-size: 34px;
+      line-height: 1.35;
+      font-weight: 750;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12);
+    }
+
+    .bullet::before {
+      content: "";
+      position: absolute;
+      left: 30px;
+      top: 40px;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      background: var(--neon);
+      box-shadow: 0 0 20px rgba(111,255,0,0.68);
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px;
+      margin-top: 64px;
+    }
+
+    .time-card {
+      min-height: 410px;
+      padding: 34px 30px;
+      display: grid;
+      align-content: space-between;
+    }
+
+    .time-card .num,
+    .matrix-card .num {
+      font-family: var(--font-display);
+      font-size: 82px;
+      line-height: 0.9;
+      color: rgba(239,244,255,0.95);
+    }
+
+    .time-card h3,
+    .matrix-card h3 {
+      font-size: 31px;
+      line-height: 1.22;
+      font-weight: 900;
+    }
+
+    .time-card p,
+    .matrix-card p,
+    .note {
+      color: var(--muted);
+      font-size: 24px;
+      line-height: 1.52;
+      font-weight: 600;
+    }
+
+    .quote-layout {
+      height: calc(100% - 80px);
+      padding-top: 126px;
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 58px;
+      align-items: center;
+    }
+
+    .distill-bg {
+      background:
+        linear-gradient(90deg, rgba(1,8,40,0.92), rgba(1,8,40,0.54) 48%, rgba(1,8,40,0.78)),
+        url("./assets/template/about-orbital-world-clean.png") center / cover no-repeat;
+    }
+
+    .distill-bg .skill-panel.illustrated {
+      padding: 0;
+      min-height: auto;
+      overflow: visible;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+
+    .distill-bg .skill-panel.illustrated::after {
+      display: none;
+    }
+
+    .distill-bg .skill-panel.illustrated .skill-row {
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.13), rgba(255,255,255,0.045)),
+        radial-gradient(circle at 8% 50%, rgba(111,255,0,0.16), transparent 28%);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14), 0 18px 34px rgba(0,0,0,0.14);
+    }
+
+    .homepage-content {
+      padding-top: 76px;
+    }
+
+    .homepage-content .two-col.centered {
+      padding-top: 28px;
+    }
+
+    .homepage-content .template-preview {
+      min-height: 540px;
+    }
+
+    .quote {
+      font-size: 70px;
+      line-height: 1.16;
+      font-weight: 900;
+      text-wrap: balance;
+    }
+
+    .quote mark {
+      color: var(--bg-deep);
+      background: var(--neon);
+      padding: 0 16px 8px;
+      border-radius: 16px;
+    }
+
+    .skill-panel {
+      padding: 44px;
+      min-height: 640px;
+      display: grid;
+      gap: 24px;
+      align-content: center;
+    }
+
+    .skill-panel.illustrated {
+      position: relative;
+      background:
+        linear-gradient(90deg, rgba(1,8,40,0.82), rgba(1,8,40,0.48) 48%, rgba(1,8,40,0.2)),
+        url("./assets/template/about-orbital-world-clean.png") center / cover no-repeat;
+      overflow: hidden;
+    }
+
+    .skill-panel.illustrated::after {
+      content: "";
+      position: absolute;
+      right: -70px;
+      bottom: -90px;
+      width: 360px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: url("./assets/template/cartoon-earth-transparent.png") center / contain no-repeat;
+      opacity: 0.38;
+      filter: drop-shadow(0 0 42px rgba(75,183,255,0.3));
+      animation: earth-spin 30s linear infinite;
+    }
+
+    .skill-panel.illustrated .skill-row {
+      position: relative;
+      z-index: 2;
+      padding: 18px 20px;
+      border-radius: 24px;
+      background: rgba(1,8,40,0.48);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .skill-row {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      gap: 26px;
+      align-items: center;
+    }
+
+    .skill-row strong {
+      font-family: var(--font-display);
+      font-size: 78px;
+      line-height: 0.9;
+      color: var(--neon);
+    }
+
+    .skill-row span {
+      color: rgba(239,244,255,0.88);
+      font-size: 31px;
+      line-height: 1.38;
+      font-weight: 800;
+    }
+
+    .feature-mock {
+      position: relative;
+      min-height: 620px;
+      padding: 42px;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 28px;
+    }
+
+    .visual-frame {
+      position: relative;
+      min-height: 620px;
+      padding: 0;
+      overflow: hidden;
+      border-radius: 34px;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .visual-frame.medium {
+      min-height: 585px;
+    }
+
+    .visual-frame img {
+      width: 100%;
+      height: 100%;
+      min-height: inherit;
+      object-fit: cover;
+      transform: scale(1.02);
+      animation: image-drift 7s ease-in-out infinite alternate;
+    }
+
+    .visual-frame::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(1,8,40,0.82), rgba(1,8,40,0.28) 48%, rgba(1,8,40,0.08)),
+        radial-gradient(circle at 70% 20%, rgba(111,255,0,0.12), transparent 32%);
+    }
+
+    .template-preview {
+      position: relative;
+      min-height: 585px;
+      overflow: hidden;
+      border-radius: 34px;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .template-preview.real-page img {
+      object-position: center top;
+    }
+
+    .template-preview img {
+      width: 100%;
+      height: 100%;
+      min-height: inherit;
+      object-fit: cover;
+      object-position: center;
+      filter: saturate(1.08) contrast(1.02);
+      transform: scale(1.02);
+      animation: image-drift 7s ease-in-out infinite alternate;
+    }
+
+    .template-preview::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(1,8,40,0.72), rgba(1,8,40,0.12) 50%, rgba(1,8,40,0.54)),
+        radial-gradient(circle at 74% 18%, rgba(111,255,0,0.18), transparent 26%);
+      pointer-events: none;
+    }
+
+    .template-badge {
+      position: absolute;
+      left: 34px;
+      top: 32px;
+      z-index: 3;
+      display: grid;
+      place-items: center;
+      width: 148px;
+      height: 148px;
+      border-radius: 50%;
+      color: #071017;
+      background: var(--neon);
+      box-shadow: 0 0 46px rgba(111,255,0,0.36), inset 0 -9px 0 rgba(1,8,40,0.13);
+      font-family: var(--font-display);
+      font-size: 84px;
+      line-height: 1;
+      text-shadow: 0 5px 0 rgba(255,255,255,0.35);
+      animation: pulse-chip 2.4s ease-in-out infinite;
+    }
+
+    .edit-orbit-panel {
+      position: relative;
+      min-height: 640px;
+      padding: 48px;
+      overflow: hidden;
+      border-radius: 34px;
+      background:
+        radial-gradient(circle at 72% 18%, rgba(111,255,0,0.18), transparent 26%),
+        radial-gradient(circle at 25% 74%, rgba(75,183,255,0.16), transparent 24%),
+        rgba(255,255,255,0.065);
+    }
+
+    .edit-image-panel {
+      position: relative;
+      min-height: 640px;
+      overflow: hidden;
+      border-radius: 34px;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .edit-image-panel img {
+      width: 100%;
+      height: 100%;
+      min-height: inherit;
+      object-fit: cover;
+      object-position: center;
+      filter: saturate(1.06) contrast(1.03);
+      transform: scale(1.01);
+      animation: image-drift 7s ease-in-out infinite alternate;
+    }
+
+    .edit-image-panel::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(1,8,40,0.28), rgba(1,8,40,0.06) 50%, rgba(1,8,40,0.54)),
+        radial-gradient(circle at 20% 22%, rgba(111,255,0,0.12), transparent 24%);
+      pointer-events: none;
+    }
+
+    .edit-orbit-panel::after {
+      content: "";
+      position: absolute;
+      right: -94px;
+      bottom: -156px;
+      width: 430px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: url("./assets/template/cartoon-earth-transparent.png") center / contain no-repeat;
+      opacity: 0.28;
+      filter: drop-shadow(0 0 48px rgba(75,183,255,0.28));
+      animation: earth-spin 32s linear infinite;
+    }
+
+    .mini-browser {
+      position: relative;
+      z-index: 2;
+      min-height: 500px;
+      border-radius: 30px;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04)),
+        #07123b;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.16),
+        0 28px 70px rgba(0,0,0,0.32);
+    }
+
+    .mini-browser-bar {
+      height: 62px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 0 26px;
+      background: rgba(255,255,255,0.08);
+      color: rgba(239,244,255,0.7);
+      font-family: var(--font-mono);
+      font-size: 18px;
+      letter-spacing: 0.08em;
+    }
+
+    .mini-browser-bar::before {
+      content: "";
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--pink);
+      box-shadow: 28px 0 0 var(--gold), 56px 0 0 var(--neon);
+      margin-right: 64px;
+    }
+
+    .editable-slide-mini {
+      position: relative;
+      margin: 34px;
+      min-height: 370px;
+      padding: 42px;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 80% 20%, rgba(75,183,255,0.18), transparent 26%),
+        linear-gradient(135deg, rgba(1,8,40,0.72), rgba(1,8,40,0.42));
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14);
+    }
+
+    .editable-slide-mini h3 {
+      margin: 0;
+      width: 64%;
+      color: rgba(239,244,255,0.96);
+      font-size: 42px;
+      line-height: 1.15;
+      font-weight: 900;
+    }
+
+    .editable-slide-mini p {
+      margin-top: 24px;
+      width: 70%;
+      color: rgba(239,244,255,0.7);
+      font-size: 24px;
+      line-height: 1.48;
+      font-weight: 650;
+    }
+
+    .edit-selection {
+      position: absolute;
+      left: 38px;
+      bottom: 40px;
+      width: 58%;
+      padding: 22px 24px;
+      border: 3px dashed rgba(111,255,0,0.72);
+      border-radius: 20px;
+      color: rgba(239,244,255,0.94);
+      font-size: 31px;
+      line-height: 1.25;
+      font-weight: 900;
+      animation: pulse-chip 2.1s ease-in-out infinite;
+    }
+
+    .edit-selection::after {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 34px;
+      margin-left: 8px;
+      vertical-align: -7px;
+      background: var(--neon);
+      box-shadow: 0 0 18px rgba(111,255,0,0.65);
+      animation: blink 950ms steps(2, start) infinite;
+    }
+
+    .edit-floating-chip {
+      position: absolute;
+      right: 42px;
+      top: 128px;
+      z-index: 3;
+      padding: 18px 24px;
+      border-radius: 999px;
+      color: #071017;
+      background: var(--neon);
+      font-size: 26px;
+      font-weight: 900;
+      box-shadow: 0 20px 42px rgba(111,255,0,0.24);
+      transform: rotate(4deg);
+    }
+
+    .visual-frame.right-glow::after {
+      background:
+        linear-gradient(90deg, rgba(1,8,40,0.08), rgba(1,8,40,0.26) 45%, rgba(1,8,40,0.78)),
+        radial-gradient(circle at 22% 24%, rgba(111,255,0,0.12), transparent 28%);
+    }
+
+    .feature-card-overlay {
+      position: absolute;
+      left: 38px;
+      bottom: 38px;
+      z-index: 2;
+      width: min(520px, calc(100% - 76px));
+      padding: 28px 30px;
+      border-radius: 28px;
+      background: rgba(1,8,40,0.58);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14);
+    }
+
+    .feature-card-overlay h3 {
+      margin: 0 0 10px;
+      font-size: 34px;
+      line-height: 1.15;
+    }
+
+    .feature-card-overlay p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 23px;
+      line-height: 1.5;
+      font-weight: 650;
+    }
+
+    .fake-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: rgba(239,244,255,0.7);
+      font-family: var(--font-mono);
+      font-size: 20px;
+      letter-spacing: 0.08em;
+    }
+
+    .fake-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--pink);
+      box-shadow: 30px 0 0 var(--gold), 60px 0 0 var(--neon);
+    }
+
+    .edit-demo {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 420px;
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 40% 30%, rgba(111,255,0,0.13), transparent 22%),
+        linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.025));
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12);
+    }
+
+    .edit-chip {
+      position: absolute;
+      left: 26px;
+      top: 24px;
+      padding: 14px 24px;
+      border-radius: 999px;
+      background: var(--neon);
+      color: #071017;
+      font-size: 25px;
+      font-weight: 900;
+      animation: pulse-chip 1.8s ease-in-out infinite;
+    }
+
+    .edit-text {
+      width: 76%;
+      padding: 28px;
+      border-radius: 22px;
+      color: rgba(239,244,255,0.92);
+      border: 2px dashed rgba(111,255,0,0.58);
+      font-size: 42px;
+      line-height: 1.35;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .matrix-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      margin-top: 40px;
+    }
+
+    .matrix-content {
+      padding-top: 86px;
+    }
+
+    .matrix-content .lead {
+      max-width: 900px;
+    }
+
+    .matrix-content .matrix-grid {
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .matrix-content .project-image-card {
+      min-height: 222px;
+      padding: 22px 24px;
+      border-radius: 26px;
+    }
+
+    .matrix-card {
+      min-height: 236px;
+      padding: 30px;
+      display: grid;
+      align-content: space-between;
+      background: rgba(255,255,255,0.07);
+      border-radius: 30px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12);
+    }
+
+    .project-image-card {
+      position: relative;
+      min-height: 272px;
+      padding: 26px 28px;
+      overflow: hidden;
+      border-radius: 30px;
+      display: grid;
+      align-content: end;
+      color: inherit;
+      text-decoration: none;
+      background: #060b2b;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14), 0 22px 48px rgba(0,0,0,0.22);
+    }
+
+    .project-image-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--img) center / cover no-repeat;
+      transform: scale(1.05);
+      transition: transform 600ms ease, filter 600ms ease;
+    }
+
+    .project-image-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.58) 42%, rgba(0,0,0,0.08) 100%),
+        linear-gradient(180deg, transparent 24%, rgba(0,0,0,0.62));
+    }
+
+    .project-image-card:hover::before {
+      transform: scale(1.12);
+      filter: saturate(1.12) brightness(1.08);
+    }
+
+    .project-image-card .num,
+    .project-image-card h3,
+    .project-image-card p {
+      position: relative;
+      z-index: 2;
+    }
+
+    .project-image-card .num {
+      position: absolute;
+      left: 26px;
+      top: 22px;
+      font-family: var(--font-display);
+      font-size: 58px;
+      line-height: 0.9;
+      color: var(--neon);
+      text-shadow: 0 6px 0 rgba(123,50,255,0.6);
+    }
+
+    .project-image-card h3 {
+      margin: 0 0 8px;
+      max-width: 260px;
+      font-size: 28px;
+      line-height: 1.14;
+      font-weight: 900;
+    }
+
+    .project-image-card p {
+      max-width: 280px;
+      color: rgba(239,244,255,0.76);
+      font-size: 18px;
+      line-height: 1.45;
+      font-weight: 650;
+    }
+
+    .matrix-card:nth-child(2n) .num {
+      color: var(--neon);
+    }
+
+    .insight-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+      margin-top: 58px;
+    }
+
+    .project-collage {
+      position: relative;
+      min-height: 585px;
+      overflow: hidden;
+      border-radius: 34px;
+      background:
+        radial-gradient(circle at 55% 44%, rgba(111,255,0,0.12), transparent 28%),
+        rgba(255,255,255,0.06);
+    }
+
+    .lesson-showcase {
+      position: relative;
+      min-height: 590px;
+      padding: 28px;
+      overflow: hidden;
+      border-radius: 34px;
+      background:
+        radial-gradient(circle at 50% 44%, rgba(111,255,0,0.12), transparent 28%),
+        rgba(255,255,255,0.06);
+    }
+
+    .lesson-card-grid {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      height: 100%;
+      min-height: 530px;
+    }
+
+    .lesson-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+      background: #061038;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16), 0 24px 52px rgba(0,0,0,0.28);
+      animation: floaty var(--time, 5.4s) ease-in-out infinite alternate;
+    }
+
+    .lesson-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(1.08) brightness(0.88);
+      transform: scale(1.05);
+    }
+
+    .lesson-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,0.72)),
+        linear-gradient(90deg, rgba(0,0,0,0.38), rgba(0,0,0,0.06));
+    }
+
+    .lesson-card h3 {
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      bottom: 28px;
+      z-index: 2;
+      margin: 0;
+      font-size: 32px;
+      line-height: 1.15;
+      font-weight: 900;
+    }
+
+    .lesson-card .num {
+      position: absolute;
+      left: 22px;
+      top: 20px;
+      z-index: 2;
+      font-family: var(--font-display);
+      font-size: 54px;
+      line-height: 0.9;
+      color: var(--neon);
+      text-shadow: 0 5px 0 rgba(123,50,255,0.62);
+    }
+
+    .lessons-slide {
+      background:
+        linear-gradient(90deg, rgba(1,8,40,0.9), rgba(1,8,40,0.66) 46%, rgba(1,8,40,0.82)),
+        url("./assets/generated/lesson-space-background-v2.png") center / cover no-repeat;
+    }
+
+    .lessons-slide .planet {
+      opacity: 0.78;
+    }
+
+    .lesson-content {
+      padding-top: 78px;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 32px;
+    }
+
+    .lesson-content .slide-title {
+      max-width: 1000px;
+    }
+
+    .lesson-content .lead {
+      max-width: 1120px;
+      margin-top: 22px;
+    }
+
+    .lesson-showcase.template-cards {
+      min-height: auto;
+      padding: 0;
+      overflow: visible;
+      border-radius: 0;
+      background: none;
+      box-shadow: none;
+    }
+
+    .lesson-card-grid.template-cards {
+      gap: 28px;
+      min-height: 430px;
+      height: auto;
+      align-items: stretch;
+      margin-top: 46px;
+    }
+
+    .lesson-card.feature-card {
+      min-height: 420px;
+      padding: 42px 40px;
+      border-radius: 32px;
+      translate: 0 var(--lift, 0);
+      animation-name: card-float;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      align-content: initial;
+      overflow: hidden;
+      background: #061038;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18), 0 28px 68px rgba(0,0,0,0.28);
+    }
+
+    .lesson-card.feature-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--img) center / cover no-repeat;
+      transform: scale(1.04);
+      filter: saturate(1.1) brightness(0.9) contrast(1.06);
+      animation: image-drift 8s ease-in-out infinite alternate;
+    }
+
+    .lesson-card.feature-card:nth-child(1) {
+      --lift: 26px;
+    }
+
+    .lesson-card.feature-card:nth-child(2) {
+      --lift: -8px;
+    }
+
+    .lesson-card.feature-card:nth-child(3) {
+      --lift: 38px;
+    }
+
+    .lesson-card.feature-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(111,255,0,0.2), transparent 24%),
+        linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.66)),
+        linear-gradient(90deg, rgba(0,0,0,0.64), rgba(0,0,0,0.18) 58%, rgba(0,0,0,0.32));
+    }
+
+    .lesson-card.feature-card h3 {
+      position: relative;
+      left: auto;
+      right: auto;
+      bottom: auto;
+      z-index: 2;
+      font-size: 42px;
+      line-height: 1.18;
+      align-self: center;
+      margin-top: 18px;
+    }
+
+    .lesson-card.feature-card .num {
+      position: relative;
+      left: auto;
+      top: auto;
+      z-index: 2;
+      font-size: 82px;
+    }
+
+    .project-collage::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(1,8,40,0.5), rgba(1,8,40,0.06) 48%, rgba(1,8,40,0.38)),
+        radial-gradient(circle at 72% 12%, rgba(111,255,0,0.12), transparent 24%);
+    }
+
+    .collage-shot {
+      position: absolute;
+      overflow: hidden;
+      border-radius: 26px;
+      background: #08123e;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16), 0 28px 54px rgba(0,0,0,0.28);
+      animation: floaty var(--time, 5.2s) ease-in-out infinite alternate;
+    }
+
+    .collage-shot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(1.05) contrast(1.02);
+    }
+
+    .collage-shot.a { left: 44px; top: 38px; width: 470px; height: 265px; --time: 5.6s; }
+    .collage-shot.b { right: 36px; top: 70px; width: 385px; height: 268px; --time: 5.1s; }
+    .collage-shot.c { left: 132px; bottom: 44px; width: 550px; height: 310px; --time: 6s; }
+
+    .scene-collage {
+      position: relative;
+      min-height: 690px;
+      overflow: hidden;
+      border-radius: 34px;
+      background:
+        radial-gradient(circle at 56% 46%, rgba(111,255,0,0.16), transparent 27%),
+        rgba(255,255,255,0.06);
+    }
+
+    .scene-collage::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 520px;
+      height: 210px;
+      border: 2px dashed rgba(239,244,255,0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%) rotate(-12deg);
+      animation: halo-spin 26s linear infinite;
+    }
+
+    .scene-collage::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(1,8,40,0.16), rgba(1,8,40,0.08) 50%, rgba(1,8,40,0.62)),
+        radial-gradient(circle at 72% 18%, rgba(111,255,0,0.13), transparent 24%);
+      pointer-events: none;
+    }
+
+    .scene-collage .core-planet {
+      position: absolute;
+      left: 46%;
+      top: 42%;
+      z-index: 3;
+      width: 182px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: var(--neon);
+      box-shadow: 0 0 64px rgba(111,255,0,0.34), inset -18px -18px 0 rgba(1,8,40,0.12);
+      display: grid;
+      place-items: center;
+      color: #071017;
+      font-size: 34px;
+      line-height: 1.1;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .scene-window {
+      position: absolute;
+      z-index: 2;
+      overflow: hidden;
+      border-radius: 28px;
+      background: #07123b;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16), 0 24px 58px rgba(0,0,0,0.28);
+      animation: floaty var(--time, 5s) ease-in-out infinite alternate;
+    }
+
+    .scene-window img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(1.05) brightness(0.94);
+    }
+
+    .scene-window.one { left: 42px; top: 60px; width: 400px; height: 246px; --time: 5.8s; }
+    .scene-window.two { right: 42px; top: 70px; width: 405px; height: 258px; --time: 5.2s; }
+    .scene-window.three { left: 116px; bottom: 58px; width: 520px; height: 292px; --time: 6.1s; }
+
+    .insight-card {
+      min-height: 500px;
+      padding: 38px 34px;
+      display: grid;
+      align-content: space-between;
+      border-radius: 34px;
+      background: linear-gradient(160deg, rgba(255,255,255,0.09), rgba(255,255,255,0.035));
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12);
+    }
+
+    .insight-card h3 {
+      font-size: 38px;
+      line-height: 1.18;
+      font-weight: 900;
+    }
+
+    .insight-card p {
+      color: var(--muted);
+      font-size: 28px;
+      line-height: 1.5;
+      font-weight: 650;
+    }
+
+    .failure {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 54px;
+      align-items: center;
+      height: calc(100% - 88px);
+      padding-top: 126px;
+    }
+
+    .failure .visual-frame img {
+      object-position: left center;
+      transform: scale(1);
+    }
+
+    .failure .feature-card-overlay {
+      left: auto;
+      right: 34px;
+      bottom: 34px;
+      width: 430px;
+    }
+
+    .failure-list {
+      display: grid;
+      gap: 22px;
+    }
+
+    .failure-item {
+      padding: 30px 34px;
+      border-radius: 28px;
+      background: rgba(255,255,255,0.075);
+      font-size: 34px;
+      line-height: 1.35;
+      font-weight: 850;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12);
+    }
+
+    .failure-visual {
+      position: relative;
+      min-height: 620px;
+      padding: 46px;
+      display: grid;
+      align-content: end;
+    }
+
+    .failure-visual::after {
+      content: "3";
+      position: absolute;
+      right: 44px;
+      top: 24px;
+      font-family: var(--font-display);
+      font-size: 330px;
+      line-height: 0.82;
+      color: rgba(255,105,210,0.2);
+    }
+
+    .scenario-map {
+      position: relative;
+      height: 650px;
+      margin-top: 36px;
+    }
+
+    .scene-layout {
+      display: grid;
+      grid-template-columns: 0.82fr 1.18fr;
+      gap: 48px;
+      align-items: center;
+      height: calc(100% - 90px);
+      padding-top: 116px;
+    }
+
+    .opportunity-slide {
+      background:
+        radial-gradient(circle at 78% 36%, rgba(111,255,0,0.14), transparent 28%),
+        linear-gradient(90deg, #031147 0%, #010828 52%, #02051f 100%);
+    }
+
+    .opportunity-wall {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      opacity: 0.42;
+      filter: saturate(1.12) contrast(1.08);
+      pointer-events: none;
+    }
+
+    .opportunity-wall div {
+      min-height: 100%;
+      background: var(--img) center / cover no-repeat;
+      transform: scale(1.06);
+    }
+
+    .opportunity-wall div:nth-child(2n) {
+      filter: brightness(0.82) saturate(1.18);
+    }
+
+    .opportunity-wall div:nth-child(3n) {
+      background-position: center top;
+    }
+
+    .opportunity-wall::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(1,8,40,0.92), rgba(1,8,40,0.58) 42%, rgba(1,8,40,0.86)),
+        radial-gradient(circle at 58% 38%, rgba(111,255,0,0.18), transparent 30%),
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 320px);
+    }
+
+    .opportunity-content {
+      position: relative;
+      z-index: 3;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 0.82fr 1.18fr;
+      align-items: center;
+      gap: 56px;
+      padding-top: 92px;
+    }
+
+    .opportunity-content .slide-title {
+      max-width: 780px;
+    }
+
+    .opportunity-cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      margin-top: 44px;
+    }
+
+    .opportunity-card {
+      position: relative;
+      min-height: 150px;
+      padding: 28px 30px;
+      border-radius: 30px;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,0.72), rgba(0,0,0,0.42)),
+        rgba(255,255,255,0.055);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.16), 0 28px 60px rgba(0,0,0,0.22);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: grid;
+      grid-template-columns: 112px 1fr;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .opportunity-card::after {
+      content: "";
+      position: absolute;
+      left: 34px;
+      right: 34px;
+      bottom: 28px;
+      height: 5px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--neon), rgba(255,240,112,0.2), transparent);
+      opacity: 0.68;
+    }
+
+    .opportunity-card strong {
+      position: relative;
+      z-index: 2;
+      font-family: var(--font-display);
+      font-size: 74px;
+      line-height: 0.9;
+      color: var(--neon);
+      text-shadow: 0 6px 0 rgba(123,50,255,0.62);
+    }
+
+    .opportunity-card span {
+      position: relative;
+      z-index: 2;
+      display: block;
+      margin-top: 0;
+      font-size: 31px;
+      line-height: 1.28;
+      font-weight: 900;
+    }
+
+    .opportunity-art {
+      position: relative;
+      min-height: 640px;
+      overflow: hidden;
+      border-radius: 34px;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .opportunity-art img {
+      width: 100%;
+      height: 100%;
+      min-height: inherit;
+      object-fit: cover;
+      object-position: center;
+      transform: scale(1.01);
+      animation: image-drift 8s ease-in-out infinite alternate;
+    }
+
+    .opportunity-art::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(1,8,40,0.42), rgba(1,8,40,0.08) 45%, rgba(1,8,40,0.22)),
+        radial-gradient(circle at 74% 20%, rgba(111,255,0,0.14), transparent 26%);
+    }
+
+    .scene-points {
+      display: grid;
+      gap: 24px;
+      margin-top: 34px;
+    }
+
+    .scene-point {
+      padding: 28px 30px;
+      border-radius: 28px;
+      background: rgba(255,255,255,0.08);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.13);
+      font-size: 32px;
+      line-height: 1.34;
+      font-weight: 850;
+    }
+
+    .scene-visual {
+      min-height: 690px;
+    }
+
+    .node {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      width: var(--size);
+      height: var(--size);
+      border-radius: 50%;
+      padding: 24px;
+      text-align: center;
+      font-size: 31px;
+      line-height: 1.25;
+      font-weight: 900;
+      background: rgba(255,255,255,0.08);
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.15),
+        0 28px 60px rgba(0,0,0,0.28);
+      animation: floaty calc(var(--time) * 1s) ease-in-out infinite alternate;
+    }
+
+    .node.core {
+      left: 50%;
+      top: 50%;
+      width: 330px;
+      height: 330px;
+      transform: translate(-50%, -50%);
+      background: var(--neon);
+      color: #071017;
+      font-size: 39px;
+      box-shadow: 0 0 70px rgba(111,255,0,0.35);
+    }
+
+    .node.a { left: 7%; top: 8%; --size: 250px; --time: 4.8; }
+    .node.b { right: 5%; top: 5%; --size: 270px; --time: 5.1; }
+    .node.c { left: 14%; bottom: 5%; --size: 290px; --time: 5.5; }
+    .node.d { right: 12%; bottom: 0; --size: 285px; --time: 4.6; }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 0.92fr 1.08fr;
+      gap: 50px;
+      height: calc(100% - 80px);
+      padding-top: 98px;
+      align-items: center;
+    }
+
+    .qr-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .qr-card {
+      padding: 22px;
+      border-radius: 32px;
+      background: rgba(255,255,255,0.92);
+      color: #101322;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.28);
+    }
+
+    .qr-card img {
+      width: 100%;
+      aspect-ratio: 0.78;
+      object-fit: contain;
+      border-radius: 20px;
+      background: #fff;
+    }
+
+    .qr-card strong {
+      display: block;
+      margin-top: 18px;
+      font-size: 30px;
+      line-height: 1.1;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .github-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 18px;
+      margin-top: 34px;
+      padding: 20px 28px;
+      border-radius: 999px;
+      color: rgba(239,244,255,0.92);
+      background: rgba(255,255,255,0.09);
+      font-family: var(--font-mono);
+      font-size: 24px;
+      text-decoration: none;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14);
+    }
+
+    .nav-chrome {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transform: translateX(-50%);
+      opacity: 0.2;
+      transition: opacity 180ms ease;
+    }
+
+    .nav-chrome:hover,
+    .nav-chrome:focus-within {
+      opacity: 1;
+    }
+
+    .nav-chrome button,
+    .counter,
+    .fullscreen {
+      border: 0;
+      min-width: 44px;
+      height: 44px;
+      padding: 0 16px;
+      border-radius: 999px;
+      color: var(--cream);
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      cursor: pointer;
+    }
+
+    .counter {
+      display: grid;
+      place-items: center;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      letter-spacing: 0.08em;
+    }
+
+    .edit-hotzone {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 40;
+      width: 90px;
+      height: 70px;
+    }
+
+    .edit-toggle {
+      position: absolute;
+      left: 12px;
+      top: 12px;
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 16px;
+      color: #071017;
+      background: var(--neon);
+      font-weight: 900;
+      opacity: 0;
+      transform: translateY(-6px);
+      transition: opacity 180ms ease, transform 180ms ease;
+      cursor: pointer;
+    }
+
+    .edit-hotzone:hover .edit-toggle,
+    .edit-toggle.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    [contenteditable="true"] {
+      outline: 2px dashed rgba(111,255,0,0.72);
+      outline-offset: 8px;
+      border-radius: 8px;
+    }
+
+    .active .reveal {
+      animation: reveal-up 620ms cubic-bezier(.2,.7,.18,1) both;
+      animation-delay: var(--delay, 0ms);
+    }
+
+    .active .reveal-pop {
+      animation: reveal-pop 680ms cubic-bezier(.2,.7,.18,1) both;
+      animation-delay: var(--delay, 0ms);
+    }
+
+    @keyframes reveal-up {
+      from { opacity: 0; transform: translateY(34px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes reveal-pop {
+      from { opacity: 0; transform: translateY(24px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes hero-float {
+      0%, 100% { transform: translate3d(0,8px,0) rotate(-5deg) scale(1); }
+      44% { transform: translate3d(-32px,-64px,0) rotate(7deg) scale(1.045); }
+      72% { transform: translate3d(18px,-18px,0) rotate(-2deg) scale(1.014); }
+    }
+
+    @keyframes avatar-small {
+      0%, 100% { transform: translate3d(0,0,0) rotate(-2deg); }
+      50% { transform: translate3d(-10px,-22px,0) rotate(2deg); }
+    }
+
+    @keyframes halo-spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes earth-spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes floaty {
+      from { transform: translateY(0) rotate(-8deg); }
+      to { transform: translateY(-24px) rotate(8deg); }
+    }
+
+    @keyframes card-float {
+      from { transform: translateY(0); }
+      to { transform: translateY(-18px); }
+    }
+
+    @keyframes orbit-wobble {
+      from { transform: translateY(0) rotate(var(--r)); }
+      to { transform: translateY(-18px) rotate(calc(var(--r) + 18deg)); }
+    }
+
+    @keyframes pulse-chip {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 rgba(111,255,0,0); }
+      50% { transform: scale(1.04); box-shadow: 0 0 38px rgba(111,255,0,0.34); }
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    @keyframes image-drift {
+      from { transform: scale(1.02) translate3d(0,0,0); }
+      to { transform: scale(1.08) translate3d(-18px,-10px,0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    @media print {
+      body {
+        overflow: visible;
+        background: #fff;
+      }
+
+      .deck-viewport {
+        position: static;
+        display: block;
+      }
+
+      .stage-shell,
+      .stage {
+        position: static;
+        width: 1920px;
+        height: auto;
+        transform: none;
+      }
+
+      .slide {
+        position: relative;
+        visibility: visible;
+        opacity: 1;
+        break-after: page;
+      }
+
+      .nav-chrome,
+      .edit-hotzone {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck-viewport">
+    <div class="stage-shell" id="stageShell">
+      <main class="stage" id="stage" aria-live="polite">
+        <section class="slide active" data-slide>
+          <div class="earth hero-earth" aria-hidden="true"></div>
+          <div class="planet" style="--size:74px;--x:8%;--y:78%;--a:#fff070;--b:#ff69d2;--time:4.8"></div>
+          <div class="planet" style="--size:54px;--x:75%;--y:18%;--a:#bffcff;--b:#7c3aed;--time:5.4"></div>
+          <div class="planet" style="--size:42px;--x:48%;--y:14%;--a:#ffca5f;--b:#ff69d2;--time:4.2"></div>
+          <div class="planet" style="--size:36px;--x:58%;--y:84%;--a:#bffcff;--b:#7c3aed;--time:4.9"></div>
+          <div class="content hero-grid">
+            <div>
+              <div class="hero-kicker liquid reveal" data-edit-id="slide-01-kicker">从传统行业到开源项目作者</div>
+              <h1 class="cn-title hero-title reveal" style="--delay:90ms" data-edit-id="slide-01-title">
+                我来自传统行业，<br /><span class="nowrap">学 AI 两个月</span><span class="accent-pill">开源6个项目</span>
+              </h1>
+              <p class="hero-subtitle reveal" style="--delay:180ms" data-edit-id="slide-01-subtitle">
+                AI 的下一次机会，不在 AI 圈
+                <span class="script hero-phrase">next orbit</span>
+              </p>
+            </div>
+            <aside class="avatar-wrap" aria-label="3D 太空人物形象">
+              <div class="avatar-motion reveal-pop" style="--delay:150ms">
+                <div class="avatar-halo" aria-hidden="true"></div>
+                <img class="avatar" src="./assets/ai-space-avatar-jump.png" alt="3D 太空风格人物形象，跳起来并手托一颗小星球" />
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="slide" data-slide>
+          <div class="deck-label">Who am I</div>
+          <div class="page-no">02</div>
+          <div class="ambient-planet" style="--size:46px;--right:19%;--y:16%;--a:#ffca5f;--b:#ff69d2;--time:5.2"></div>
+          <div class="ambient-planet" style="--size:34px;--x:10%;--bottom:14%;--a:#bffcff;--b:#7c3aed;--time:4.9;--opacity:0.78"></div>
+          <div class="ambient-planet" style="--size:30px;--right:8%;--bottom:28%;--a:#fff070;--b:#ff69d2;--time:5.8;--opacity:0.72"></div>
+          <div class="content two-col centered">
+            <div class="profile-visual profile-lowered reveal-pop">
+              <div class="profile-card liquid">
+              </div>
+              <img class="sitting-avatar" src="./assets/ai-space-avatar-sitting-crop.png" alt="3D 人物坐在太空卡片边缘" />
+              <div class="big-stat">
+                <strong>8Y</strong>
+                <span data-edit-id="slide-02-stat-label">传统行业市场品牌</span>
+              </div>
+            </div>
+            <div>
+              <h2 class="cn-title slide-title reveal" data-edit-id="slide-02-title">我是谁</h2>
+              <p class="lead reveal" style="--delay:90ms" data-edit-id="slide-02-lead">零基础、非互联网从业、美术生。</p>
+              <div class="bullet-grid" style="margin-top:42px">
+                <div class="bullet reveal" style="--delay:160ms" data-edit-id="slide-02-b1">8 年传统行业市场品牌经验</div>
+                <div class="bullet reveal" style="--delay:230ms" data-edit-id="slide-02-b2">原本做文案、PPT、传播</div>
+                <div class="bullet reveal" style="--delay:300ms" data-edit-id="slide-02-b3">现在是 AI 新手 / Vibecoder / 开源项目作者</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide distill-bg" data-slide>
+          <div class="deck-label">Distill yourself</div>
+          <div class="page-no">03</div>
+          <div class="ambient-planet" style="--size:50px;--right:11%;--bottom:13%;--a:#bffcff;--b:#7c3aed;--time:5.6"></div>
+          <div class="ambient-planet" style="--size:34px;--x:14%;--y:20%;--a:#ffca5f;--b:#ff69d2;--time:4.8;--opacity:0.7"></div>
+          <div class="ambient-planet" style="--size:28px;--right:42%;--bottom:10%;--a:#fff070;--b:#7c3aed;--time:5.4;--opacity:0.76"></div>
+          <div class="content quote-layout">
+            <div>
+              <h2 class="cn-title quote reveal" data-edit-id="slide-04-title">学会做skill之后的第一件事：<mark>蒸馏自己</mark>。</h2>
+              <p class="lead reveal" style="--delay:120ms" data-edit-id="slide-04-lead">把自己真正懂的工作，拆给 AI；把自己长期积累的判断，写进 Skill。</p>
+            </div>
+            <div class="skill-panel illustrated liquid reveal-pop" style="--delay:180ms">
+              <div class="skill-row"><strong>01</strong><span data-edit-id="slide-04-r1">我最熟悉的是写文案和做 PPT</span></div>
+              <div class="skill-row"><strong>02</strong><span data-edit-id="slide-04-r2">PPT / HTML 设计生成 Skill</span></div>
+              <div class="skill-row"><strong>03</strong><span data-edit-id="slide-04-r3">用 AI 放大自己的能力</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" data-slide>
+          <div class="deck-label">Homepage Skill</div>
+          <div class="page-no">04</div>
+          <div class="ambient-planet" style="--size:44px;--right:21%;--y:12%;--a:#fff070;--b:#ff69d2;--time:5"></div>
+          <div class="ambient-planet" style="--size:32px;--x:12%;--bottom:18%;--a:#bffcff;--b:#7c3aed;--time:5.6;--opacity:0.76"></div>
+          <div class="ambient-planet" style="--size:30px;--right:6%;--bottom:34%;--a:#ffca5f;--b:#ff69d2;--time:4.7;--opacity:0.72"></div>
+          <div class="content standard-content homepage-content">
+            <h2 class="cn-title slide-title reveal" data-edit-id="slide-05-title">3 小时手搓个人主页 Skill</h2>
+            <p class="lead reveal" style="--delay:80ms" data-edit-id="slide-05-lead">它不只是“生成网页”，而是把页面结构、审美、动效、检查清单都封装成可复用流程。</p>
+            <div class="two-col centered" style="height:auto; padding-top:38px; grid-template-columns: 0.82fr 1.18fr;">
+              <div class="bullet-grid">
+                <div class="bullet reveal" style="--delay:150ms" data-edit-id="slide-05-c1-title">内置 19 套模板</div>
+                <div class="bullet reveal" style="--delay:220ms" data-edit-id="slide-05-c1-body">从个人主页、作品集，到 16:9 HTML PPT</div>
+                <div class="bullet reveal" style="--delay:360ms" data-edit-id="slide-05-c3-title">GitHub 一个月 60+ star，已上传小红书 RedSkill</div>
+              </div>
+              <div class="template-preview real-page liquid reveal-pop" style="--delay:190ms">
+                <img src="./assets/project-real/template-gallery-shot.png" alt="个人主页 Skill 模板库真实页面截图" />
+                <div class="template-badge">19</div>
+                <div class="feature-card-overlay">
+                  <h3 data-edit-id="slide-05-visual-title">模板不是皮肤，是经验压缩包</h3>
+                  <p data-edit-id="slide-05-visual-body">把结构、审美、动效和检查清单一起封装。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide editable-slide" data-slide>
+          <div class="deck-label">Editable PPT</div>
+          <div class="page-no">05</div>
+          <div class="ambient-planet" style="--size:48px;--x:48%;--y:13%;--a:#ffca5f;--b:#7c3aed;--time:5.4"></div>
+          <div class="ambient-planet" style="--size:34px;--x:8%;--bottom:16%;--a:#fff070;--b:#ff69d2;--time:5.1;--opacity:0.78"></div>
+          <div class="ambient-planet" style="--size:30px;--right:12%;--y:18%;--a:#bffcff;--b:#7c3aed;--time:5.9;--opacity:0.72"></div>
+          <div class="earth editable-earth" aria-hidden="true"></div>
+          <div class="content two-col">
+            <div>
+              <h2 class="cn-title slide-title reveal" data-edit-id="slide-06-title">HTML PPT 可直接编辑</h2>
+              <p class="lead reveal" style="--delay:80ms" data-edit-id="slide-06-lead">真正的痛点是修改文字。</p>
+              <div class="bullet-grid" style="margin-top:38px">
+                <div class="bullet reveal" style="--delay:150ms" data-edit-id="slide-06-b1">以前 HTML PPT 改字很痛苦</div>
+                <div class="bullet reveal" style="--delay:220ms" data-edit-id="slide-06-b2">现在左上角点击即可编辑</div>
+                <div class="bullet reveal" style="--delay:290ms" data-edit-id="slide-06-b3">不换电脑、不清缓存，修改一直保留</div>
+                <div class="bullet reveal" style="--delay:360ms" data-edit-id="slide-06-b4">适合路演前临时调整</div>
+              </div>
+            </div>
+            <div class="edit-image-panel liquid reveal-pop" style="--delay:200ms">
+              <img src="./assets/generated/editable-ppt-premium.png" alt="高质量 3D 太空编辑器界面配图" />
+              <div class="feature-card-overlay">
+                <h3 data-edit-id="slide-06-demo-title">编辑状态，直接上屏</h3>
+                <p data-edit-id="slide-06-demo">把文字修改留在页面里，路演前也能稳稳调整。</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" data-slide>
+          <div class="deck-label">Open source matrix</div>
+          <div class="page-no">06</div>
+          <div class="ambient-planet" style="--size:42px;--right:18%;--y:14%;--a:#bffcff;--b:#ff69d2;--time:4.8"></div>
+          <div class="ambient-planet" style="--size:32px;--x:12%;--bottom:12%;--a:#ffca5f;--b:#7c3aed;--time:5.5;--opacity:0.76"></div>
+          <div class="ambient-planet" style="--size:28px;--right:7%;--bottom:24%;--a:#fff070;--b:#ff69d2;--time:5.1;--opacity:0.7"></div>
+          <div class="content standard-content matrix-content">
+            <h2 class="cn-title slide-title reveal" data-edit-id="slide-07-title">开源项目矩阵</h2>
+            <p class="lead reveal" style="--delay:80ms" data-edit-id="slide-07-lead">这些项目不来自“我要做 AI 产品”的抽象想法，而来自每天会遇到的真实小问题。</p>
+            <div class="matrix-grid">
+              <a class="project-image-card reveal-pop" href="https://github.com/powerycy/personal-homepage-skill" target="_blank" rel="noreferrer" style="--delay:120ms; --img:url('./assets/template-screens/template-projects.png')"><div class="num">01</div><h3 data-edit-id="slide-07-m1">个人主页 / PPT Skill</h3><p>表达与展示自动化</p></a>
+              <a class="project-image-card reveal-pop" href="https://github.com/powerycy/desktop-cat" target="_blank" rel="noreferrer" style="--delay:180ms; --img:url('./assets/project-real/desktop-cat-demo.gif')"><div class="num">02</div><h3 data-edit-id="slide-07-m2">久坐提醒桌宠</h3><p>把健康提醒做成陪伴</p></a>
+              <a class="project-image-card reveal-pop" href="https://github.com/powerycy/multi-style-image-generator" target="_blank" rel="noreferrer" style="--delay:240ms; --img:url('./assets/project-real/visual-skill-style.png')"><div class="num">03</div><h3 data-edit-id="slide-07-m3">视觉生成 Skill</h3><p>把审美要求变成流程</p></a>
+              <a class="project-image-card reveal-pop" href="https://github.com/powerycy/BossHunter" target="_blank" rel="noreferrer" style="--delay:300ms; --img:url('./assets/project-real/bosshunter-workbench.png')"><div class="num">04</div><h3 data-edit-id="slide-07-m4">求职全流程 Agent</h3><p>从岗位到简历再到面试</p></a>
+              <a class="project-image-card reveal-pop" href="https://github.com/powerycy/multi-model-review" target="_blank" rel="noreferrer" style="--delay:360ms; --img:url('./assets/project-real/document-review-card.jpg')"><div class="num">05</div><h3 data-edit-id="slide-07-m5">文档审核项目</h3><p>把审核经验变成流程</p></a>
+              <article class="project-image-card reveal-pop" style="--delay:420ms; --img:url('./assets/project-real/codex-presentation-shot.png')"><div class="num">06</div><h3 data-edit-id="slide-07-m6">PPT Skill（已合并）</h3><p>16:9 HTML 路演页</p></article>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide lessons-slide" data-slide>
+          <div class="deck-label">Project lessons</div>
+          <div class="page-no">07</div>
+          <div class="earth lesson-earth" aria-hidden="true"></div>
+          <div class="planet" style="--size:56px;--x:72%;--y:13%;--a:#ffca5f;--b:#ff69d2;--time:4.8"></div>
+          <div class="planet" style="--size:42px;--x:18%;--y:78%;--a:#bffcff;--b:#7c3aed;--time:5.2"></div>
+          <div class="ambient-planet" style="--size:32px;--x:44%;--bottom:10%;--a:#fff070;--b:#ff69d2;--time:5.4;--opacity:0.72"></div>
+          <div class="ambient-planet" style="--size:28px;--right:10%;--bottom:24%;--a:#bffcff;--b:#7c3aed;--time:4.9;--opacity:0.68"></div>
+          <div class="content lesson-content">
+            <div>
+              <h2 class="cn-title slide-title reveal" data-edit-id="slide-08-title">做项目以来的理解</h2>
+              <p class="lead reveal" style="--delay:80ms" data-edit-id="slide-08-lead">AI 降低了做东西的门槛，但没有取消“你到底理解什么”的门槛。</p>
+            </div>
+            <div class="lesson-showcase template-cards reveal-pop" style="--delay:180ms">
+              <div class="lesson-card-grid template-cards">
+                <article class="lesson-card feature-card" style="--time:5.5s; --img:url('./assets/generated/lesson-real-work-v2.png')">
+                  <div class="num">01</div>
+                  <h3 data-edit-id="slide-08-c1-title">需求来自真实工作和生活</h3>
+                </article>
+                <article class="lesson-card feature-card" style="--time:5.1s; --img:url('./assets/generated/lesson-tech-gap-v2.png')">
+                  <div class="num">02</div>
+                  <h3 data-edit-id="slide-08-c2-title">技术发展与落地之间的错位</h3>
+                </article>
+                <article class="lesson-card feature-card" style="--time:5.9s; --img:url('./assets/generated/lesson-everyone-builds-v2.png')">
+                  <div class="num">03</div>
+                  <h3 data-edit-id="slide-08-c3-title">人人都能做项目</h3>
+                </article>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" data-slide>
+          <div class="deck-label">Failed games</div>
+          <div class="page-no">08</div>
+          <div class="ambient-planet" style="--size:46px;--right:16%;--y:14%;--a:#fff070;--b:#7c3aed;--time:5.3"></div>
+          <div class="ambient-planet" style="--size:30px;--x:14%;--bottom:12%;--a:#ffca5f;--b:#ff69d2;--time:5.7;--opacity:0.72"></div>
+          <div class="ambient-planet" style="--size:28px;--right:8%;--bottom:30%;--a:#bffcff;--b:#7c3aed;--time:4.8;--opacity:0.7"></div>
+          <div class="content failure">
+            <div>
+              <h2 class="cn-title slide-title reveal" data-edit-id="slide-09-title">做独立小游戏失败 3 次</h2>
+              <p class="lead reveal" style="--delay:80ms" data-edit-id="slide-09-lead">这个失败很关键：AI 不是许愿机，它放大的是你对场景的理解。</p>
+              <div class="failure-list" style="margin-top:42px">
+                <div class="failure-item reveal" style="--delay:150ms" data-edit-id="slide-09-b1">我没玩过独立小游戏</div>
+                <div class="failure-item reveal" style="--delay:220ms" data-edit-id="slide-09-b2">玩法只靠资料和想象</div>
+                <div class="failure-item reveal" style="--delay:290ms" data-edit-id="slide-09-b3">没见过、没做过、没接触过，就很难让 AI 做对</div>
+              </div>
+            </div>
+            <div class="visual-frame right-glow liquid reveal-pop" style="--delay:200ms">
+              <img src="./assets/project-real/nushu-title.png" alt="女书独立游戏标题场景截图" />
+              <div class="feature-card-overlay">
+                <h3 data-edit-id="slide-09-visual-label">FAIL × 3</h3>
+                <p data-edit-id="slide-09-note">失败不是因为 AI 不够强，而是我没有足够的场景经验给它。</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide opportunity-slide" data-slide>
+          <div class="deck-label">Next opportunity</div>
+          <div class="page-no">09</div>
+          <div class="ambient-planet" style="--size:44px;--right:18%;--bottom:13%;--a:#ffca5f;--b:#ff69d2;--time:5.1"></div>
+          <div class="ambient-planet" style="--size:34px;--x:9%;--bottom:16%;--a:#bffcff;--b:#7c3aed;--time:5.6;--opacity:0.74"></div>
+          <div class="ambient-planet" style="--size:28px;--right:6%;--y:20%;--a:#fff070;--b:#ff69d2;--time:4.9;--opacity:0.68"></div>
+          <div class="content opportunity-content">
+            <div class="opportunity-copy">
+              <h2 class="cn-title slide-title reveal" data-edit-id="slide-11-title">AI 下一次机会在场景里</h2>
+              <div class="opportunity-cards">
+                <article class="opportunity-card reveal-pop" style="--delay:110ms">
+                  <strong>01</strong>
+                  <span data-edit-id="slide-11-p1">AI 圈不缺技术供给者</span>
+                </article>
+                <article class="opportunity-card reveal-pop" style="--delay:190ms">
+                  <strong>02</strong>
+                  <span data-edit-id="slide-11-p2">传统行业缺“场景翻译官”</span>
+                </article>
+                <article class="opportunity-card reveal-pop" style="--delay:270ms">
+                  <strong>03</strong>
+                  <span data-edit-id="slide-11-p3">把真实工作流翻译成 AI 任务、产品流程、Skill。</span>
+                </article>
+              </div>
+            </div>
+            <div class="opportunity-art liquid reveal-pop" style="--delay:180ms">
+              <img src="./assets/generated/opportunity-scene-translator-v2.png" alt="真实工作流被翻译成 AI 任务和 Skill 的太空 3D 配图" />
+            </div>
+          </div>
+        </section>
+
+        <section class="slide" data-slide>
+          <div class="deck-label">Thanks</div>
+          <div class="page-no">10</div>
+          <div class="ambient-planet" style="--size:48px;--x:52%;--bottom:15%;--a:#bffcff;--b:#7c3aed;--time:5.2"></div>
+          <div class="ambient-planet" style="--size:32px;--x:12%;--y:18%;--a:#ffca5f;--b:#ff69d2;--time:5.7;--opacity:0.74"></div>
+          <div class="ambient-planet" style="--size:28px;--right:9%;--bottom:12%;--a:#fff070;--b:#7c3aed;--time:4.9;--opacity:0.68"></div>
+          <div class="earth final-earth" aria-hidden="true"></div>
+          <div class="content contact-layout">
+            <div>
+              <h2 class="cn-title slide-title reveal" data-edit-id="slide-12-title">把 AI 红利，<br />变成自己的红利</h2>
+              <p class="lead reveal" style="--delay:90ms" data-edit-id="slide-12-lead">从自己熟悉的场景开始，把经验写成任务，把任务做成工具。</p>
+              <a class="github-pill reveal" style="--delay:160ms" href="https://github.com/powerycy" target="_blank" rel="noreferrer" data-edit-id="slide-12-github">GitHub: https://github.com/powerycy</a>
+            </div>
+            <div class="qr-grid reveal-pop" style="--delay:180ms">
+              <div class="qr-card"><img src="./assets/source/wechat-qr.jpg" alt="微信二维码" /><strong data-edit-id="slide-12-qr1">微信</strong></div>
+              <div class="qr-card"><img src="./assets/source/xiaohongshu-qr.jpg" alt="小红书二维码" /><strong data-edit-id="slide-12-qr2">小红书</strong></div>
+              <div class="qr-card"><img src="./assets/source/douyin-qr.jpg" alt="抖音二维码" /><strong data-edit-id="slide-12-qr3">抖音</strong></div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="nav-chrome" aria-label="Presentation controls">
+    <button type="button" id="prevBtn" aria-label="上一页">‹</button>
+    <div class="counter" id="counter">01 / 10</div>
+    <button type="button" id="nextBtn" aria-label="下一页">›</button>
+    <button class="fullscreen" type="button" id="fullscreenBtn" aria-label="全屏">全屏</button>
+  </div>
+
+  <div class="edit-hotzone">
+    <button class="edit-toggle" id="editToggle" type="button">编辑</button>
+  </div>
+
+  <script>
+    const stageShell = document.getElementById("stageShell");
+    const stage = document.getElementById("stage");
+    const slides = Array.from(document.querySelectorAll("[data-slide]"));
+    const counter = document.getElementById("counter");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const fullscreenBtn = document.getElementById("fullscreenBtn");
+    const editToggle = document.getElementById("editToggle");
+    const editKey = `ai-next-opportunity-edits-v5:${location.pathname}`;
+    let index = 0;
+    let touchStartX = 0;
+    let editMode = false;
+
+    function scaleStage() {
+      const scale = stageShell.getBoundingClientRect().width / 1920;
+      stage.style.setProperty("--stage-scale", Math.max(0.08, scale));
+    }
+
+    function showSlide(nextIndex) {
+      index = Math.max(0, Math.min(slides.length - 1, nextIndex));
+      slides.forEach((slide, i) => {
+        slide.classList.toggle("active", i === index);
+      });
+      counter.textContent = `${String(index + 1).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}`;
+    }
+
+    function saveEdits() {
+      const data = {};
+      document.querySelectorAll("[data-edit-id]").forEach((node) => {
+        data[node.dataset.editId] = node.innerHTML;
+      });
+      localStorage.setItem(editKey, JSON.stringify(data));
+    }
+
+    function restoreEdits() {
+      try {
+        const data = JSON.parse(localStorage.getItem(editKey) || "{}");
+        Object.entries(data).forEach(([id, html]) => {
+          const node = document.querySelector(`[data-edit-id="${CSS.escape(id)}"]`);
+          if (node) node.innerHTML = html;
+        });
+      } catch (error) {
+        console.warn("Failed to restore edits", error);
+      }
+    }
+
+    function setEditMode(next) {
+      editMode = next;
+      editToggle.classList.toggle("active", editMode);
+      document.querySelectorAll("[data-edit-id]").forEach((node) => {
+        node.setAttribute("contenteditable", editMode ? "true" : "false");
+      });
+      if (!editMode) saveEdits();
+    }
+
+    function isEditingTarget(event) {
+      return event.target && event.target.closest && event.target.closest('[contenteditable="true"]');
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen?.();
+      } else {
+        document.exitFullscreen?.();
+      }
+    }
+
+    prevBtn.addEventListener("click", () => showSlide(index - 1));
+    nextBtn.addEventListener("click", () => showSlide(index + 1));
+    fullscreenBtn.addEventListener("click", toggleFullscreen);
+    editToggle.addEventListener("click", () => setEditMode(!editMode));
+
+    window.addEventListener("keydown", (event) => {
+      const key = event.key;
+      if ((event.metaKey || event.ctrlKey) && key.toLowerCase() === "s") {
+        event.preventDefault();
+        saveEdits();
+        return;
+      }
+      if (isEditingTarget(event)) return;
+      if (key.toLowerCase() === "e") {
+        event.preventDefault();
+        setEditMode(!editMode);
+        return;
+      }
+      if (key.toLowerCase() === "f") {
+        event.preventDefault();
+        toggleFullscreen();
+        return;
+      }
+      if (["ArrowRight", " ", "PageDown"].includes(key)) {
+        event.preventDefault();
+        showSlide(index + 1);
+      } else if (["ArrowLeft", "PageUp"].includes(key)) {
+        event.preventDefault();
+        showSlide(index - 1);
+      } else if (key === "Home") {
+        event.preventDefault();
+        showSlide(0);
+      } else if (key === "End") {
+        event.preventDefault();
+        showSlide(slides.length - 1);
+      }
+    });
+
+    window.addEventListener("resize", scaleStage);
+    window.addEventListener("orientationchange", scaleStage);
+    window.addEventListener("touchstart", (event) => {
+      touchStartX = event.changedTouches[0].clientX;
+    }, { passive: true });
+    window.addEventListener("touchend", (event) => {
+      const delta = event.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(delta) > 56) showSlide(index + (delta < 0 ? 1 : -1));
+    }, { passive: true });
+
+    restoreEdits();
+    setEditMode(false);
+    scaleStage();
+    showSlide(0);
+  </script>
+</body>
+</html>
