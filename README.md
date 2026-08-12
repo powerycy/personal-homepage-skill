@@ -13,7 +13,7 @@ An AI Skill + template gallery for generating polished personal homepages, portf
 
 ## Template demos
 
-精选 3 个代表性输出：星球空间、潮玩手办和电影感主页。
+精选 4 个代表性输出：星球空间、潮玩手办、电影感主页和可直接分享的神经 AI Hero 主页。
 
 ### 01 · Orbis NFT Space Landing
 
@@ -26,6 +26,12 @@ An AI Skill + template gallery for generating polished personal homepages, portf
 ### 03 · Cinematic Scroll Personal Brand
 
 ![Cinematic Scroll Personal Brand demo](assets/demo-cinematic-scroll-personal-brand.gif)
+
+### 04 · Hero Neural Cinematic Homepage
+
+![Hero Neural Cinematic Homepage](assets/demo-hero-neural-homepage.png)
+
+这套完整模版内置原版视频与静态尾屏照片。用户提供姓名、介绍、项目或视频时替换对应内容；未提供的视频继续使用模版素材。`templates/hero/portable/index.html` 可以直接双击打开，整个 `portable` 文件夹压缩后即可发送给其他人。
 
 ## 可以生成什么？
 
@@ -56,7 +62,7 @@ An AI Skill + template gallery for generating polished personal homepages, portf
 
 - AI Skill 主入口与生成规则
 - Reference-first 个人主页生成工作流
-- 16+ 个视觉模板方向
+- 19 个视觉模板方向
 - 可交互 React + Tailwind 模板 Gallery
 - 单文件 HTML 主页模板
 - React + Tailwind 主页模板
@@ -125,6 +131,14 @@ npm install
 npm run dev
 ```
 
+### 生成可分享的 Hero 便携版
+
+```bash
+npm run build:hero-portable
+```
+
+生成结果位于 `templates/hero/portable/`。无需服务器，双击其中的 `index.html` 即可打开；分享时请发送整个文件夹或 ZIP。
+
 ### 运行检查
 
 ```bash
@@ -136,7 +150,7 @@ npm run check
 
 ## 模板 Gallery
 
-项目内置 18 个视觉方向。实际生成时，Agent 会优先跟随用户给定参考；模板只在方向不清楚或用户主动选择时使用。
+项目内置 19 个视觉方向。实际生成时，Agent 会优先跟随用户给定参考；模板只在方向不清楚或用户主动选择时使用。
 
 更完整的可交互 Gallery：
 
@@ -147,6 +161,7 @@ demo/template-gallery.html
 | 模板 | 预览 |
 | --- | --- |
 | Cinematic Scroll Personal Brand | ![Cinematic Scroll Personal Brand](assets/template-previews/cinematic-scroll-personal-brand.svg) |
+| Hero Neural Cinematic Homepage | ![Hero Neural Cinematic Homepage](assets/demo-hero-neural-homepage.png) |
 | Soft Product Video Hero | ![Soft Product Video Hero](assets/template-previews/soft-product-video-hero.svg) |
 | Orbis NFT Space Landing | ![Orbis NFT Space Landing](assets/template-previews/orbis-nft-space-landing.svg) |
 | TOONHUB Figurine Carousel | ![TOONHUB Figurine Carousel](assets/template-previews/toonhub-figurine-carousel.svg) |
@@ -205,6 +220,7 @@ demo/template-gallery.html
 | [assets/template-previews/](assets/template-previews/) | 模板预览图片 |
 | [src/](src/) | React + Tailwind 模板 Gallery 源码 |
 | [templates/](templates/) | 可复用主页、HTML 演示文稿和用户授权 prompt 模板 |
+| [templates/hero/](templates/hero/) | 神经 AI 电影感完整模版、原版视频素材和可直接双击的便携版 |
 | [scripts/](scripts/) | 校验脚本 |
 
 </details>

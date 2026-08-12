@@ -1,13 +1,14 @@
 {
   "name": "personal-homepage-skill",
   "private": true,
-  "version": "0.3.0",
+  "version": "0.4.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:hero-portable": "node scripts/build-hero-portable.mjs",
     "check": "npm run check:spec && npm run check:templates && npm run build",
-    "check:all": "npm run check:spec && npm run check:templates && npm run check:visual && npm run test:homepage-qa-rules && npm run test:ppt-qa && npm run test:homepage-regression && npm run build",
+    "check:all": "npm run check:spec && npm run check:templates && npm run check:visual && npm run test:homepage-qa-rules && npm run test:ppt-qa && npm run test:homepage-regression && npm run test:hero-template && npm run test:hero-portable && npm run build",
     "check:spec": "node scripts/check-spec.mjs",
     "check:templates": "node scripts/check-templates.mjs",
     "check:visual": "node scripts/check-visual.mjs",
@@ -15,12 +16,16 @@
     "capture:ppt": "node scripts/capture-slides.mjs",
     "test:ppt-qa": "node tests/verify-html-ppt-stage.test.mjs && node tests/capture-slides.test.mjs",
     "test:homepage-regression": "node tests/homepage-regression.test.mjs",
-    "test:homepage-qa-rules": "node tests/homepage-qa-rules.test.mjs"
+    "test:homepage-qa-rules": "node tests/homepage-qa-rules.test.mjs",
+    "test:hero-template": "node tests/hero-template.test.mjs",
+    "test:hero-portable": "node tests/hero-portable.test.mjs"
   },
   "engines": {
     "node": ">=22"
   },
   "dependencies": {
+    "framer-motion": "^12.43.0",
+    "lenis": "^1.3.26",
     "lucide-react": "^0.468.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"

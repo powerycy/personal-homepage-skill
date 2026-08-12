@@ -7,7 +7,7 @@ const failures = [];
 
 const allowedCategories = new Set(['Tech', 'Creator', 'Business', 'Art']);
 const allowedVisuals = new Set([
-  'cinematic', 'softProduct', 'orbisNft', 'toonhub', 'clean', 'tech3d', 'gradient', 'magazine', 'terminal', 'resume',
+  'cinematic', 'heroNeural', 'softProduct', 'orbisNft', 'toonhub', 'clean', 'tech3d', 'gradient', 'magazine', 'terminal', 'resume',
   'pixel', 'dashboard', 'bento', 'darkEditorial', 'spatial', 'business', 'caseStudy', 'museum',
 ]);
 

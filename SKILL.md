@@ -66,6 +66,7 @@ Before generating a full homepage, use the relevant reference files:
 | Visual style selection | [STYLE_PRESETS.md](STYLE_PRESETS.md) |
 | Cinematic WISA-style premium template | [CINEMATIC_SCROLL_TEMPLATE.md](CINEMATIC_SCROLL_TEMPLATE.md) |
 | Orbis NFT dark space landing prompt template | [templates/orbis-nft/README.md](templates/orbis-nft/README.md) |
+| Cinematic neural-AI personal project template | [templates/hero/README.md](templates/hero/README.md) |
 | Motion, 3D, background effects | [MOTION_PATTERNS.md](MOTION_PATTERNS.md) |
 | Section content rules | [HOMEPAGE_SECTIONS.md](HOMEPAGE_SECTIONS.md) |
 | Component implementation patterns | [COMPONENT_PATTERNS.md](COMPONENT_PATTERNS.md) |
@@ -74,6 +75,17 @@ Before generating a full homepage, use the relevant reference files:
 | Presentation Mode workflow and deterministic QA | [PRESENTATION_WORKFLOW.md](PRESENTATION_WORKFLOW.md) |
 | Presentation Mode rendered visual judgment | [PPT_VISUAL_QA.md](PPT_VISUAL_QA.md) |
 | PM and engineering context | [PRD.md](PRD.md), [TECHNICAL_ROUTE.md](TECHNICAL_ROUTE.md) |
+
+### Hero template selection and media fallback
+
+When the user explicitly asks to use the **Hero template**, start from `templates/hero/` and preserve its six-section cinematic structure, video motion model, and dark neural-AI visual system.
+
+- Replace the example name, role, biography, projects, metrics, links, and contact details with the user's real data.
+- Replace each video or portrait only when the user provides or authorizes a corresponding asset.
+- When a user asset is missing, retain the bundled original asset for that position; do not invent a remote URL or leave a broken media slot.
+- If only some media is supplied, replace only those positions and keep the remaining bundled videos.
+- Deliver the ready-to-share `portable/` folder or ZIP when the user wants a file that recipients can open directly. Recipients must be able to unzip and double-click `index.html` without installing Node.js or starting a server.
+- Keep unverified metrics visibly marked as placeholders instead of fabricating results.
 
 ## Default Workflow
 
