@@ -2,6 +2,18 @@ import { ArrowUpRight } from 'lucide-react';
 import type { VisualKey } from '../data/templates';
 import { FOUR_ITEMS } from './previewData';
 
+const heroNeuralPreview = new URL('../../assets/demo-hero-neural-homepage.png', import.meta.url).href;
+
+function HeroNeuralPreview() {
+  return (
+    <div className="preview-shell bg-black text-white">
+      <img src={heroNeuralPreview} alt="Hero Neural Cinematic Homepage preview" className="absolute inset-0 h-full w-full object-cover" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/10" />
+      <div className="absolute bottom-4 left-4 rounded-full border border-white/20 bg-black/45 px-3 py-2 font-mono text-[10px] tracking-wide backdrop-blur-md">Mouse-scrub video · portable</div>
+    </div>
+  );
+}
+
 function CinematicPreview() {
   return (
     <div className="preview-shell bg-[#050507] font-cjk-sans text-[#f7f1e7]">
@@ -93,8 +105,9 @@ function SpatialPreview() {
   );
 }
 
-export const TechPreviews: Pick<Record<VisualKey, () => JSX.Element>, 'cinematic' | 'clean' | 'tech3d' | 'terminal' | 'dashboard' | 'spatial'> = {
+export const TechPreviews: Pick<Record<VisualKey, () => JSX.Element>, 'cinematic' | 'heroNeural' | 'clean' | 'tech3d' | 'terminal' | 'dashboard' | 'spatial'> = {
   cinematic: CinematicPreview,
+  heroNeural: HeroNeuralPreview,
   clean: CleanDeveloperPreview,
   tech3d: Tech3DPreview,
   terminal: TerminalPreview,

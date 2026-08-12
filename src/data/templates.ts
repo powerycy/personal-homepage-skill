@@ -2,6 +2,7 @@ export type Category = 'All' | 'Tech' | 'Creator' | 'Business' | 'Art';
 
 export type VisualKey =
   | 'cinematic'
+  | 'heroNeural'
   | 'softProduct'
   | 'orbisNft'
   | 'toonhub'
@@ -117,6 +118,27 @@ export const templates: TemplateDefinition[] = [
     risks: ['长中文标题会破坏电影感；视频素材缺失时必须提供高质量 placeholder。'],
     effects: ['Scroll video', 'Word reveal', 'Glass footer'],
     accent: '#f7f1e7',
+  },
+  {
+    id: 'hero-neural-cinematic-homepage',
+    name: 'Hero Neural Cinematic Homepage',
+    category: 'Tech',
+    visual: 'heroNeural',
+    summary: '神经网络电影感视频、鼠标拖拽式首屏、数据与技术全屏叙事，并提供可直接双击的便携版本。',
+    bestFor: 'AI 研究者 / 独立开发者 / 前沿科技个人项目',
+    identityFits: ['ai-engineer', 'frontend-engineer', 'founder'],
+    densityModes: ['minimal-card', 'portfolio-standard'],
+    layoutGrammar: '六段连续暗场叙事：身份 Hero、理念、指标、技术能力、架构和个人联系尾屏。',
+    typography: { display: 'Avenir Next Condensed', body: 'SF Mono', cjk: 'PingFang SC / Microsoft YaHei', mono: 'SF Mono' },
+    palette: { base: '#000000', text: '#ffffff', accent: '#72e7ff', secondary: '#f38cff' },
+    heroPattern: '全屏神经人物视频 + 左右分离的大标题 + 姓名职业 + 双 CTA。',
+    sectionPlan: ['Mouse-scrub Hero', 'Cinematic intro', 'Metrics', 'Technology', 'Architecture', 'Portrait contact'],
+    motionPlan: ['mouse-scrub hero video', 'viewport video playback', 'scramble text', 'scroll reveal'],
+    imagePolicy: '用户视频和头像优先；没有提供时保留模版内置视频与静态尾屏照片。',
+    generationNotes: ['先替换 content.ts 中的个人数据。', '只替换用户实际提供的媒体，其余位置沿用内置素材。', '交付 portable 文件夹或 ZIP。'],
+    risks: ['视频包约 28MB；应整体压缩分享，不能只发送 index.html。'],
+    effects: ['Mouse-scrub video', 'Scramble reveal', 'Portable file:// package'],
+    accent: '#72e7ff',
   },
   {
     id: 'soft-product-video-hero',

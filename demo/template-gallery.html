@@ -306,6 +306,10 @@
     .pv-cinematic p { position: absolute; bottom: 22px; left: 20px; max-width: 52%; margin: 0; transform: translateY(60px); font-size: 12px; line-height: 1.6; color: rgba(255,255,255,.56); }
     .pv-cinematic .cta { position: absolute; right: 20px; bottom: 20px; width: 92px; height: 92px; border: 1px solid rgba(255,255,255,.14); border-radius: 26px; background: rgba(255,255,255,.1); backdrop-filter: blur(18px); }
 
+    .pv-hero-neural { background: #000; }
+    .pv-hero-neural img { width: 100%; height: 100%; object-fit: cover; }
+    .pv-hero-neural::before { content: "Mouse-scrub video · portable"; position: absolute; left: 16px; bottom: 16px; z-index: 2; border: 1px solid rgba(255,255,255,.2); border-radius: 999px; background: rgba(0,0,0,.55); padding: 8px 11px; color: rgba(255,255,255,.86); font: 700 9px/1 "JetBrains Mono"; letter-spacing: .08em; backdrop-filter: blur(10px); }
+
     .pv-soft { background: #cfc8c5; color: #192837; }
     .pv-soft .bg { position: absolute; inset: 0; background: radial-gradient(circle at 45% 65%, rgba(255,255,255,.58), transparent 28%), linear-gradient(135deg, #d7d0ca, #aab3b3); }
     .pv-soft .nav { position: absolute; left: 20px; top: 18px; display: flex; gap: 13px; align-items: center; font-size: 12px; font-weight: 900; }
@@ -573,6 +577,15 @@
         accent: '#f7f1e7',
       },
       {
+        name: 'Hero Neural Cinematic Homepage',
+        category: 'Tech',
+        visual: 'heroNeural',
+        summary: '神经网络电影感视频、鼠标拖拽式首屏和可直接双击分享的便携版本。',
+        bestFor: 'AI 研究者 / 独立开发者 / 前沿科技个人项目',
+        effects: ['Mouse-scrub video', 'Scramble reveal', 'Portable file://'],
+        accent: '#72e7ff',
+      },
+      {
         name: 'Soft Product Video Hero',
         category: 'Creator',
         visual: 'soft',
@@ -730,6 +743,7 @@
     /* === PREVIEW HTML FACTORY === */
     const previewHtml = {
       cinematic: '<div class="pv-cinematic preview-shell"><div class="bg"></div><div class="noise"></div><div class="label">WISA-style</div><div class="title">Curious AI Engineer</div><p>Scroll-driven video, sparse grid, premium statement.</p><div class="cta"></div></div>',
+      heroNeural: '<div class="pv-hero-neural preview-shell"><img src="../assets/demo-hero-neural-homepage.png" alt="Hero Neural Cinematic Homepage preview"></div>',
       soft: '<div class="pv-soft preview-shell"><div class="bg"></div><div class="nav">▱ Vault Plans Help</div><div class="pill">Start Free</div><div class="title">Lock ✦ Down Your Work</div><p>Soft product video hero with one strong violet CTA.</p></div>',
       orbis: '<div class="pv-orbis preview-shell"><div class="bg"></div><div class="noise"></div><div class="brand">Orbis.Nft</div><div class="nav">Home Gallery Buy NFT</div><div class="social"><div></div><div></div></div><div class="title">Beyond earth<br>and ( its )<br>boundaries</div><div class="script">Nft collection</div><div class="cards"><div class="card"><div class="media"></div></div><div class="card big"><div class="media"></div></div><div class="card"><div class="media"></div></div></div><div class="bar"></div><div class="score">Rarity score: 8.7 / 9.0 / 8.2</div></div>',
       toon: '<div class="pv-toon preview-shell"><div class="bg"></div><div class="noise"></div><div class="brand">TOONHUB</div><div class="blob"></div><div class="ghost">3D SHAPE</div><div class="side-a"></div><div class="side-b"></div><div class="center"></div><div class="copy">TOONHUB FIGURINES</div><div class="discover">Discover</div></div>',
