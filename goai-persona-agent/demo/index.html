@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="PersonaProof 人设有据：经授权、可验证、可撤回的个人品牌多 Agent 演示。" />
+  <title>人设有据 PersonaProof · GOAI Demo</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="ambient ambient-a" aria-hidden="true"></div>
+  <div class="ambient ambient-b" aria-hidden="true"></div>
+
+  <header class="hero shell">
+    <nav class="eyebrow-row" aria-label="项目状态">
+      <span class="brand-mark">PERSONA<span>PROOF</span></span>
+      <span class="track">GOAI 2026 · AGENT INFRA</span>
+    </nav>
+    <div class="hero-grid">
+      <div>
+        <p class="kicker">授权驱动的个人品牌多 Agent 操作系统</p>
+        <h1>不是替你“编人设”，<br />而是让每一句表达<span>有据可查</span>。</h1>
+        <p class="hero-copy">从经历洞察、定位确认到证据采集、网页交付，八个职能 Agent 在三个同意闸门内协作。用户随时可撤回，系统保留审计与回滚。</p>
+      </div>
+      <aside class="case-card" aria-label="当前案例">
+        <div class="case-top"><span>LIVE CASE</span><strong id="caseStage">G1 · 等待定位确认</strong></div>
+        <p class="case-name">跑跑蹦蹦跳跳</p>
+        <p>开源项目作者 · 公司隐藏</p>
+        <div class="case-metrics">
+          <span><b id="traceCount">0</b> Trace</span>
+          <span><b id="claimCount">0</b> Claims</span>
+          <span><b id="grantCount">0</b> Grants</span>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="workflow" aria-labelledby="workflow-title">
+      <div class="section-heading">
+        <p class="kicker">AGENTTEAMS PROJECT WORK</p>
+        <h2 id="workflow-title">一条被同意闸门约束的交付链</h2>
+      </div>
+      <ol id="workflowSteps" class="workflow-steps"></ol>
+    </section>
+
+    <section class="gate-panel" id="positionGate" aria-labelledby="position-title">
+      <div class="gate-label"><span>G1</span> 宣传方向同意闸门</div>
+      <div class="section-heading compact">
+        <h2 id="position-title">先确认“怎么被记住”，再找外部证据</h2>
+        <p>策略 Agent 给出三个方向。推荐项来自现有材料，但必须由本人选择。</p>
+      </div>
+      <div id="positionCards" class="position-grid"></div>
+    </section>
+
+    <section class="gate-panel is-locked" id="sourceGate" aria-labelledby="source-title">
+      <div class="gate-label"><span>G2</span> 数据源授权闸门</div>
+      <div class="section-heading compact">
+        <h2 id="source-title">授权不是一句“全部允许”，而是一组可撤回能力令牌</h2>
+        <p>每项令牌都绑定数据源、用途、范围、访问方式和有效期。未授权的数据源默认拒绝。</p>
+      </div>
+      <div id="sourceRows" class="source-list"></div>
+      <div class="gate-actions">
+        <p id="sourceHint">请先完成 G1。</p>
+        <button id="approveSources" class="button primary" disabled>批准所选数据源</button>
+      </div>
+    </section>
+
+    <section class="run-panel" aria-labelledby="run-title">
+      <div>
+        <p class="kicker">CONTROL PLANE</p>
+        <h2 id="run-title">让 Agent 开始协作</h2>
+        <p>AgentTeams Manager 创建 DAG；Leader 只接受通过证据与质量检查的 Worker 结果。</p>
+      </div>
+      <button id="runWorkflow" class="button run" disabled>运行完整闭环</button>
+    </section>
+
+    <section class="evidence-layout" aria-label="证据与执行轨迹">
+      <article class="ledger-panel">
+        <div class="panel-heading">
+          <div><p class="kicker">CLAIM–EVIDENCE LEDGER</p><h2>事实、推断、包装，必须分开</h2></div>
+          <button id="downloadLedger" class="text-button" disabled>导出台账</button>
+        </div>
+        <div id="claimLedger" class="empty-state">闭环运行后，主张和证据会出现在这里。</div>
+      </article>
+      <aside class="trace-panel">
+        <div class="panel-heading">
+          <div><p class="kicker">TRACE / LOG</p><h2>每一次交接都可回放</h2></div>
+          <button id="downloadTrace" class="text-button" disabled>导出 Trace</button>
+        </div>
+        <div id="traceLog" class="trace-log"><p class="empty-state">尚无执行记录。</p></div>
+      </aside>
+    </section>
+
+    <section class="release-panel" aria-labelledby="release-title">
+      <div class="release-copy">
+        <div class="gate-label"><span>G3</span> 发布前最终同意</div>
+        <h2 id="release-title">QA 通过，仍然不能自动公开</h2>
+        <p>用户审核公开姓名、定位、证据与联系方式后，交付 Agent 才能发布。发布清单保留上一版本，可随授权撤回一起回滚。</p>
+        <div class="checkline"><span id="qaDot"></span><b id="qaStatus">QA 未运行</b></div>
+        <label class="approval-check"><input id="publishApproval" type="checkbox" disabled /> 我已审阅公开内容，同意发布此版本</label>
+        <div class="release-actions">
+          <button id="publishButton" class="button primary" disabled>发布版本</button>
+          <button id="rollbackButton" class="button danger" disabled>撤回授权并回滚</button>
+        </div>
+        <p id="releaseStatus" class="release-status">当前：草稿，外部不可见。</p>
+      </div>
+      <div class="site-preview" aria-label="个人主页预览">
+        <span class="preview-tag">PUBLIC PREVIEW</span>
+        <p class="preview-name">跑跑蹦蹦跳跳</p>
+        <h3>AI 场景翻译官<br />& 开源产品人</h3>
+        <p>把传统行业的真实问题，翻译成能运行、能传播、能迭代的 AI 产品。</p>
+        <div class="proof-strip"><span>8 年场景经验</span><span>公开项目证据</span><span>公司隐藏</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="shell footer">
+    <p>PersonaProof · 人设有据</p>
+    <p>Demo 默认本地运行，不上传、不抓取、不自动发布。</p>
+  </footer>
+
+  <script type="module" src="./demo.js"></script>
+</body>
+</html>
