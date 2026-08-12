@@ -99,7 +99,7 @@ export function runWorkflow(state, scenario) {
     {
       claimId: 'claim-002',
       text: '擅长把传统行业的真实问题翻译成可运行的 AI 产品',
-      claimType: 'packaging',
+      claimType: 'inference',
       status: 'qualified',
       evidenceRefs: ['ev-resume-8y', 'ev-github-projects', 'ev-talk-0718'],
       confidence: 0.9,
@@ -108,8 +108,8 @@ export function runWorkflow(state, scenario) {
     },
     {
       claimId: 'claim-003',
-      text: '最适合定位为“AI 场景翻译官 / 开源产品人”',
-      claimType: 'inference',
+      text: 'AI 场景翻译官 / 开源产品人',
+      claimType: 'packaging',
       status: 'qualified',
       evidenceRefs: ['ev-resume-8y', 'ev-github-projects', 'ev-homepage-skill'],
       confidence: 0.86,

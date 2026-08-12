@@ -22,6 +22,7 @@ assert.equal(state.qaPassed, true);
 assert.equal(state.stage, 'publish-review');
 assert.ok(state.claims.length >= 3);
 assert.ok(state.claims.filter((claim) => claim.claimType === 'fact').every((claim) => claim.evidenceRefs.length > 0));
+assert.deepEqual(new Set(state.claims.map((claim) => claim.claimType)), new Set(['fact', 'inference', 'packaging']));
 assert.ok(state.trace.some((item) => item.action === 'AUTHORIZED_SOURCE_READ'));
 assert.throws(() => publishRelease(state), /FINAL_APPROVAL_REQUIRED/);
 
