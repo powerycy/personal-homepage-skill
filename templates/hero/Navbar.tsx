@@ -28,7 +28,7 @@ function NavPillLink({ label, target, onNavigate }: { label: string; target: str
 function DownloadButton({ small = false }: { small?: boolean }) {
   const [hovered, setHovered] = useState(false)
   return (
-    <motion.a href={PROFILE.contactHref} data-edit-id="nav-contact-link" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} whileHover={{ scale: 1.03, backgroundColor: '#e2e2e6' }} whileTap={{ scale: 0.97 }} style={{ backgroundColor: '#fff', color: '#000' }} className={`flex items-center gap-2 rounded-full font-medium ${small ? 'h-9 px-3.5 text-[13px]' : 'h-12 px-6 text-[15px]'}`}>
+    <motion.a href={PROFILE.contactHref} data-edit-id={small ? 'nav-contact-link-mobile' : 'nav-contact-link'} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} whileHover={{ scale: 1.03, backgroundColor: '#e2e2e6' }} whileTap={{ scale: 0.97 }} style={{ backgroundColor: '#fff', color: '#000' }} className={`flex items-center gap-2 rounded-full font-medium ${small ? 'h-9 px-3.5 text-[13px]' : 'h-12 px-6 text-[15px]'}`}>
       <span aria-hidden="true">↘</span>
       <ScrambleText text="Connect" isHovered={hovered} />
     </motion.a>

@@ -65,6 +65,27 @@ for (const target of targets) {
     failures.push(`${target.name}: sanitize dropped allowed markup: ${sanitized}`);
   }
 
+  // 2b. dropped markup passes through the same sanitizer
+  const dropped = await page.evaluate((markerText) => {
+    const node = document.querySelector('[data-edit-id]');
+    node.focus();
+    const dirty = `<div style="width:9999px"><img src=x onerror="evil()"><b>drop</b> ${markerText}</div>`;
+    const transfer = new DataTransfer();
+    transfer.setData('text/html', dirty);
+    // Chromium has no DropEvent constructor; a plain Event with an attached
+    // DataTransfer exercises the same handler path.
+    const drop = new Event('drop', { bubbles: true, cancelable: true });
+    drop.dataTransfer = transfer;
+    node.dispatchEvent(drop);
+    return document.querySelector('[data-edit-id]').innerHTML;
+  }, marker);
+  if (dropped.includes('<div') || dropped.includes('onerror') || dropped.includes('<img')) {
+    failures.push(`${target.name}: drop sanitize left dirty markup: ${dropped}`);
+  }
+  if (!dropped.includes('<b>drop</b>')) {
+    failures.push(`${target.name}: drop sanitize dropped allowed markup: ${dropped}`);
+  }
+
   // 3. save on Cmd+S, then exit editing
   const mod = process.platform === 'darwin' ? 'Meta' : 'Control';
   await page.keyboard.press(`${mod}+s`);

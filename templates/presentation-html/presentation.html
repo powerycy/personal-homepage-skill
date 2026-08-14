@@ -288,6 +288,7 @@
           if (event.target.closest && event.target.closest('[contenteditable="true"]')) this.save(false);
         });
         document.addEventListener('paste', (event) => this.handlePaste(event), true);
+        document.addEventListener('drop', (event) => this.handleDrop(event), true);
         document.addEventListener('keydown', (event) => this.handleKeydown(event));
         document.addEventListener('click', (event) => this.handleAttrClick(event), true);
         window.addEventListener('beforeunload', () => { if (this.isActive) this.save(false); });
@@ -328,6 +329,20 @@
         event.preventDefault();
         const html = event.clipboardData ? event.clipboardData.getData('text/html') : '';
         const plain = event.clipboardData ? event.clipboardData.getData('text/plain') : '';
+        if (html) {
+          document.execCommand('insertHTML', false, this.sanitize(html));
+        } else if (plain) {
+          document.execCommand('insertText', false, plain);
+        }
+      }
+
+      handleDrop(event) {
+        if (!this.isActive) return;
+        const node = event.target.closest && event.target.closest('[contenteditable="true"]');
+        if (!node) return;
+        event.preventDefault();
+        const html = event.dataTransfer ? event.dataTransfer.getData('text/html') : '';
+        const plain = event.dataTransfer ? event.dataTransfer.getData('text/plain') : '';
         if (html) {
           document.execCommand('insertHTML', false, this.sanitize(html));
         } else if (plain) {

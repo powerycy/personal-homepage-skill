@@ -256,6 +256,16 @@ export default function InlineEditor() {
       if (html) document.execCommand('insertHTML', false, sanitizeHtml(html))
       else if (plain) document.execCommand('insertText', false, plain)
     }
+    const onDrop = (event: DragEvent) => {
+      if (!editing) return
+      const target = event.target as HTMLElement | null
+      if (!target?.closest('[contenteditable="true"]')) return
+      event.preventDefault()
+      const html = event.dataTransfer?.getData('text/html') || ''
+      const plain = event.dataTransfer?.getData('text/plain') || ''
+      if (html) document.execCommand('insertHTML', false, sanitizeHtml(html))
+      else if (plain) document.execCommand('insertText', false, plain)
+    }
     const onAttrClick = (event: Event) => {
       if (!editing) return
       const target = event.target as HTMLElement | null
@@ -272,12 +282,14 @@ export default function InlineEditor() {
     window.addEventListener('keydown', onKeyDown)
     document.addEventListener('input', onInput)
     document.addEventListener('paste', onPaste, true)
+    document.addEventListener('drop', onDrop, true)
     document.addEventListener('click', onAttrClick, true)
     window.addEventListener('beforeunload', onBeforeUnload)
     return () => {
       window.removeEventListener('keydown', onKeyDown)
       document.removeEventListener('input', onInput)
       document.removeEventListener('paste', onPaste, true)
+      document.removeEventListener('drop', onDrop, true)
       document.removeEventListener('click', onAttrClick, true)
       window.removeEventListener('beforeunload', onBeforeUnload)
     }

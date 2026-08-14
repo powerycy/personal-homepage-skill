@@ -60,6 +60,8 @@ try {
       await editable.evaluate((element) => { element.innerHTML = 'Portable Test Name · AI Builder'; });
       await page.keyboard.press(process.platform === 'darwin' ? 'Meta+KeyS' : 'Control+KeyS');
 
+      // The untouched hero value proposition is placeholder copy; accept the export warning.
+      page.once('dialog', (dialog) => dialog.accept());
       const downloadPromise = page.waitForEvent('download');
       await page.locator('#exportHtml').click();
       const download = await downloadPromise;

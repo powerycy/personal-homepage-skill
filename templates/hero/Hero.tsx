@@ -76,13 +76,13 @@ export default function Hero({ entranceComplete }: HeroProps) {
         <div className="flex-1" />
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div className="flex flex-col gap-4">
-            <p data-edit-id="hero-identity" className="text-[11px] sm:text-[12px] uppercase tracking-[0.18em] text-white/70">{PROFILE.name} · {PROFILE.role}</p>
+            <p data-edit-id="hero-identity" data-placeholder="true" className="text-[11px] sm:text-[12px] uppercase tracking-[0.18em] text-white/70">{PROFILE.name} · {PROFILE.role}</p>
             <h1 className="text-white font-normal leading-[0.95] tracking-[-0.03em] text-[clamp(40px,10vw,100px)]">
               <ScrambleIn text="Brain" delay={200} triggered={entranceComplete} />
               <br />
               <ScrambleIn text="And Body" delay={500} triggered={entranceComplete} />
             </h1>
-            <motion.p data-edit-id="hero-value-proposition" initial={{ y: 25, opacity: 0 }} animate={entranceComplete ? { y: 0, opacity: 1 } : { y: 25, opacity: 0 }} transition={{ duration: 0.9, delay: 0.2, ease: [0.215, 0.61, 0.355, 1] }} className="max-w-sm text-[13px] sm:text-[15px] text-white/80 leading-relaxed">
+            <motion.p data-edit-id="hero-value-proposition" data-placeholder="true" initial={{ y: 25, opacity: 0 }} animate={entranceComplete ? { y: 0, opacity: 1 } : { y: 25, opacity: 0 }} transition={{ duration: 0.9, delay: 0.2, ease: [0.215, 0.61, 0.355, 1] }} className="max-w-sm text-[13px] sm:text-[15px] text-white/80 leading-relaxed">
               {PROFILE.valueProposition}
             </motion.p>
             <motion.div initial={{ y: 18, opacity: 0 }} animate={entranceComplete ? { y: 0, opacity: 1 } : { y: 18, opacity: 0 }} transition={{ duration: 0.8, delay: 0.35 }} className="flex flex-wrap gap-3 pointer-events-auto">

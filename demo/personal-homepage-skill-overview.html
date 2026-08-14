@@ -864,6 +864,7 @@
         this.toggle.addEventListener('mouseenter', () => this.showToggle());
         this.toggle.addEventListener('mouseleave', () => this.scheduleHide());
         document.addEventListener('paste', (event) => this.handlePaste(event), true);
+        document.addEventListener('drop', (event) => this.handleDrop(event), true);
         document.addEventListener('keydown', (event) => {
           const inField = event.target.closest && event.target.closest('input, textarea, select, [contenteditable="true"]');
           if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 's') {
@@ -962,6 +963,20 @@
         event.preventDefault();
         const html = event.clipboardData ? event.clipboardData.getData('text/html') : '';
         const plain = event.clipboardData ? event.clipboardData.getData('text/plain') : '';
+        if (html) {
+          document.execCommand('insertHTML', false, this.sanitize(html));
+        } else if (plain) {
+          document.execCommand('insertText', false, plain);
+        }
+      }
+
+      handleDrop(event) {
+        if (!this.isActive) return;
+        const node = event.target.closest && event.target.closest('[contenteditable="true"]');
+        if (!node) return;
+        event.preventDefault();
+        const html = event.dataTransfer ? event.dataTransfer.getData('text/html') : '';
+        const plain = event.dataTransfer ? event.dataTransfer.getData('text/plain') : '';
         if (html) {
           document.execCommand('insertHTML', false, this.sanitize(html));
         } else if (plain) {
