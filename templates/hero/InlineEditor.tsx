@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 declare global {
   interface Window {
@@ -49,20 +49,34 @@ function attrKey(node: HTMLElement, attribute: string) {
 
 function readStorage(key: string) {
   try {
-    return JSON.parse(localStorage.getItem(key) || '{}') as Record<string, string>
+    return JSON.parse(storageGet(key) || '{}') as Record<string, string>
   } catch {
     return {}
   }
 }
 
+function storageGet(key: string): string | null {
+  try { return localStorage.getItem(key) } catch { return null }
+}
+
+function storageSet(key: string, value: string) {
+  try { localStorage.setItem(key, value) } catch { /* storage unavailable */ }
+}
+
+function storageRemove(key: string) {
+  try { localStorage.removeItem(key) } catch { /* storage unavailable */ }
+}
+
 // Whitelist sanitizer: keeps basic inline formatting, unwraps everything else,
-// and strips every attribute except safe href values. Prevents pasted markup
-// (Word, web pages, editors) and script-carrying payloads from breaking the page.
+// and strips every attribute except safe href values. Parsing happens inside an
+// inert <template> so untrusted images/scripts never load or run before the
+// tree is cleaned; only the sanitized markup reaches the live document.
 function sanitizeHtml(html: string) {
   const ALLOWED = new Set(['B', 'STRONG', 'I', 'EM', 'U', 'BR', 'A', 'SPAN'])
   const SAFE_URL = /^(https?:|mailto:)/i
-  const root = document.createElement('div')
+  const root = document.createElement('template')
   root.innerHTML = html
+  const content = root.content
   const clean = (element: Element) => {
     Array.from(element.children).forEach(clean)
     if (!ALLOWED.has(element.tagName)) {
@@ -83,8 +97,8 @@ function sanitizeHtml(html: string) {
     }
     while (element.attributes.length) element.removeAttribute(element.attributes[0].name)
   }
-  Array.from(root.children).forEach(clean)
-  const walker = document.createTreeWalker(root, NodeFilter.SHOW_COMMENT)
+  Array.from(content.children).forEach(clean)
+  const walker = document.createTreeWalker(content, NodeFilter.SHOW_COMMENT)
   const comments: Comment[] = []
   while (walker.nextNode()) comments.push(walker.currentNode as Comment)
   comments.forEach((comment) => comment.remove())
@@ -95,6 +109,8 @@ export default function InlineEditor() {
   const [editing, setEditing] = useState(false)
   const [savedLabel, setSavedLabel] = useState(false)
   const [panelTarget, setPanelTarget] = useState<{ node: HTMLElement; attribute: string; value: string } | null>(null)
+  const [panelError, setPanelError] = useState(false)
+  const initializedRef = useRef(false)
   const texts = resolveTexts()
 
   const baseKey = `hero-homepage-edits:${location.pathname}`
@@ -107,8 +123,8 @@ export default function InlineEditor() {
   }
 
   const backupOriginals = () => {
-    const originalKey = `${baseKey}:original`
-    if (localStorage.getItem(originalKey) !== null) return
+    const originalKey = `${storageKey}:original`
+    if (storageGet(originalKey) !== null) return
     const snapshot: Record<string, string> = {}
     textNodes().forEach((node) => { snapshot[node.dataset.editId || ''] = node.innerHTML })
     attrNodes().forEach((node) => {
@@ -116,7 +132,7 @@ export default function InlineEditor() {
         if (node.hasAttribute(name)) snapshot[attrKey(node, name)] = node.getAttribute(name) || ''
       })
     })
-    try { localStorage.setItem(originalKey, JSON.stringify(snapshot)) } catch { /* storage unavailable */ }
+    storageSet(originalKey, JSON.stringify(snapshot))
   }
 
   const save = (showLabel = true) => {
@@ -127,7 +143,7 @@ export default function InlineEditor() {
         if (node.hasAttribute(name)) edits[attrKey(node, name)] = node.getAttribute(name) || ''
       })
     })
-    try { localStorage.setItem(storageKey, JSON.stringify(edits)) } catch { /* storage unavailable */ }
+    storageSet(storageKey, JSON.stringify(edits))
     if (showLabel) flashSaved()
     return edits
   }
@@ -147,14 +163,14 @@ export default function InlineEditor() {
 
   const resetAll = () => {
     if (!window.confirm(texts.resetConfirm)) return
-    applyEdits(readStorage(`${baseKey}:original`))
-    localStorage.removeItem(baseKey)
-    if (storageKey !== baseKey) localStorage.removeItem(storageKey)
+    applyEdits(readStorage(`${storageKey}:original`))
+    storageRemove(baseKey)
+    if (storageKey !== baseKey) storageRemove(storageKey)
     flashSaved()
   }
 
   const pendingPlaceholderCount = () => {
-    const original = readStorage(`${baseKey}:original`)
+    const original = readStorage(`${storageKey}:original`)
     return textNodes().filter((node) => (
       node.dataset.placeholder === 'true' && node.innerHTML === original[node.dataset.editId || '']
     )).length
@@ -182,23 +198,24 @@ export default function InlineEditor() {
     if (pending > 0 && !window.confirm(texts.placeholderWarning(pending))) return
 
     const clone = document.documentElement.cloneNode(true) as HTMLElement
-    clone.classList.remove('hero-editing')
+    clone.querySelector('body')?.classList.remove('hero-editing')
     clone.removeAttribute('data-edit-version')
     clone.setAttribute('data-edit-version', `export-${Date.now()}`)
     clone.querySelectorAll('[contenteditable]').forEach((node) => node.setAttribute('contenteditable', 'false'))
     clone.querySelectorAll('#hero-exported-edits, .hero-editor__panel, [data-runtime-chrome]').forEach((node) => node.remove())
 
-    // Embed the edit snapshot so the exported file renders identically anywhere,
-    // even where localStorage is empty or stale.
+    // Embed the edit snapshot (and resource banner) in <head> so both run before
+    // the deferred hero.js bundle: stale same-path localStorage can never
+    // override the exported markup, and early resource errors are still caught.
     const payload = JSON.stringify(edits).replace(/</g, '\\u003c')
     const embedded = document.createElement('script')
     embedded.id = 'hero-exported-edits'
     embedded.textContent = `window.__HERO_EXPORTED_EDITS__=${payload}`
-    clone.querySelector('body')?.appendChild(embedded)
+    clone.querySelector('head')?.appendChild(embedded)
 
     const banner = document.createElement('script')
     banner.textContent = resourceBannerScript()
-    clone.querySelector('body')?.appendChild(banner)
+    clone.querySelector('head')?.appendChild(banner)
 
     const blob = new Blob([`<!doctype html>\n${clone.outerHTML}`], { type: 'text/html;charset=utf-8' })
     const url = URL.createObjectURL(blob)
@@ -209,11 +226,19 @@ export default function InlineEditor() {
     window.setTimeout(() => URL.revokeObjectURL(url), 1000)
   }
 
+  // One-shot hydration: apply persisted edits before any user interaction.
+  // Never re-run on re-render, or Cmd+S (setSavedLabel) would rewrite the
+  // focused contenteditable and drop the caret / IME composition.
   useEffect(() => {
+    if (initializedRef.current) return
+    initializedRef.current = true
     backupOriginals()
     const saved = { ...readStorage(baseKey), ...readStorage(storageKey), ...(window.__HERO_EXPORTED_EDITS__ || {}) }
     applyEdits(saved)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
+  useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null
       const inField = target?.closest('input, textarea, select, [contenteditable="true"]')
@@ -276,6 +301,7 @@ export default function InlineEditor() {
       event.stopPropagation()
       const attribute = node.tagName === 'IMG' ? 'src' : 'href'
       setPanelTarget({ node, attribute, value: node.getAttribute(attribute) || '' })
+      setPanelError(false)
     }
     const onBeforeUnload = () => { if (editing) save(false) }
 
@@ -293,11 +319,18 @@ export default function InlineEditor() {
       document.removeEventListener('click', onAttrClick, true)
       window.removeEventListener('beforeunload', onBeforeUnload)
     }
-  })
+    // Re-bind only when the closures' state (editing / panelTarget) changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editing, panelTarget])
 
   const applyPanelValue = () => {
     if (!panelTarget) return
-    panelTarget.node.setAttribute(panelTarget.attribute, panelTarget.value.trim())
+    const value = panelTarget.value.trim()
+    if (/^\s*(javascript|data|vbscript)\s*:/i.test(value)) {
+      setPanelError(true)
+      return
+    }
+    panelTarget.node.setAttribute(panelTarget.attribute, value)
     save(false)
     setPanelTarget(null)
   }
@@ -318,8 +351,10 @@ export default function InlineEditor() {
             type="text"
             value={panelTarget.value}
             autoFocus
-            onChange={(event) => setPanelTarget({ ...panelTarget, value: event.target.value })}
+            style={panelError ? { borderColor: '#ef4444' } : undefined}
+            onChange={(event) => { setPanelTarget({ ...panelTarget, value: event.target.value }); setPanelError(false) }}
             onKeyDown={(event) => {
+              if (event.nativeEvent.isComposing) return
               if (event.key === 'Enter') { event.preventDefault(); applyPanelValue() }
               if (event.key === 'Escape') { event.preventDefault(); setPanelTarget(null) }
             }}

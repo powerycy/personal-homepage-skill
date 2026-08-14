@@ -964,7 +964,7 @@
         this.editableNodes().forEach((node) => {
           data[this.nodeKey(node)] = this.sanitize(node.innerHTML);
         });
-        localStorage.setItem(this.key, JSON.stringify(data));
+        try { localStorage.setItem(this.key, JSON.stringify(data)); } catch (error) { /* storage unavailable */ }
         this.data = data;
         this.toggle.textContent = '已保存';
         setTimeout(() => {
@@ -983,7 +983,7 @@
         try {
           return JSON.parse(localStorage.getItem(this.key) || '{}');
         } catch (error) {
-          localStorage.removeItem(this.key);
+          try { localStorage.removeItem(this.key); } catch (nested) { /* storage unavailable */ }
           return {};
         }
       }
@@ -1045,13 +1045,15 @@
       }
 
       // Whitelist sanitizer: keeps basic inline formatting, unwraps everything else,
-      // and strips every attribute except safe href values. Prevents pasted markup
-      // (Word, web pages, editors) and script-carrying payloads from breaking the page.
+      // and strips every attribute except safe href values. Parsing happens inside an
+      // inert <template> so untrusted images/scripts never load or run before the
+      // tree is cleaned; only the sanitized markup reaches the live document.
       sanitize(html) {
         const ALLOWED = new Set(['B', 'STRONG', 'I', 'EM', 'U', 'BR', 'A', 'SPAN']);
         const SAFE_URL = /^(https?:|mailto:)/i;
-        const root = document.createElement('div');
+        const root = document.createElement('template');
         root.innerHTML = html;
+        const content = root.content;
         const clean = (element) => {
           Array.from(element.children).forEach(clean);
           if (!ALLOWED.has(element.tagName)) {
@@ -1072,8 +1074,8 @@
           }
           while (element.attributes.length) element.removeAttribute(element.attributes[0].name);
         };
-        Array.from(root.children).forEach(clean);
-        const walker = document.createTreeWalker(root, NodeFilter.SHOW_COMMENT);
+        Array.from(content.children).forEach(clean);
+        const walker = document.createTreeWalker(content, NodeFilter.SHOW_COMMENT);
         const comments = [];
         while (walker.nextNode()) comments.push(walker.currentNode);
         comments.forEach((comment) => comment.remove());
@@ -1094,22 +1096,6 @@
         let value = 0;
         for (const char of text) value = ((value * 31) + char.charCodeAt(0)) >>> 0;
         return value.toString(36);
-      }
-
-      pathWithin(root, node) {
-        const parts = [];
-        let current = node;
-        while (current && current !== root) {
-          const parent = current.parentElement;
-          if (!parent) break;
-          const tag = current.tagName.toLowerCase();
-          const className = Array.from(current.classList).slice(0, 2).join('.');
-          const similar = Array.from(parent.children).filter((child) => child.tagName === current.tagName && child.className === current.className);
-          const index = similar.indexOf(current);
-          parts.unshift(`${tag}${className ? `.${className}` : ''}:${index}`);
-          current = parent;
-        }
-        return parts.join('>');
       }
     }
 

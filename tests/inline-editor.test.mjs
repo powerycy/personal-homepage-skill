@@ -131,6 +131,22 @@ for (const target of targets) {
   const hasExportButton = await page2.locator('#exportHtml').count();
   if (!hasExportButton) failures.push(`${target.name}: exported file lost export button`);
 
+  // 7b. stale same-path edits must not override the embedded export snapshot
+  const stalePrefix = target.name === 'presentation' ? 'presentation-template' : 'personal-homepage-template';
+  await page.evaluate((staleKey) => {
+    const firstId = document.querySelector('[data-edit-id]').dataset.editId;
+    localStorage.setItem(staleKey, JSON.stringify({ [firstId]: 'STALE_SHOULD_NOT_WIN' }));
+  }, `${stalePrefix}-edits:${pathToFileURL(exportedPath).pathname}`);
+  const stalePage = await context.newPage();
+  await stalePage.goto(pathToFileURL(exportedPath).href);
+  await stalePage.waitForTimeout(300);
+  const staleView = await stalePage.locator('[data-edit-id]').first().innerHTML();
+  if (!staleView.includes(marker) || staleView.includes('STALE_SHOULD_NOT_WIN')) {
+    failures.push(`${target.name}: stale same-path edits overrode the exported snapshot`);
+  }
+  await stalePage.close();
+  await page2.close();
+
   await context.close();
 
   // 8. touch devices have no hover: the controls must stay visible

@@ -141,46 +141,61 @@
           .filter((node) => !node.closest('[data-editor-chrome]'))
           .filter((node) => !this.settings.exclude || !node.closest(this.settings.exclude));
         const seen = Object.create(null);
+        const taken = new Set(this.nodes.filter((node) => node.dataset.editId).map((node) => node.dataset.editId));
         this.nodes.forEach((node) => {
-          if (!node.dataset.editId) node.dataset.editId = this.deriveId(node, seen, '');
+          if (!node.dataset.editId) node.dataset.editId = this.deriveId(node, seen, '', taken);
         });
         if (this.settings.attrSelector) {
           this.attrNodes = Array.from(document.querySelectorAll(this.settings.attrSelector))
             .filter((node) => !node.closest('[data-editor-chrome]'));
           const seenAttr = Object.create(null);
+          const takenAttr = new Set(this.attrNodes.filter((node) => node.dataset.editId).map((node) => node.dataset.editId));
           this.attrNodes.forEach((node) => {
-            if (!node.dataset.editId) node.dataset.editId = this.deriveId(node, seenAttr, 'attr-');
+            if (!node.dataset.editId) node.dataset.editId = this.deriveId(node, seenAttr, 'attr-', takenAttr);
           });
         }
       }
 
-      deriveId(node, seen, kindPrefix) {
+      deriveId(node, seen, kindPrefix, taken) {
         const scopeEl = node.closest('[data-slide-id]') || node.closest('section[id]') || node.closest('section');
         const rawScope = (scopeEl && (scopeEl.dataset.slideId || scopeEl.id || scopeEl.classList[0] || '')) || 'page';
         const role = node.classList[0] || node.tagName.toLowerCase();
         const base = `${this.settings.scopePrefix}${kindPrefix}${rawScope}-${role}`.replace(/[^a-zA-Z0-9_-]+/g, '-').toLowerCase();
-        const count = seen[base] || 0;
+        let count = seen[base] || 0;
+        let candidate = count ? `${base}-${count + 1}` : base;
+        while (taken && taken.has(candidate)) { count += 1; candidate = `${base}-${count + 1}`; }
         seen[base] = count + 1;
-        return count ? `${base}-${count + 1}` : base;
+        return candidate;
       }
 
       attrKey(node, attribute) {
         return `@attr:${node.dataset.editId}:${attribute}`;
       }
 
+      storageGet(key) {
+        try { return localStorage.getItem(key); } catch (error) { return null; }
+      }
+
+      storageSet(key, value) {
+        try { localStorage.setItem(key, value); } catch (error) { /* storage unavailable */ }
+      }
+
+      storageRemove(key) {
+        try { localStorage.removeItem(key); } catch (error) { /* storage unavailable */ }
+      }
+
       readStorage(key) {
         try {
-          const data = JSON.parse(localStorage.getItem(key) || '{}');
+          const data = JSON.parse(this.storageGet(key) || '{}');
           return data && !Array.isArray(data) ? data : {};
         } catch (error) {
-          localStorage.removeItem(key);
           return {};
         }
       }
 
       backupOriginals() {
-        const originalKey = `${this.baseKey}:original`;
-        if (localStorage.getItem(originalKey) !== null) return;
+        const originalKey = `${this.versionKey || this.baseKey}:original`;
+        if (this.storageGet(originalKey) !== null) return;
         const snapshot = {};
         this.nodes.forEach((node) => { snapshot[node.dataset.editId] = node.innerHTML; });
         this.attrNodes.forEach((node) => {
@@ -188,7 +203,7 @@
             if (node.hasAttribute(name)) snapshot[this.attrKey(node, name)] = node.getAttribute(name);
           });
         });
-        try { localStorage.setItem(originalKey, JSON.stringify(snapshot)); } catch (error) { /* storage unavailable */ }
+        this.storageSet(originalKey, JSON.stringify(snapshot));
       }
 
       loadEdits() {
@@ -218,7 +233,7 @@
             if (node.hasAttribute(name)) data[this.attrKey(node, name)] = node.getAttribute(name);
           });
         });
-        try { localStorage.setItem(this.versionKey || this.baseKey, JSON.stringify(data)); } catch (error) { /* storage unavailable */ }
+        this.storageSet(this.versionKey || this.baseKey, JSON.stringify(data));
         if (showLabel !== false) this.flashSaved();
         return data;
       }
@@ -321,13 +336,15 @@
       }
 
       // Whitelist sanitizer: keeps basic inline formatting, unwraps everything else,
-      // and strips every attribute except safe href values. Prevents pasted markup
-      // (Word, web pages, editors) and script-carrying payloads from breaking the page.
+      // and strips every attribute except safe href values. Parsing happens inside an
+      // inert <template> so untrusted images/scripts never load or run before the
+      // tree is cleaned; only the sanitized markup reaches the live document.
       sanitize(html) {
         const ALLOWED = new Set(['B', 'STRONG', 'I', 'EM', 'U', 'BR', 'A', 'SPAN']);
         const SAFE_URL = /^(https?:|mailto:)/i;
-        const root = document.createElement('div');
+        const root = document.createElement('template');
         root.innerHTML = html;
+        const content = root.content;
         const clean = (element) => {
           Array.from(element.children).forEach(clean);
           if (!ALLOWED.has(element.tagName)) {
@@ -348,8 +365,8 @@
           }
           while (element.attributes.length) element.removeAttribute(element.attributes[0].name);
         };
-        Array.from(root.children).forEach(clean);
-        const walker = document.createTreeWalker(root, NodeFilter.SHOW_COMMENT);
+        Array.from(content.children).forEach(clean);
+        const walker = document.createTreeWalker(content, NodeFilter.SHOW_COMMENT);
         const comments = [];
         while (walker.nextNode()) comments.push(walker.currentNode);
         comments.forEach((comment) => comment.remove());
@@ -392,12 +409,20 @@
         this.panel = { panel, target, attribute, apply };
 
         apply.addEventListener('click', () => {
-          target.setAttribute(attribute, input.value.trim());
+          const value = input.value.trim();
+          if (/^\s*(javascript|data|vbscript)\s*:/i.test(value)) {
+            input.style.borderColor = '#ef4444';
+            input.focus();
+            return;
+          }
+          input.style.borderColor = '';
+          target.setAttribute(attribute, value);
           this.save(false);
           this.closePanel();
         });
         cancel.addEventListener('click', () => this.closePanel());
         input.addEventListener('keydown', (event) => {
+          if (event.isComposing) return;
           if (event.key === 'Enter') { event.preventDefault(); apply.click(); }
           if (event.key === 'Escape') { event.preventDefault(); this.closePanel(); }
         });
@@ -409,7 +434,7 @@
 
       resetAll() {
         if (!window.confirm(this.texts.resetConfirm)) return;
-        const original = this.readStorage(`${this.baseKey}:original`);
+        const original = this.readStorage(`${this.versionKey || this.baseKey}:original`);
         this.nodes.forEach((node) => {
           const value = original[node.dataset.editId];
           if (typeof value === 'string') node.innerHTML = value;
@@ -421,13 +446,13 @@
             else if (node.hasAttribute(name)) node.removeAttribute(name);
           });
         });
-        localStorage.removeItem(this.baseKey);
-        if (this.versionKey) localStorage.removeItem(this.versionKey);
+        this.storageRemove(this.baseKey);
+        if (this.versionKey) this.storageRemove(this.versionKey);
         this.flashSaved();
       }
 
       pendingPlaceholderCount() {
-        const original = this.readStorage(`${this.baseKey}:original`);
+        const original = this.readStorage(`${this.versionKey || this.baseKey}:original`);
         return this.nodes.filter((node) => (
           node.dataset.placeholder === 'true' && node.innerHTML === original[node.dataset.editId]
         )).length;
@@ -446,17 +471,26 @@
         clone.querySelectorAll('[contenteditable]').forEach((node) => node.setAttribute('contenteditable', 'false'));
         clone.querySelectorAll('[data-editor-chrome], #exported-edits').forEach((node) => node.remove());
 
-        // Embed the edit snapshot so the exported file renders identically anywhere,
-        // even where localStorage is empty or stale.
+        // Reset runtime slide state so an exported deck opens on slide 1 with a matching counter.
+        const slides = clone.querySelectorAll('.slide');
+        if (slides.length) {
+          slides.forEach((slide, i) => slide.classList.toggle('active', i === 0));
+          const counter = clone.querySelector('#counter');
+          if (counter) counter.textContent = `01 / ${String(slides.length).padStart(2, '0')}`;
+        }
+
+        // Embed the snapshot and the resource banner in <head> so they run before
+        // the editor script: stale same-path localStorage can never override the
+        // exported markup, and early resource errors are still caught.
         const payload = JSON.stringify(edits).replace(/</g, '\\u003c');
         const embed = document.createElement('script');
         embed.id = 'exported-edits';
         embed.textContent = `window.__EXPORTED_EDITS__=${payload}`;
-        body.appendChild(embed);
+        clone.querySelector('head').appendChild(embed);
 
         const banner = document.createElement('script');
         banner.textContent = this.resourceBannerScript();
-        body.appendChild(banner);
+        clone.querySelector('head').appendChild(banner);
 
         const blob = new Blob([`<!doctype html>\n${clone.outerHTML}`], { type: 'text/html;charset=utf-8' });
         const url = URL.createObjectURL(blob);

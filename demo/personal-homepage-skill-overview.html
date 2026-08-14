@@ -914,7 +914,7 @@
         this.editableNodes().forEach((node) => {
           data[node.dataset.editId] = this.sanitize(node.innerHTML);
         });
-        localStorage.setItem(this.key, JSON.stringify(data));
+        try { localStorage.setItem(this.key, JSON.stringify(data)); } catch (error) { /* storage unavailable */ }
         this.toggle.textContent = '已保存';
         setTimeout(() => {
           this.toggle.textContent = this.isActive ? '编辑中' : '编辑';
@@ -993,13 +993,15 @@
       }
 
       // Whitelist sanitizer: keeps basic inline formatting, unwraps everything else,
-      // and strips every attribute except safe href values. Prevents pasted markup
-      // (Word, web pages, editors) and script-carrying payloads from breaking the page.
+      // and strips every attribute except safe href values. Parsing happens inside an
+      // inert <template> so untrusted images/scripts never load or run before the
+      // tree is cleaned; only the sanitized markup reaches the live document.
       sanitize(html) {
         const ALLOWED = new Set(['B', 'STRONG', 'I', 'EM', 'U', 'BR', 'A', 'SPAN']);
         const SAFE_URL = /^(https?:|mailto:)/i;
-        const root = document.createElement('div');
+        const root = document.createElement('template');
         root.innerHTML = html;
+        const content = root.content;
         const clean = (element) => {
           Array.from(element.children).forEach(clean);
           if (!ALLOWED.has(element.tagName)) {
@@ -1020,8 +1022,8 @@
           }
           while (element.attributes.length) element.removeAttribute(element.attributes[0].name);
         };
-        Array.from(root.children).forEach(clean);
-        const walker = document.createTreeWalker(root, NodeFilter.SHOW_COMMENT);
+        Array.from(content.children).forEach(clean);
+        const walker = document.createTreeWalker(content, NodeFilter.SHOW_COMMENT);
         const comments = [];
         while (walker.nextNode()) comments.push(walker.currentNode);
         comments.forEach((comment) => comment.remove());
