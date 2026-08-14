@@ -513,6 +513,18 @@
       outline: 0;
     }
 
+    #editReset {
+      top: 58px;
+      font-weight: 500;
+    }
+
+    @media (hover: none) {
+      .edit-toggle {
+        opacity: 1;
+        pointer-events: auto;
+      }
+    }
+
     body.editing [contenteditable="true"] {
       outline: 2px dashed rgba(255, 184, 106, 0.9);
       outline-offset: 5px;
@@ -561,7 +573,8 @@
     </article>
   </template>
   <div class="edit-hotzone" aria-hidden="true"></div>
-  <button class="edit-toggle" id="editToggle" title="编辑模式（E）" aria-label="编辑模式">编辑</button>
+  <button class="edit-toggle" id="editToggle" data-editor-control="toggle" title="编辑模式（E）" aria-label="编辑模式">编辑</button>
+  <button class="edit-toggle" id="editReset" data-editor-control="reset" title="恢复初始文案" aria-label="恢复初始文案">恢复初始</button>
 
   <script>
     /* === TEMPLATE DATA === */
@@ -838,8 +851,10 @@
         this.isActive = false;
         this.key = `template-gallery-edits:${location.pathname}`;
         this.toggle = document.getElementById('editToggle');
+        this.resetButton = document.getElementById('editReset');
         this.hotzone = document.querySelector('.edit-hotzone');
         this.hideTimeout = null;
+        this.prepareOriginals();
         this.data = this.readData();
         this.bind();
         this.refresh();
@@ -887,20 +902,26 @@
       bind() {
         if (!this.toggle || !this.hotzone) return;
         this.toggle.addEventListener('click', () => this.toggleEditMode());
+        if (this.resetButton) this.resetButton.addEventListener('click', () => this.resetAll());
         this.hotzone.addEventListener('click', () => this.toggleEditMode());
         this.hotzone.addEventListener('mouseenter', () => this.showToggle());
         this.hotzone.addEventListener('mouseleave', () => this.scheduleHide());
         this.toggle.addEventListener('mouseenter', () => this.showToggle());
         this.toggle.addEventListener('mouseleave', () => this.scheduleHide());
+        document.addEventListener('paste', (event) => this.handlePaste(event), true);
         document.addEventListener('keydown', (event) => {
-          if ((event.key === 'e' || event.key === 'E') && (!event.target.getAttribute || event.target.getAttribute('contenteditable') !== 'true')) {
-            event.preventDefault();
-            this.toggleEditMode();
-          }
+          const inField = event.target.closest && event.target.closest('input, textarea, select, [contenteditable="true"]');
           if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 's') {
             event.preventDefault();
             this.save();
+            return;
           }
+          if (!inField && !event.metaKey && !event.ctrlKey && !event.altKey && (event.key === 'e' || event.key === 'E')) {
+            event.preventDefault();
+            this.toggleEditMode();
+            return;
+          }
+          if (this.isActive && event.key === 'Enter') this.handleEnter(event);
         });
       }
 
@@ -916,11 +937,15 @@
       showToggle() {
         clearTimeout(this.hideTimeout);
         this.toggle.classList.add('show');
+        if (this.resetButton) this.resetButton.classList.add('show');
       }
 
       scheduleHide() {
         this.hideTimeout = setTimeout(() => {
-          if (!this.isActive) this.toggle.classList.remove('show');
+          if (!this.isActive) {
+            this.toggle.classList.remove('show');
+            if (this.resetButton) this.resetButton.classList.remove('show');
+          }
         }, 420);
       }
 
@@ -936,7 +961,7 @@
       save() {
         const data = this.readData();
         this.editableNodes().forEach((node) => {
-          data[this.nodeKey(node)] = node.innerHTML;
+          data[this.nodeKey(node)] = this.sanitize(node.innerHTML);
         });
         localStorage.setItem(this.key, JSON.stringify(data));
         this.data = data;
@@ -960,6 +985,84 @@
           localStorage.removeItem(this.key);
           return {};
         }
+      }
+
+      prepareOriginals() {
+        const originalKey = `${this.key}:original`;
+        if (localStorage.getItem(originalKey) !== null) return;
+        const snapshot = {};
+        this.editableNodes().forEach((node) => { snapshot[this.nodeKey(node)] = node.innerHTML; });
+        try { localStorage.setItem(originalKey, JSON.stringify(snapshot)); } catch (error) { /* storage unavailable */ }
+      }
+
+      resetAll() {
+        if (!window.confirm('把所有可编辑文案恢复为初始内容？当前修改将被清除。')) return;
+        let original = {};
+        try { original = JSON.parse(localStorage.getItem(`${this.key}:original`) || '{}'); } catch (error) { original = {}; }
+        this.editableNodes().forEach((node) => {
+          const value = original[this.nodeKey(node)];
+          if (typeof value === 'string') node.innerHTML = value;
+        });
+        localStorage.removeItem(this.key);
+        this.data = {};
+      }
+
+      handlePaste(event) {
+        if (!this.isActive) return;
+        const node = event.target.closest && event.target.closest('[contenteditable="true"]');
+        if (!node) return;
+        event.preventDefault();
+        const html = event.clipboardData ? event.clipboardData.getData('text/html') : '';
+        const plain = event.clipboardData ? event.clipboardData.getData('text/plain') : '';
+        if (html) {
+          document.execCommand('insertHTML', false, this.sanitize(html));
+        } else if (plain) {
+          document.execCommand('insertText', false, plain);
+        }
+      }
+
+      handleEnter(event) {
+        const node = event.target.closest && event.target.closest('[contenteditable="true"]');
+        if (!node) return;
+        event.preventDefault();
+        // Insert <br> instead of letting the browser split the element, so headings keep their layout.
+        if (/^(P|LI|BLOCKQUOTE|TD|TH|DIV)$/.test(node.tagName)) document.execCommand('insertLineBreak');
+      }
+
+      // Whitelist sanitizer: keeps basic inline formatting, unwraps everything else,
+      // and strips every attribute except safe href values. Prevents pasted markup
+      // (Word, web pages, editors) and script-carrying payloads from breaking the page.
+      sanitize(html) {
+        const ALLOWED = new Set(['B', 'STRONG', 'I', 'EM', 'U', 'BR', 'A', 'SPAN']);
+        const SAFE_URL = /^(https?:|mailto:)/i;
+        const root = document.createElement('div');
+        root.innerHTML = html;
+        const clean = (element) => {
+          Array.from(element.children).forEach(clean);
+          if (!ALLOWED.has(element.tagName)) {
+            element.replaceWith(...Array.from(element.childNodes));
+            return;
+          }
+          if (element.tagName === 'A') {
+            const href = element.getAttribute('href') || '';
+            if (!SAFE_URL.test(href)) {
+              element.replaceWith(...Array.from(element.childNodes));
+              return;
+            }
+            const safe = document.createElement('a');
+            safe.setAttribute('href', href);
+            safe.append(...Array.from(element.childNodes));
+            element.replaceWith(safe);
+            return;
+          }
+          while (element.attributes.length) element.removeAttribute(element.attributes[0].name);
+        };
+        Array.from(root.children).forEach(clean);
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_COMMENT);
+        const comments = [];
+        while (walker.nextNode()) comments.push(walker.currentNode);
+        comments.forEach((comment) => comment.remove());
+        return root.innerHTML;
       }
 
       nodeKey(node) {
