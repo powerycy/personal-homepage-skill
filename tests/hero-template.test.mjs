@@ -37,8 +37,8 @@ try {
       profileVisible: document.body.innerText.includes('YOUR NAME'),
       ctas: Array.from(document.querySelectorAll('#top a')).map((link) => link.textContent?.trim()),
       unlabeledButtons: Array.from(document.querySelectorAll('button')).filter((button) => !(button.textContent || '').trim() && !button.getAttribute('aria-label')).length,
-      editButton: Boolean(Array.from(document.querySelectorAll('button')).find((button) => button.textContent?.trim() === '编辑')),
-      exportButton: Boolean(Array.from(document.querySelectorAll('button')).find((button) => button.textContent?.trim() === '导出 HTML')),
+      editButton: Boolean(document.querySelector('[data-editor-control="toggle"]')),
+      exportButton: Boolean(document.querySelector('#exportHtml, [data-editor-control="export"]')),
     }));
 
     if (state.overflow > 1) failures.push(`${viewport.name}: horizontal overflow ${state.overflow}px`);
