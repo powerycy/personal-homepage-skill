@@ -1,39 +1,43 @@
-import assert from 'node:assert/strict';
-import { scenario } from '../demo/scenario.mjs';
+import assert from 'node:assert/strict'
 import {
-  approvePosition,
-  approvePublish,
-  createWorkflowState,
+  attemptSourceAccess,
+  confirmDirection,
+  getActiveScenario,
   grantSources,
-  publishRelease,
-  revokeAndRollback,
-  runWorkflow,
-} from '../demo/engine.mjs';
+  publicDemoWorkspace,
+  publishScenario,
+  revokeSourceAndRollback,
+  runAgentTeam,
+  validateClaim,
+} from '../packages/personaproof-plugin/src/domain.js'
 
-const state = createWorkflowState(scenario);
+const workspace = publicDemoWorkspace()
+let scenario = getActiveScenario(workspace)
 
-assert.throws(() => runWorkflow(state, scenario), /G1_POSITION_APPROVAL_REQUIRED/);
-approvePosition(state, scenario, 'scene-translator');
-assert.throws(() => runWorkflow(state, scenario), /ACCESS_DENIED:resume-local/);
-grantSources(state, scenario, ['resume-local', 'github-powerycy', 'public-content']);
-runWorkflow(state, scenario);
+const blocked = attemptSourceAccess(scenario, 'github')
+assert.equal(blocked.allowed, false)
+assert.equal(blocked.scenario.trace.at(-1).event, 'tool.denied')
 
-assert.equal(state.qaPassed, true);
-assert.equal(state.stage, 'publish-review');
-assert.ok(state.claims.length >= 3);
-assert.ok(state.claims.filter((claim) => claim.claimType === 'fact').every((claim) => claim.evidenceRefs.length > 0));
-assert.deepEqual(new Set(state.claims.map((claim) => claim.claimType)), new Set(['fact', 'inference', 'packaging']));
-assert.ok(state.trace.some((item) => item.action === 'AUTHORIZED_SOURCE_READ'));
-assert.throws(() => publishRelease(state), /FINAL_APPROVAL_REQUIRED/);
+scenario = confirmDirection(blocked.scenario, 'scene-translator')
+assert.equal(scenario.gates.G1, 'approved')
+assert.throws(() => runAgentTeam(scenario), /G2/)
 
-approvePublish(state);
-publishRelease(state);
-assert.equal(state.releaseStatus, 'published');
-assert.ok(state.releaseId.startsWith('release_'));
+scenario = grantSources(scenario, ['resume', 'github', 'homepage-demo'])
+assert.equal(attemptSourceAccess(scenario, 'github').allowed, true)
 
-revokeAndRollback(state);
-assert.equal(state.releaseStatus, 'rolled-back');
-assert.ok(state.grants.every((grant) => grant.status === 'revoked'));
-assert.equal(state.trace.at(-1).action, 'CONSENT_REVOKED_AND_RELEASE_ROLLED_BACK');
+scenario = runAgentTeam(scenario)
+assert.equal(scenario.status, 'qa-passed')
+assert.equal(scenario.agentRuns.length, 8)
+assert.ok(scenario.trace.some(item => item.event === 'task.rejected'))
+assert.ok(scenario.claims.every(claim => validateClaim(claim).valid || claim.status === 'rejected'))
 
-console.log(`PASS: ${state.trace.length} trace events, ${state.claims.length} governed claims, rollback verified.`);
+scenario = publishScenario(scenario)
+assert.equal(scenario.gates.G3, 'approved')
+assert.equal(scenario.releases.at(-1).status, 'published')
+
+scenario = revokeSourceAndRollback(scenario, 'github')
+assert.equal(scenario.status, 'rolled-back')
+assert.equal(scenario.releases.at(-1).status, 'rolled-back')
+assert.ok(scenario.claims.some(item => item.status === 'needs-review'))
+
+console.log(`PASS: ${scenario.trace.length} trace events, ${scenario.claims.length} governed claims, 8 agents, denial and rollback verified.`)
