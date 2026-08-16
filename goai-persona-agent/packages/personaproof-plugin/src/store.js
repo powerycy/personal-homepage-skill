@@ -76,6 +76,10 @@ class PersonaWorkspaceStore {
     this.patch({ overlay }, false)
   }
 
+  clearNotice() {
+    this.patch({ notice: null }, false)
+  }
+
   mutateScenario(mutator, extras = {}) {
     const scenario = getActiveScenario(this.state)
     if (!scenario) return
@@ -110,7 +114,7 @@ class PersonaWorkspaceStore {
   runTeam() {
     try {
       this.mutateScenario(runAgentTeam, {
-        view: 'trace',
+        view: 'workbench',
         notice: 'AgentTeams 闭环完成：一次无证据强断言已被 QA 退回并修正。',
       })
     } catch (error) {
@@ -121,7 +125,7 @@ class PersonaWorkspaceStore {
   publish() {
     try {
       this.mutateScenario(publishScenario, {
-        view: 'site',
+        view: 'workbench',
         notice: 'G3 已通过：v1.0.0 已发布，上一安全状态可回滚。',
       })
     } catch (error) {

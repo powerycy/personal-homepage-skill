@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useSyncExternalStore } from 'react'
+import React, { useEffect, useMemo, useState, useSyncExternalStore } from 'react'
 import {
   ArchiveRestore,
   BadgeCheck,
@@ -75,44 +75,7 @@ function PersonaBrand({ compact = false }) {
 }
 
 function Sidebar({ collapsed = false }) {
-  const state = useWorkspace()
-  const active = getActiveScenario(state)
-  return <aside className={`pp-sidebar ${collapsed ? 'is-collapsed' : ''}`} aria-label="个人品牌工作区">
-    <div className="pp-brand-stack">
-      <DeepSeekBrand compact={collapsed} />
-      <div className="pp-brand-join" />
-      <PersonaBrand compact={collapsed} />
-    </div>
-
-    <button className="pp-new-scenario" onClick={() => state.profile ? workspaceStore.setOverlay({ type: 'scenario' }) : workspaceStore.loadDemo()}>
-      <Plus size={18} /> {!collapsed && <span>{state.profile ? '新建场景版本' : '建立品牌档案'}</span>}
-    </button>
-
-    {!collapsed && state.profile && <section className="pp-profile-mini">
-      <span className="pp-profile-avatar">跑</span>
-      <div><small>唯一事实主档案</small><strong>{state.profile.alias}</strong><span>{state.profile.displayName} · 公司隐藏</span></div>
-      <ShieldCheck size={16} />
-    </section>}
-
-    {!collapsed && <div className="pp-side-heading"><span>场景版本</span><small>{state.scenarios.length}/5</small></div>}
-    <nav className="pp-scenario-list" aria-label="品牌场景版本">
-      {state.scenarios.map((scenario, index) => <button
-        key={scenario.id}
-        className={`pp-scenario-row ${scenario.id === active?.id ? 'is-active' : ''}`}
-        onClick={() => workspaceStore.selectScenario(scenario.id)}
-        title={collapsed ? scenario.name : undefined}
-      >
-        <span className="pp-scenario-icon">{index === 0 ? <BriefcaseBusiness size={17} /> : <Target size={17} />}</span>
-        {!collapsed && <><span><strong>{scenario.name}</strong><small>{scenario.status === 'published' ? '已发布' : scenario.status === 'rolled-back' ? '已回滚' : scenario.gates.G1 === 'approved' ? '定位已确认' : '等待定位'}</small></span><i className={scenario.id === active?.id ? 'is-live' : ''} /></>}
-      </button>)}
-      {!state.scenarios.length && !collapsed && <div className="pp-side-empty">一个人只有一份事实底座；求职、创作、合作等版本只改变表达重点。</div>}
-    </nav>
-
-    <div className="pp-sidebar-foot">
-      {!collapsed && <button className="pp-demo-link" onClick={() => workspaceStore.loadDemo()}><Sparkles size={15} />载入郑淑文授权案例</button>}
-      <div className="pp-local-badge"><LockKeyhole size={15} />{!collapsed && <span>本地优先 · 按来源授权</span>}</div>
-    </div>
-  </aside>
+  return <aside className="pp-sidebar pp-sidebar-simplified" aria-hidden="true" />
 }
 
 function EmptyWorkspace() {
@@ -141,15 +104,16 @@ const VIEW_ITEMS = [
 ]
 
 function WorkspaceHeader({ state, scenario }) {
-  return <header className="pp-header">
-    <div className="pp-current-profile"><span>跑</span><div><small>当前主档案 · {state.profile.id}</small><strong>{state.profile.alias}</strong></div></div>
-    <div className="pp-view-switch" role="tablist" aria-label="工作区视图">
-      {VIEW_ITEMS.map(item => { const Icon = item.icon; return <button key={item.id} className={state.view === item.id ? 'is-active' : ''} onClick={() => workspaceStore.setView(item.id)}><Icon size={15} />{item.label}</button> })}
-    </div>
-    <div className="pp-header-actions">
-      <button onClick={() => workspaceStore.setOverlay({ type: 'memory' })} title="长期品牌记忆"><MemoryStick size={18} /></button>
-      <button onClick={() => workspaceStore.setOverlay({ type: 'consent' })} title="授权中心"><ShieldCheck size={18} /></button>
-      <button title="更多"><MoreHorizontal size={18} /></button>
+  const activeStep = scenario.gates.G1 !== 'approved' ? 2 : scenario.gates.G2 !== 'approved' ? 3 : 4
+  const steps = ['资料', '定位', '授权', '主页']
+  return <header className="pp-simple-header">
+    <button className="pp-simple-brand" onClick={() => workspaceStore.setView('workbench')} aria-label="返回定位主页"><span><Fingerprint size={23} /></span><div><strong>人设有据</strong><small>PersonaProof</small></div></button>
+    <ol className="pp-simple-progress" aria-label="个人品牌生成进度">
+      {steps.map((label, index) => { const number = index + 1; const done = number < activeStep; const active = number === activeStep; return <li key={label} className={done ? 'is-done' : active ? 'is-active' : ''}><span>{done ? <Check size={13} /> : number}</span><strong>{label}</strong>{index < steps.length - 1 && <i />}</li> })}
+    </ol>
+    <div className="pp-simple-tools">
+      {state.view !== 'workbench' && <button onClick={() => workspaceStore.setView('workbench')}>返回定位</button>}
+      <button onClick={() => workspaceStore.setOverlay({ type: 'process' })}><ShieldCheck size={16} />查看过程</button>
     </div>
   </header>
 }
@@ -182,51 +146,47 @@ function PositioningCard({ option, scenario }) {
 }
 
 function WorkbenchView({ state, scenario }) {
-  const [text, setText] = useState('')
-  const positioning = POSITIONING_OPTIONS.find(item => item.id === scenario.selectedPositioningId)
-  const submit = () => { workspaceStore.send(text); setText('') }
-  return <div className="pp-workbench">
-    <div className="pp-workbench-scroll">
-      <div className="pp-context-strip"><Bot size={15} /><span>只召回 <strong>{scenario.name}</strong> 所需上下文</span><small>主档案事实跨场景一致</small></div>
-      <GateRail scenario={scenario} />
+  const recommended = POSITIONING_OPTIONS[0]
+  const positioning = POSITIONING_OPTIONS.find(item => item.id === scenario.selectedPositioningId) || recommended
+  const stage = scenario.gates.G1 !== 'approved' ? 'direction' : scenario.gates.G2 !== 'approved' ? 'consent' : scenario.status === 'qa-passed' ? 'publish' : scenario.status === 'published' ? 'published' : 'build'
+  const action = () => {
+    if (stage === 'direction') workspaceStore.confirmDirection(recommended.id)
+    else if (stage === 'consent') workspaceStore.setOverlay({ type: 'consent' })
+    else if (stage === 'build') workspaceStore.runTeam()
+    else if (stage === 'publish') workspaceStore.publish()
+    else workspaceStore.setView('site')
+  }
+  const actionLabel = stage === 'direction' ? '就用这个方向' : stage === 'consent' ? '授权取证，继续生成' : stage === 'build' ? '生成我的个人主页' : stage === 'publish' ? '审阅并发布主页' : '查看已发布主页'
+  const proofItems = [
+    { icon: MessageSquareText, title: '长期内容一致', text: '持续输出 AI 场景解读与实践文章，表达稳定、主题聚焦。' },
+    { icon: Github, title: '开源实践沉淀', text: '多个开源项目与工具沉淀，获得社区认可与持续贡献。' },
+    { icon: BadgeCheck, title: '真实用户反馈', text: '用户因内容与工具获得实际帮助，并主动推荐与转发。' },
+  ]
+  return <main className="pp-simple-workbench">
+    <section className="pp-position-summary">
+      <div className="pp-simple-eyebrow"><Sparkles size={18} />这是我建议你被记住的方式</div>
+      <h1>{positioning.title.replace(' / ', '\n/\n')}</h1>
+      <p className="pp-position-pitch">把复杂的 AI 技术，翻译成可落地的场景方案；<br />用开源与协作，帮助更多产品更快被世界看见。</p>
+      <div className="pp-proof-list"><small>关键依据（3 条）</small>{proofItems.map(item => { const Icon = item.icon; return <article key={item.title}><span><Icon size={21} /></span><div><strong>{item.title}</strong><p>{item.text}</p></div></article> })}</div>
+      <div className="pp-simple-actions">
+        <button className="pp-confirm-direction" onClick={action}>{actionLabel}<ChevronRight size={20} /></button>
+        {scenario.gates.G1 === 'pending' && <button className="pp-change-direction" onClick={() => workspaceStore.setOverlay({ type: 'directions' })}>换个方向</button>}
+      </div>
+      <p className="pp-consent-note"><ShieldCheck size={16} />{stage === 'direction' ? '确认方向后，才会进入授权取证。' : stage === 'consent' ? '方向已经确认；外部来源仍需逐项授权。' : '公开前仍会再次请你审阅。'}</p>
+    </section>
 
-      <section className="pp-brief-card">
-        <div className="pp-brief-head"><div><small>PERSONA DISCOVERY</small><h2>我看见的，不只是一份简历。</h2></div><span><BadgeCheck size={16} />公司信息隐藏</span></div>
-        <p>你真正稀缺的不是“会用 AI”，而是能把传统行业里的真实问题，翻译成能运行、能传播、能持续迭代的产品。开源项目与内容影响力让这个判断有了可验证的抓手。</p>
-        <div className="pp-signal-grid">
-          <div><strong>真实场景</strong><span>长期一线业务与运营经历</span></div>
-          <div><strong>产品落地</strong><span>从问题到可运行 AI 项目</span></div>
-          <div><strong>公开创造</strong><span>开源作者与持续内容输出</span></div>
-          <div><strong>传播翻译</strong><span>让非技术人理解并使用 AI</span></div>
-        </div>
-      </section>
+    <section className="pp-future-site" aria-label="未来个人主页实时预览">
+      <header><strong>你的未来主页</strong><span>· 实时预览</span><i /><small>实时预览中</small></header>
+      <div className="pp-future-hero">
+        <div className="pp-future-copy"><small>AI 场景翻译官 / 开源产品人</small><h2>把 AI 变成<br />你能用的生产力</h2><p>把复杂的技术翻译成可落地的方案，<br />让更多产品更快被世界看见。</p><div><button onClick={() => workspaceStore.setView('site')}>探索我的项目 <ChevronRight size={16} /></button><button onClick={() => workspaceStore.setView('site')}>阅读我的文章 <ChevronRight size={16} /></button></div></div>
+        <div className="pp-future-visual"><img src={homepagePreview} alt="用户授权的星球个人主页视觉预览" /></div>
+      </div>
+      <div className="pp-future-values"><div><span><Github size={18} /></span><strong>开源优先</strong><small>代码开放，协作共建</small></div><div><span><Target size={18} /></span><strong>场景落地</strong><small>从需求到方案到效果</small></div><div><span><ShieldCheck size={18} /></span><strong>长期主义</strong><small>持续迭代，持续输出</small></div></div>
+      <div className="pp-future-projects"><h3>我正在做的事</h3><div><article><Code2 size={19} /><span><strong>场景翻译</strong><small>将前沿 AI 技术拆解为可落地的业务场景</small></span></article><article><Github size={19} /><span><strong>开源产品</strong><small>构建开源工具与模板，降低使用与创建门槛</small></span></article><article><MessageSquareText size={19} /><span><strong>内容分享</strong><small>图文、视频与工作坊，持续分享实践与思考</small></span></article></div></div>
+    </section>
 
-      <section className="pp-positioning-section">
-        <div className="pp-section-title"><div><small>G1 · DIRECTION CONSENT</small><h2>先确认“怎么被记住”</h2></div><p>未经本人确认，不进入外部证据检索。</p></div>
-        <div className="pp-position-grid">{POSITIONING_OPTIONS.map(option => <PositioningCard key={option.id} option={option} scenario={scenario} />)}</div>
-      </section>
-
-      {scenario.gates.G1 === 'approved' && <section className="pp-next-action">
-        <div><span className="pp-next-icon"><ShieldCheck /></span><div><small>下一步 · G2</small><h3>{positioning?.title}</h3><p>方向已确认。现在可以逐项决定哪些来源可被只读核验、用于什么目的、保留多久。</p></div></div>
-        <div className="pp-next-buttons">
-          <button className="pp-ghost-danger" onClick={() => workspaceStore.attemptGitHub()}><Github size={16} />先试访问 GitHub</button>
-          <button className="pp-primary" onClick={() => workspaceStore.setOverlay({ type: 'consent' })}><LockKeyhole size={16} />打开授权中心</button>
-        </div>
-      </section>}
-
-      {scenario.gates.G2 === 'approved' && scenario.status !== 'qa-passed' && <section className="pp-team-launch">
-        <div><Network /><div><small>AGENTTEAMS RUN</small><h2>证据已授权，让 8 个 Agent 开始协作。</h2><p>现场会出现一次 QA 退回，证明 Leader 不是无条件接受所有生成结果。</p></div></div>
-        <button className="pp-primary" onClick={() => workspaceStore.runTeam()}><Sparkles size={17} />运行完整闭环</button>
-      </section>}
-
-      {scenario.messages.map(message => <ChatBubble key={message.id} message={message} />)}
-    </div>
-    <div className="pp-composer-wrap">
-      <div className="pp-composer-tools"><button><FileText size={14} />简历</button><button onClick={() => workspaceStore.setOverlay({ type: 'consent' })}><Github size={14} />授权来源</button><button onClick={() => workspaceStore.setView('site')}><Globe2 size={14} />主页效果</button></div>
-      <div className="pp-composer"><textarea rows={2} value={text} onChange={event => setText(event.target.value)} onKeyDown={event => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); submit() } }} placeholder="继续补充你的经历、目标或不想公开的内容…" /><button disabled={!text.trim()} onClick={submit} aria-label="发送"><Send size={17} /></button></div>
-      <p>人设可以包装，事实不能编造。关键方向、数据来源和公开发布始终由你确认。</p>
-    </div>
-  </div>
+    <button className="pp-process-link" onClick={() => workspaceStore.setOverlay({ type: 'process' })}><ShieldCheck size={17} />查看依据与生成记录<ChevronRight size={17} /></button>
+  </main>
 }
 
 function EvidenceView({ scenario }) {
@@ -285,16 +245,37 @@ function MemoryDialog({ profile }) {
   return <div className="pp-modal"><button className="pp-modal-close" onClick={() => workspaceStore.setOverlay(null)}><X size={18} /></button><div className="pp-modal-heading"><span><MemoryStick /></span><div><small>G0 · LONG-TERM BRAND MEMORY</small><h2>你的品牌档案由你控制</h2></div></div><p>只保存确认过的核心档案、证据摘要、定位假设、阶段总结和发布记录；原始敏感材料默认留在本地证据库。</p><div className="pp-memory-status"><span className={profile.memory.paused ? 'is-paused' : ''} /><div><strong>{profile.memory.paused ? '长期记忆已暂停' : '长期记忆已启用'}</strong><small>{profile.memory.items} 条精简记忆 · 可查看、更正、撤销和硬删除</small></div></div><button className="pp-secondary pp-wide" onClick={() => workspaceStore.toggleMemory()}>{profile.memory.paused ? <><ArchiveRestore size={15} />恢复长期记忆</> : <><Pause size={15} />暂停长期记忆</>}</button></div>
 }
 
+function DirectionsDialog({ scenario }) {
+  return <div className="pp-modal pp-directions-dialog"><button className="pp-modal-close" onClick={() => workspaceStore.setOverlay(null)}><X size={18} /></button><div className="pp-modal-heading"><span><Target /></span><div><small>选择你的记忆点</small><h2>哪一种更像你？</h2></div></div><p>这是建议，不是替你做决定。确认之前不会检索任何外部个人资料。</p><div className="pp-simple-direction-list">{POSITIONING_OPTIONS.map(option => <button key={option.id} onClick={() => { workspaceStore.confirmDirection(option.id); workspaceStore.setOverlay(null) }}><span>{option.id === 'scene-translator' ? '最推荐' : `${option.fit}% 匹配`}</span><strong>{option.title}</strong><small>{option.reason}</small><ChevronRight size={18} /></button>)}</div></div>
+}
+
+function ProcessDialog({ scenario }) {
+  const acceptedAgents = scenario.agentRuns.filter(item => item.status === 'accepted').length
+  const closeAndView = view => { workspaceStore.setOverlay(null); workspaceStore.setView(view) }
+  return <div className="pp-modal pp-process-dialog"><button className="pp-modal-close" onClick={() => workspaceStore.setOverlay(null)}><X size={18} /></button><div className="pp-modal-heading"><span><ShieldCheck /></span><div><small>依据与生成记录</small><h2>复杂流程，替你藏在这里。</h2></div></div><p>普通使用只需要做三次确认；需要核验时，所有 Agent、证据、授权和回滚记录都可以查看。</p>
+    <div className="pp-process-summary"><article><span><Network /></span><div><strong>8 个职能 Agent</strong><small>{acceptedAgents ? `${acceptedAgents} 个已完成并通过验收` : '等待定位与授权后开始协作'}</small></div></article><article><span><FileCheck2 /></span><div><strong>{scenario.claims.length} 条品牌表达</strong><small>事实、推断和包装分别标注</small></div></article><article><span><History /></span><div><strong>{scenario.trace.length} 条生成记录</strong><small>任务、工具、退回与回滚可追溯</small></div></article></div>
+    <div className="pp-process-gates"><span className="is-done"><Check />定位由本人确认</span><span className={scenario.gates.G2 === 'approved' ? 'is-done' : ''}><ShieldCheck />数据源逐项授权</span><span className={scenario.gates.G3 === 'approved' ? 'is-done' : ''}><Rocket />发布前再次审阅</span></div>
+    <div className="pp-process-actions"><button onClick={() => closeAndView('evidence')}>查看证据与授权</button><button onClick={() => closeAndView('trace')}>查看 Agent 协作记录</button><button onClick={() => { workspaceStore.loadDemo(); workspaceStore.setOverlay(null) }}>重新体验演示</button></div>
+  </div>
+}
+
 function Overlay({ state, scenario }) {
   if (!state.overlay) return null
   return <div className="pp-modal-backdrop" role="dialog" aria-modal="true">
     {state.overlay.type === 'consent' && scenario && <ConsentDialog scenario={scenario} />}
     {state.overlay.type === 'scenario' && <ScenarioDialog />}
     {state.overlay.type === 'memory' && state.profile && <MemoryDialog profile={state.profile} />}
+    {state.overlay.type === 'directions' && scenario && <DirectionsDialog scenario={scenario} />}
+    {state.overlay.type === 'process' && scenario && <ProcessDialog scenario={scenario} />}
   </div>
 }
 
 function Notice({ text }) {
+  useEffect(() => {
+    if (!text) return undefined
+    const timer = window.setTimeout(() => workspaceStore.clearNotice(), 2600)
+    return () => window.clearTimeout(timer)
+  }, [text])
   if (!text) return null
   const denied = text.includes('拒绝') || text.includes('撤回') || text.includes('必须')
   return <div className={`pp-notice ${denied ? 'is-alert' : ''}`}>{denied ? <CircleAlert size={15} /> : <Check size={15} />}{text}</div>

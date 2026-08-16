@@ -1,66 +1,62 @@
-# PersonaProof 设计验收
+# PersonaProof Option 3 Design QA
 
-## 比较基准
+## Comparison target
 
-- Harness 视觉基准：`/Users/zhengshuwen/.codex/worktrees/f3ba/狗头军师/competition/deepseek-harness-goutoujunshi/artifacts/screenshots/03-progress-desktop.png`
-- 用户授权主页视觉：`/Users/zhengshuwen/Documents/宣传材料/DEMO/个人主页/星球/screenshots/desktop-hero.png`
-- 实现截图：`artifacts/screenshots/08-agentteams-trace-desktop-1440x900.png`
-- 主页交付截图：`artifacts/screenshots/03-homepage-preview-desktop.png`
-- 手机端修正后截图：`artifacts/screenshots/07-homepage-preview-mobile-fixed.png`
-- 并排比较：`artifacts/screenshots/09-reference-implementation-comparison.png`、`artifacts/screenshots/10-homepage-source-implementation-comparison.png`
+- Source visual truth: `/Users/zhengshuwen/.codex/generated_images/019ff507-767b-7330-ac6b-17c97706e4b8/exec-56f1c9a0-901d-4108-b468-feaec36b84f9.png`
+- Browser-rendered implementation: `/Users/zhengshuwen/Documents/Codex/2026-08-12/goai-persona-agent/work/repos/personal-homepage-skill/goai-persona-agent/artifacts/screenshots/09-simple-option3-desktop-1440x1024.png`
+- Mobile implementation: `/Users/zhengshuwen/Documents/Codex/2026-08-12/goai-persona-agent/work/repos/personal-homepage-skill/goai-persona-agent/artifacts/screenshots/10-simple-option3-mobile-390x844.png`
+- Desktop CSS viewport: `1440 x 1024`; screenshot: `1440 x 1024`; density: `1x`.
+- Source pixels: `1488 x 1058`, normalized to `1440 x 1024` for comparison.
+- Mobile CSS viewport and screenshot: `390 x 844`, density `1x`.
+- State: authorized Zheng Shuwen demo loaded; G1 positioning is pending; no modal open.
 
-## 规格与状态
+## Evidence
 
-- Harness 基准与协作审计实现：源图 1440×900 px，实现 1440×900 px；CSS viewport 1440×900，density 1，无缩放。
-- 主页源图与交付预览：源图 1440×960 px，实现 1440×960 px；CSS viewport 1440×960，density 1，无缩放。
-- 手机端：实现 390×844 px；CSS viewport 390×844，density 1。
-- 状态：已载入郑淑文授权演示档案；G1/G2 已确认；8 个 Agent 已完成协作；QA 退回一次无证据强断言；G3 发布后撤回 GitHub 并自动回滚。
-
-## 全视图比较证据
-
-- PersonaProof 保留 DeepSeek Harness 的左侧工作区、顶部场景上下文、主内容区和协作进度结构；品牌色从参考的粉紫色有意改为暖纸色、记忆橙和证据绿，以区分个人品牌治理产品。
-- 主要区域比例、上方导航密度与参考一致；内容从单一关系进度图升级为 8 Agent 控制面和可回放 Trace，符合本项目的产品语义。
-- 用户授权的“星球”主页图以原始比例和清晰度嵌入交付预览，没有重画或替换；外层增加浏览器框、授权说明与版本治理卡片，明确它是交付效果示例而非伪造的郑淑文成品站。
-
-## 聚焦区域比较证据
-
-- 顶部导航与左侧场景栏：同视口并排图中可见对齐、留白、激活态和图标密度一致，PersonaProof 的双品牌标识仍保持紧凑。
-- 主页图像区域：使用同一授权源图直接嵌入，因此主体、裁切、色彩、锐度和文字均保持一致；手机端使用 4:3 容器缩放，没有拉伸。
-- 证据卡与 Trace：正文可读、状态色语义一致；拒绝/撤回为红色，验收/授权为绿色，待 G3 为橙色。
-
-## 必检表面
-
-- 字体与排版：中文 UI 使用 Noto Sans SC / 思源黑体 / 苹方回退；叙事段落使用 Noto Serif SC / 宋体回退；层级、行高、截断和字重在桌面与手机端均可读。
-- 间距与布局节奏：桌面采用 940–1040 px 内容宽度与 8/12/16/24 px 节奏；手机端卡片单列，左栏收成图标轨道，持久控件未被裁切。
-- 颜色与令牌：暖纸背景、近黑正文、橙色关键动作、绿色证据通过、红色拒绝/撤回，语义和对比度稳定。
-- 图片质量与资产忠实度：主页使用用户提供的真实截图资产；未用手绘 SVG、CSS 图形或占位图替代可见视觉资产。
-- 文案与内容：产品文案围绕“被看到、被记住”和“挖掘—证据—同意—交付”；明确公司隐藏、事实/推断/包装边界和授权用途。
+- Full-view comparison: `artifacts/qa/option3-full-comparison.png`
+- Focused positioning comparison: `artifacts/qa/option3-left-comparison.png`
+- Focused homepage-preview comparison: `artifacts/qa/option3-right-comparison.png`
+- Focused comparisons were required because the full view makes the proof-row copy, button rhythm, preview typography and image crop too small to judge accurately.
 
 ## Findings
 
-- 无遗留 P0/P1/P2。
-- P3：Trace 长列表在 1440×900 首屏只显示前半段，但滚动区可继续查看，且核心拒绝事件已在首屏出现；不影响演示路径。
+No actionable P0, P1 or P2 issue remains.
 
-## 比较历史
+- Fonts and typography: Chinese hierarchy, headline weight, line wrapping, body size and compact utility text match the selected direction closely. The implementation uses the existing Noto Sans SC / Source Han Sans SC / PingFang SC fallback stack. The centered positioning headline was corrected in iteration 3.
+- Spacing and layout rhythm: the 1440 px two-column composition, 94 px header, proof-row rhythm, CTA stack, preview radius and internal section spacing align with the source. The process link now sits after the complete preview rather than overlapping it.
+- Colors and tokens: warm ivory, orange action, evidence green and navy preview map to the source palette. Contrast remains readable on both light and dark surfaces.
+- Image quality and asset fidelity: the preview uses the user-authorized local “星球” homepage asset at source resolution. This intentionally replaces the mock's generated male astronaut with the user's real approved demo asset while preserving the same astronaut/space art direction, crop and navy treatment.
+- Copy and content: the source's short positioning, three supporting proofs, consent sentence, primary/secondary actions and homepage payoff are preserved. Engineering labels are removed from the primary journey and moved behind “查看依据与生成记录”.
+- Responsive behavior: the 390 x 844 screen has no horizontal overflow, clipped persistent controls or toast overlap. Content stacks into one clear reading order.
+- Accessibility: semantic headings, buttons, progress list, preview region and dialog structure are present; keyboard focus and role-based locators worked during browser testing.
 
-### 第 1 轮
+## Comparison history
 
-- [P2] 手机端通知条位于 `top: 82px`，与位于 `top: 61px` 的视图切换栏重叠，降低主导航辨识度。
-- 修正：在 680 px 以下将通知条改为底部浮层，设置 `bottom: 18px; top: auto; max-width: calc(100% - 24px)`。
-- 修正后证据：`artifacts/screenshots/07-homepage-preview-mobile-fixed.png`；导航完全可见，通知不再遮挡持久控件。
+1. Initial implementation
+   - [P1] Hiding the host sidebar removed it from grid flow and collapsed the center column to 0 px.
+   - Fix: retained the zero-width sidebar grid item and expanded the center track to the full viewport.
+   - Post-fix evidence: the browser-rendered desktop screen filled the 1440 px viewport.
+2. First visual pass
+   - [P1] “查看依据与生成记录” overlapped the first project card because auto grid rows shrank inside the scroll container.
+   - Fix: changed both content rows to `max-content` so the process link follows the full preview.
+   - Post-fix evidence: `option3-full-comparison.png`; the link is below the preview and no longer covers any card.
+3. Focused positioning pass
+   - [P2] the implementation's positioning title was left-aligned and too large compared with the selected source.
+   - Fix: centered the eyebrow, title and pitch and capped the desktop headline at 44 px.
+   - Post-fix evidence: `option3-left-comparison.png`; hierarchy and vertical rhythm now align closely.
 
-### 第 2 轮
+## Primary interactions tested
 
-- 在同视口重新比较 Harness 协作页、PersonaProof 审计页、主页源图和交付预览；无新增 P0/P1/P2。
-- 浏览器完整交互已验证：载入案例、G1 定位确认、G2 前 GitHub 拒绝、逐来源授权、8 Agent 协作、QA 驳回、G3 发布、授权撤回与自动回滚。
-- 浏览器错误日志：0 error；仅记录到主动重启本地预览服务时 Harness 连接层的 5 条临时重连 warning，重载后功能正常。
+- Open and close “换个方向”.
+- Confirm the recommended positioning.
+- Open G2, select four sources, and approve them.
+- Run the 8-Agent governed generation path, including QA rejection and correction.
+- Approve G3 publication.
+- Open the hidden process panel and verify 8 accepted agents, governed claims and trace records.
+- Reset to the initial demo state through “重新体验演示”.
+- Browser console: 0 errors and 0 warnings.
 
-## Implementation Checklist
+## Follow-up polish
 
-- [x] 桌面端 1440×900 / 1440×960 视觉检查
-- [x] 手机端 390×844 响应式检查
-- [x] 关键授权与回滚交互检查
-- [x] 源图与实现并排比较
-- [x] 构建、领域测试与演示验证
+- [P3] A future production pass can replace the demo asset's embedded English portfolio copy with the user's final Chinese homepage once all claims are verified. This is intentionally not a blocker for the competition demo.
 
 final result: passed

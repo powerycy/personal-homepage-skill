@@ -57,25 +57,24 @@ pnpm start
 
 默认地址：`http://127.0.0.1:3188`
 
-点击“载入郑淑文授权案例”，按下面顺序体验：
+打开后就是 C 端用户真正会看到的简洁流程，按下面顺序体验：
 
-1. 尝试访问 GitHub，验证 G2 前拒绝；
-2. 选择“AI 场景翻译官 / 开源产品人”，完成 G1；
-3. 在授权中心选择来源，完成 G2；
-4. 运行 AgentTeams 闭环，查看一次 QA 退回；
-5. 检查事实、推断、包装与证据引用；
-6. 预览用户提供的个人主页效果，完成 G3；
-7. 撤回 GitHub，验证关联主张复核与版本回滚。
+1. 查看系统推荐的“AI 场景翻译官 / 开源产品人”定位和三条事实依据；
+2. 点击“就用这个方向”完成 G1；
+3. 选择允许使用的来源，完成 G2；
+4. 生成个人主页，系统在后台完成 8 个 Agent 的协作、校验和一次 QA 退回；
+5. 在发布前完成 G3 审阅；
+6. 如需检查工程能力，再打开“查看依据与生成记录”查看证据、Trace、回滚和审计。
 
 Demo 使用用户明确授权的参赛案例和公开主页效果图，不把简历原文、手机号、邮箱、凭据或私有来源快照写入仓库。
 
-## 实际界面
+## 简洁主流程
 
-| AgentTeams 协作审计 | 定制主站交付预览 |
+| 桌面端：定位、依据与主页效果同屏 | 手机端：一步一件事 |
 |---|---|
-| ![8 个职能 Agent 与可回放 Trace](artifacts/screenshots/02-agentteams-trace-desktop.png) | ![用户授权的个人主页效果与发布审批](artifacts/screenshots/03-homepage-preview-desktop.png) |
+| ![简洁版桌面主流程](artifacts/screenshots/09-simple-option3-desktop-1440x1024.png) | ![简洁版手机主流程](artifacts/screenshots/10-simple-option3-mobile-390x844.png) |
 
-手机端同样保留场景、授权和审计能力，见 `artifacts/screenshots/07-homepage-preview-mobile-fixed.png`。
+评委需要的 8-Agent 协作、Claim–Evidence Ledger、Trace、授权闸门和回滚没有删除，而是收进“查看依据与生成记录”，避免普通用户一上来就面对工程控制台。
 
 ## 参赛防守
 
