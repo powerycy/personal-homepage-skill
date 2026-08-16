@@ -215,6 +215,18 @@ button { color: inherit; }
 .pp-empty-ledger > svg, .pp-empty-trace > svg { color: var(--pp-orange); }
 .pp-empty-ledger h3 { margin: 12px 0 4px; color: var(--pp-ink); }
 .pp-empty-ledger p { margin: 0 0 16px; font-size: 10px; }
+.pp-discovered-evidence { max-width: 980px; margin: 0 auto 14px; padding: 18px; border: 1px solid rgba(22,138,100,.24); border-radius: 16px; background: var(--pp-green-soft); }
+.pp-discovered-evidence > div:first-child small { color: var(--pp-green); font-size: 8px; font-weight: 900; letter-spacing: .1em; }
+.pp-discovered-evidence > div:first-child h3 { margin: 4px 0; font-size: 17px; }
+.pp-discovered-evidence > div:first-child p { margin: 0 0 13px; color: var(--pp-muted); font-size: 9px; }
+.pp-discovered-evidence > div:last-child { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; }
+.pp-discovered-evidence article { min-height: 82px; padding: 11px; border: 1px solid rgba(22,138,100,.16); border-radius: 11px; display: flex; gap: 9px; background: rgba(255,255,255,.72); }
+.pp-discovered-evidence article > span { width: 32px; height: 32px; flex: 0 0 auto; border-radius: 9px; display: grid; place-items: center; color: white; background: var(--pp-green); }
+.pp-discovered-evidence article > span svg { width: 16px; }
+.pp-discovered-evidence article > div { display: grid; align-content: start; }
+.pp-discovered-evidence article strong { font-size: 10px; }
+.pp-discovered-evidence article small { color: var(--pp-green); font-size: 7px; font-weight: 800; }
+.pp-discovered-evidence article p { margin: 4px 0 0; color: var(--pp-muted); font-size: 8px; line-height: 1.45; }
 .pp-claim-list { max-width: 980px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
 .pp-claim-list article { min-height: 205px; padding: 18px; border: 1px solid var(--pp-line); border-top: 4px solid var(--pp-blue); border-radius: 14px; display: flex; flex-direction: column; background: var(--pp-paper-2); }
 .pp-claim-list article.is-fact { border-top-color: var(--pp-blue); }
@@ -327,6 +339,7 @@ button { color: inherit; }
   .pp-position-card { min-height: 155px; }
   .pp-signal-grid { grid-template-columns: 1fr 1fr; }
   .pp-agent-grid { grid-template-columns: 1fr 1fr; }
+  .pp-discovered-evidence > div:last-child { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 680px) {

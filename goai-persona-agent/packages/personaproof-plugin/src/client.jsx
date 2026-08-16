@@ -4,6 +4,7 @@ import {
   BadgeCheck,
   BookOpenCheck,
   Bot,
+  Building2,
   BriefcaseBusiness,
   Check,
   ChevronRight,
@@ -31,6 +32,7 @@ import {
   RefreshCcw,
   Rocket,
   RotateCcw,
+  Search,
   Send,
   ShieldCheck,
   Sparkles,
@@ -58,6 +60,15 @@ function formatTime(value) {
   const date = new Date(value)
   if (Number.isNaN(date.getTime())) return value
   return new Intl.DateTimeFormat('zh-CN', { hour: '2-digit', minute: '2-digit' }).format(date)
+}
+
+function SourceIcon({ id }) {
+  if (id === 'github') return <Github />
+  if (id === 'resume') return <FileText />
+  if (id === 'homepage-demo') return <Globe2 />
+  if (id === 'public-web') return <Search />
+  if (id === 'company-official') return <Building2 />
+  return <MessageSquareText />
 }
 
 function DeepSeekBrand({ compact = false }) {
@@ -89,8 +100,8 @@ function EmptyWorkspace() {
       <button className="pp-secondary" onClick={() => workspaceStore.loadDemo()}><FileText size={18} />从简历开始</button>
     </div>
     <div className="pp-promise-grid">
-      <div><UserRoundSearch /><strong>先挖掘，再定位</strong><span>主动访谈，不用一份简历草率贴标签</span></div>
-      <div><Link2 /><strong>先授权，再找证据</strong><span>没有 G2，外部个人资料工具直接拒绝</span></div>
+      <div><UserRoundSearch /><strong>你给起点，Agent 去发现</strong><span>不只读简历，还会找到散落在网络中的真实价值</span></div>
+      <div><Link2 /><strong>先授权，再检索取证</strong><span>没有 G2，公开网络和公司官方渠道都不访问</span></div>
       <div><Rocket /><strong>主站是交付，不是起点</strong><span>八个职能 Agent 协作、验收、发布和回滚</span></div>
     </div>
   </main>
@@ -156,7 +167,7 @@ function WorkbenchView({ state, scenario }) {
     else if (stage === 'publish') workspaceStore.publish()
     else workspaceStore.setView('site')
   }
-  const actionLabel = stage === 'direction' ? '就用这个方向' : stage === 'consent' ? '授权取证，继续生成' : stage === 'build' ? '生成我的个人主页' : stage === 'publish' ? '审阅并发布主页' : '查看已发布主页'
+  const actionLabel = stage === 'direction' ? '就用这个方向' : stage === 'consent' ? '授权检索与取证' : stage === 'build' ? '生成我的个人主页' : stage === 'publish' ? '审阅并发布主页' : '查看已发布主页'
   const proofItems = [
     { icon: MessageSquareText, title: '长期内容一致', text: '持续输出 AI 场景解读与实践文章，表达稳定、主题聚焦。' },
     { icon: Github, title: '开源实践沉淀', text: '多个开源项目与工具沉淀，获得社区认可与持续贡献。' },
@@ -172,7 +183,7 @@ function WorkbenchView({ state, scenario }) {
         <button className="pp-confirm-direction" onClick={action}>{actionLabel}<ChevronRight size={20} /></button>
         {scenario.gates.G1 === 'pending' && <button className="pp-change-direction" onClick={() => workspaceStore.setOverlay({ type: 'directions' })}>换个方向</button>}
       </div>
-      <p className="pp-consent-note"><ShieldCheck size={16} />{stage === 'direction' ? '确认方向后，才会进入授权取证。' : stage === 'consent' ? '方向已经确认；外部来源仍需逐项授权。' : '公开前仍会再次请你审阅。'}</p>
+      <p className="pp-consent-note"><ShieldCheck size={16} />{stage === 'direction' ? '确认方向后，才会进入授权检索与取证。' : stage === 'consent' ? '方向已确认；你可决定 Agent 去哪些渠道主动查找。' : '公开前仍会再次请你审阅。'}</p>
     </section>
 
     <section className="pp-future-site" aria-label="未来个人主页实时预览">
@@ -193,6 +204,7 @@ function EvidenceView({ scenario }) {
   const typeName = { fact: '事实', inference: '推断', packaging: '包装' }
   return <div className="pp-evidence-view">
     <section className="pp-evidence-hero"><div><small>CLAIM–EVIDENCE LEDGER</small><h2>每一句公开表达，都知道凭什么。</h2><p>事实必须绑定证据；推断要展示理由和置信度；包装只能升级表达，不能创造新事实。</p></div><div className="pp-ledger-stats"><span><b>{scenario.claims.length}</b> 主张</span><span><b>{scenario.grants.filter(item => item.status === 'active').length}</b> 有效授权</span><span><b>{scenario.claims.filter(item => item.status === 'needs-review').length}</b> 待复核</span></div></section>
+    {!!scenario.evidence?.length && <section className="pp-discovered-evidence"><div><small>AUTHORIZED DISCOVERY</small><h3>Agent 主动找到的证据</h3><p>用户只提供身份起点；公开网络、GitHub 和公司官方渠道由 Agent 在授权后主动检索。</p></div><div>{scenario.evidence.map(item => <article key={item.id}><span><SourceIcon id={item.sourceId} /></span><div><strong>{item.title}</strong><small>{item.origin} · {item.disclosure === 'internal-only' ? '仅内部核验' : item.disclosure === 'review-before-public' ? '归属确认后可用' : '已授权'}</small><p>{item.summary}</p></div></article>)}</div></section>}
     {!scenario.claims.length ? <div className="pp-empty-ledger"><BookOpenCheck /><h3>证据账本还没有内容</h3><p>通过 G2 并运行 AgentTeams 后，主张、证据和 QA 结果会出现在这里。</p><button className="pp-primary" onClick={() => workspaceStore.setView('workbench')}>返回品牌工作台</button></div> : <div className="pp-claim-list">{scenario.claims.map(claim => <article key={claim.id} className={`is-${claim.type} is-${claim.status}`}>
       <div><span>{typeName[claim.type]}</span><small>{Math.round(claim.confidence * 100)}% confidence</small><i>{claim.status === 'accepted' ? '可公开' : claim.status === 'rejected' ? 'QA 已退回' : '授权变化，待复核'}</i></div>
       <h3>{claim.text}</h3><p>{claim.explanation}</p>
@@ -231,7 +243,7 @@ function ConsentDialog({ scenario }) {
   const [selected, setSelected] = useState(() => scenario.grants.filter(item => item.status === 'active').map(item => item.sourceId))
   const toggle = id => setSelected(items => items.includes(id) ? items.filter(item => item !== id) : [...items, id])
   const locked = scenario.gates.G1 !== 'approved'
-  return <div className="pp-modal pp-consent-dialog"><button className="pp-modal-close" onClick={() => workspaceStore.setOverlay(null)}><X size={18} /></button><div className="pp-modal-heading"><span><ShieldCheck /></span><div><small>G2 · SOURCE CONSENT</small><h2>授权不是一句“全部允许”</h2></div></div><p>每个来源绑定用途、只读方式和有效期。未选择的来源继续拒绝访问，撤回后会追溯影响。</p><div className="pp-source-list">{SOURCE_CATALOG.map(source => <label key={source.id} className={selected.includes(source.id) ? 'is-selected' : ''}><input type="checkbox" checked={selected.includes(source.id)} disabled={locked} onChange={() => toggle(source.id)} /><span className="pp-source-icon">{source.id === 'github' ? <Github /> : source.id === 'resume' ? <FileText /> : source.id === 'homepage-demo' ? <Globe2 /> : <MessageSquareText />}</span><span><strong>{source.name}</strong><small>{source.purpose}</small><em>{source.mode}</em></span></label>)}</div>{locked ? <div className="pp-locked-message"><LockKeyhole />请先完成 G1 定位确认。</div> : <button className="pp-primary pp-wide" disabled={!selected.length} onClick={() => workspaceStore.grantSources(selected)}>批准所选来源</button>}</div>
+  return <div className="pp-modal pp-consent-dialog"><button className="pp-modal-close" onClick={() => workspaceStore.setOverlay(null)}><X size={18} /></button><div className="pp-modal-heading"><span><Search /></span><div><small>G2 · SEARCH & EVIDENCE CONSENT</small><h2>你定范围，Agent 主动去找</h2></div></div><p>不只处理你上传的材料。你可逐项授权 Agent 检索公开网络、GitHub 和公司官方渠道；同名结果需本人确认，公司名默认对外隐藏。</p><div className="pp-source-list">{SOURCE_CATALOG.map(source => <label key={source.id} className={selected.includes(source.id) ? 'is-selected' : ''}><input type="checkbox" checked={selected.includes(source.id)} disabled={locked} onChange={() => toggle(source.id)} /><span className="pp-source-icon"><SourceIcon id={source.id} /></span><span><strong>{source.name}</strong><small>{source.purpose}</small><em>{source.mode}</em></span></label>)}</div>{locked ? <div className="pp-locked-message"><LockKeyhole />请先完成 G1 定位确认。</div> : <button className="pp-primary pp-wide" disabled={!selected.length} onClick={() => workspaceStore.grantSources(selected)}>授权所选范围并开始检索</button>}</div>
 }
 
 function ScenarioDialog() {

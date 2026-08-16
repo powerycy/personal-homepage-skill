@@ -2,7 +2,7 @@ const MAX_SCENARIOS = 5
 
 export const AGENTS = Object.freeze([
   { id: 'discovery-interview', name: '洞察与访谈', short: '洞察', skill: 'persona-interview' },
-  { id: 'evidence-consent', name: '证据与授权', short: '证据', skill: 'consent-evidence-ledger' },
+  { id: 'evidence-consent', name: '授权检索与证据', short: '证据', skill: 'consent-evidence-ledger' },
   { id: 'brand-strategist', name: '品牌策略', short: '策略', skill: 'brand-positioning', leader: true },
   { id: 'content-architect', name: '内容与信息架构', short: '内容', skill: 'content-architecture' },
   { id: 'visual-designer', name: '视觉设计', short: '视觉', skill: 'visual-direction' },
@@ -36,11 +36,22 @@ export const POSITIONING_OPTIONS = Object.freeze([
 ])
 
 export const SOURCE_CATALOG = Object.freeze([
-  { id: 'resume', name: '最新版简历', mode: '用户上传 · 本地解析', purpose: '洞察经历与核对时间线', required: true },
-  { id: 'github', name: 'GitHub / powerycy', mode: '公开只读 · 可撤回', purpose: '核验开源作品、提交和项目数据' },
-  { id: 'homepage-demo', name: '个人主页 Demo', mode: '用户指定目录 · 只读', purpose: '复用已授权的视觉与作品效果' },
-  { id: 'talk-materials', name: '7.18 线下分享材料', mode: '用户授权文件 · 只读', purpose: '核验观点、内容能力与公开表达' },
+  { id: 'resume', name: '最新版简历', mode: '用户提供起点 · 本地解析', purpose: '建立身份锚点、洞察经历与核对时间线', required: true, discovery: false, disclosure: 'private' },
+  { id: 'github', name: 'GitHub / powerycy', mode: '指定账号 · 公开只读 · 可撤回', purpose: '主动核验开源作品、提交和项目数据', discovery: true, disclosure: 'public' },
+  { id: 'public-web', name: '公开网络检索', mode: '姓名 / 别名检索 · 归属待本人确认', purpose: '主动发现作品、采访、演讲、内容和第三方证明', discovery: true, disclosure: 'review-before-public' },
+  { id: 'company-official', name: '公司官网与官方账号', mode: '官方渠道主动检索 · 对外脱敏', purpose: '核验履历、项目案例、活动报道和业务成果', discovery: true, disclosure: 'internal-only' },
+  { id: 'homepage-demo', name: '个人主页 Demo', mode: '用户指定目录 · 只读', purpose: '复用已授权的视觉与作品效果', discovery: false, disclosure: 'public' },
+  { id: 'talk-materials', name: '7.18 线下分享材料', mode: '用户授权文件 · 只读', purpose: '核验观点、内容能力与公开表达', discovery: false, disclosure: 'public' },
 ])
+
+const EVIDENCE_CATALOG = Object.freeze({
+  resume: { id: 'e_resume_industry', title: '行业经历与时间线', origin: '用户提供', summary: '从本地简历中提取，不公开原文。' },
+  github: { id: 'e_github_projects', title: '开源项目与持续贡献', origin: 'Agent 主动核验', summary: '核验用户确认归属的 GitHub 公开账号。' },
+  'public-web': { id: 'e_public_web_mentions', title: '公开作品、演讲与第三方提及', origin: 'Agent 主动发现', summary: '按姓名与别名检索；同名结果等待本人确认。' },
+  'company-official': { id: 'e_company_official_case', title: '官方渠道的履历与项目佐证', origin: 'Agent 主动发现', summary: '仅用于内部事实核验；公司名称对外隐藏。' },
+  'homepage-demo': { id: 'e_homepage_visual', title: '用户授权的主页视觉', origin: '用户指定', summary: '仅复用授权的作品与视觉资产。' },
+  'talk-materials': { id: 'e_talk_translation', title: '线下分享与公开表达', origin: '用户提供', summary: '用于核验观点、内容能力与表达风格。' },
+})
 
 function clone(value) {
   return JSON.parse(JSON.stringify(value))
@@ -67,6 +78,7 @@ export function createScenario({ id, name, audience, goal }) {
     selectedPositioningId: null,
     gates: { G1: 'pending', G2: 'locked', G3: 'locked' },
     grants: [],
+    evidence: [],
     claims: [],
     releases: [],
     messages: [],
@@ -137,6 +149,7 @@ export function grantSources(scenario, sourceIds) {
     status: 'active',
     access: 'read-only',
     purpose: SOURCE_CATALOG.find(item => item.id === sourceId)?.purpose,
+    disclosure: SOURCE_CATALOG.find(item => item.id === sourceId)?.disclosure,
     grantedAt: now,
     expiresAt: '2026-09-14T23:59:59+08:00',
   }))
@@ -160,18 +173,28 @@ export function validateClaim(claim) {
 export function runAgentTeam(scenario) {
   if (scenario.gates.G2 !== 'approved') throw new Error('必须先通过 G2 数据源授权')
   const selected = POSITIONING_OPTIONS.find(item => item.id === scenario.selectedPositioningId)
+  const activeSourceIds = scenario.grants.filter(item => item.status === 'active').map(item => item.sourceId)
+  const evidence = activeSourceIds.map(sourceId => {
+    const source = SOURCE_CATALOG.find(item => item.id === sourceId)
+    const item = EVIDENCE_CATALOG[sourceId]
+    return item ? { ...item, sourceId, disclosure: source?.disclosure || 'private', status: 'verified' } : null
+  }).filter(Boolean)
+  const evidenceIds = new Set(evidence.map(item => item.id))
+  const hasGithubEvidence = evidenceIds.has('e_github_projects')
+  const positioningEvidence = ['e_resume_industry', 'e_github_projects', 'e_public_web_mentions', 'e_company_official_case', 'e_talk_translation'].filter(id => evidenceIds.has(id))
+  const bridgeEvidence = ['e_resume_industry', 'e_github_projects', 'e_company_official_case', 'e_talk_translation'].filter(id => evidenceIds.has(id))
   const claims = [
     {
       id: 'claim_scene_translator', type: 'inference', status: 'accepted',
       text: 'AI 场景翻译官 / 开源产品人', confidence: 0.92,
-      evidenceIds: ['e_resume_industry', 'e_github_projects', 'e_talk_translation'],
-      explanation: '由传统行业经验、AI 项目与公开分享交叉支持，是经用户确认的品牌定位。',
+      evidenceIds: positioningEvidence,
+      explanation: '由用户提供的起点材料、Agent 主动发现的公开证据与官方佐证交叉支持，是经用户确认的品牌定位。',
     },
     {
-      id: 'claim_open_source', type: 'fact', status: 'accepted',
-      text: '持续公开构建 AI 产品与开源项目', confidence: 1,
-      evidenceIds: ['e_github_projects'],
-      explanation: '来自用户授权的 GitHub 公开项目证据。',
+      id: 'claim_open_source', type: 'fact', status: hasGithubEvidence ? 'accepted' : 'rejected',
+      text: '持续公开构建 AI 产品与开源项目', confidence: hasGithubEvidence ? 1 : 0,
+      evidenceIds: hasGithubEvidence ? ['e_github_projects'] : [],
+      explanation: hasGithubEvidence ? '来自用户授权的 GitHub 公开项目证据。' : '未授权或未核验 GitHub 证据，该事实不进入公开页面。',
     },
     {
       id: 'claim_top_expert', type: 'packaging', status: 'rejected',
@@ -182,14 +205,16 @@ export function runAgentTeam(scenario) {
     {
       id: 'claim_bridge', type: 'packaging', status: 'accepted',
       text: '把真实业务问题翻译成能运行、能传播、能迭代的 AI 产品', confidence: 0.86,
-      evidenceIds: ['e_resume_industry', 'e_github_projects', 'e_talk_translation'],
-      explanation: '是对已核验经历的表达升级，不引入新的事实。',
+      evidenceIds: bridgeEvidence,
+      explanation: '是对已核验经历的表达升级；公司官方证据可内部支撑，但公司名称不进入公开文案。',
     },
   ]
 
   const events = [
     trace('task.accepted', 'discovery-interview', '完成简历洞察与缺口访谈', { taskId: 'T1', skill: 'persona-interview' }),
-    trace('task.accepted', 'evidence-consent', '完成授权校验与证据索引', { taskId: 'T2', skill: 'consent-evidence-ledger' }),
+    trace('task.accepted', 'evidence-consent', '完成授权校验、主动检索与证据索引', { taskId: 'T2', skill: 'consent-evidence-ledger' }),
+    ...(activeSourceIds.includes('public-web') ? [trace('search.completed', 'evidence-consent', '已检索公开网络；同名结果标记为待本人确认', { taskId: 'T2-S1', sourceId: 'public-web', mode: 'read-only' })] : []),
+    ...(activeSourceIds.includes('company-official') ? [trace('search.completed', 'evidence-consent', '已检索公司官网与官方账号；证据仅内部核验，对外隐藏公司名', { taskId: 'T2-S2', sourceId: 'company-official', mode: 'read-only', disclosure: 'internal-only' })] : []),
     trace('task.accepted', 'brand-strategist', `确认品牌策略：${selected?.title}`, { taskId: 'T3', skill: 'brand-positioning' }),
     trace('task.accepted', 'content-architect', '生成主站信息架构与 Claim 映射', { taskId: 'T4', skill: 'content-architecture' }),
     trace('task.accepted', 'visual-designer', '生成个人品牌视觉方向与设计令牌', { taskId: 'T5', skill: 'visual-direction' }),
@@ -204,6 +229,7 @@ export function runAgentTeam(scenario) {
     ...scenario,
     status: 'qa-passed',
     claims,
+    evidence,
     agentRuns: AGENTS.map(agent => ({ ...agent, status: agent.id === 'delivery-publisher' ? 'waiting' : 'accepted' })),
     trace: [...scenario.trace, ...events],
   }
@@ -233,14 +259,19 @@ export function publishScenario(scenario) {
 
 export function revokeSourceAndRollback(scenario, sourceId) {
   const grants = scenario.grants.map(item => item.sourceId === sourceId ? { ...item, status: 'revoked', revokedAt: new Date().toISOString() } : item)
-  const affected = sourceId === 'github' ? ['claim_open_source', 'claim_scene_translator', 'claim_bridge'] : []
+  const revokedEvidenceId = EVIDENCE_CATALOG[sourceId]?.id
+  const affected = revokedEvidenceId
+    ? scenario.claims.filter(item => item.evidenceIds?.includes(revokedEvidenceId)).map(item => item.id)
+    : []
   const claims = scenario.claims.map(item => affected.includes(item.id) ? { ...item, status: 'needs-review' } : item)
+  const evidence = (scenario.evidence || []).map(item => item.sourceId === sourceId ? { ...item, status: 'revoked' } : item)
   const releases = scenario.releases.map((item, index, all) => index === all.length - 1 ? { ...item, status: 'rolled-back' } : item)
   return {
     ...scenario,
     status: 'rolled-back',
     grants,
     claims,
+    evidence,
     releases,
     gates: { ...scenario.gates, G2: 'partially-revoked', G3: 'revoked' },
     trace: [...scenario.trace, trace('release.rolled_back', 'delivery-publisher', `${sourceId} 授权已撤回，受影响声明进入复核，当前版本已回滚`, { sourceId, affected })],
@@ -264,7 +295,7 @@ export function publicDemoWorkspace() {
       currentPositioning: '待确认',
       companyVisibility: 'hidden',
       memory: { enabled: true, paused: false, items: 12 },
-      evidenceSummary: { verified: 0, pending: 4 },
+      evidenceSummary: { verified: 0, pending: 6 },
     },
     notice: '已载入用户授权的参赛演示档案；公司信息保持隐藏。',
   }

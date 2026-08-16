@@ -22,13 +22,16 @@ scenario = confirmDirection(blocked.scenario, 'scene-translator')
 assert.equal(scenario.gates.G1, 'approved')
 assert.throws(() => runAgentTeam(scenario), /G2/)
 
-scenario = grantSources(scenario, ['resume', 'github', 'homepage-demo'])
+scenario = grantSources(scenario, ['resume', 'github', 'public-web', 'company-official', 'homepage-demo', 'talk-materials'])
 assert.equal(attemptSourceAccess(scenario, 'github').allowed, true)
 
 scenario = runAgentTeam(scenario)
 assert.equal(scenario.status, 'qa-passed')
 assert.equal(scenario.agentRuns.length, 8)
 assert.ok(scenario.trace.some(item => item.event === 'task.rejected'))
+assert.ok(scenario.trace.some(item => item.event === 'search.completed' && item.sourceId === 'public-web'))
+assert.ok(scenario.trace.some(item => item.event === 'search.completed' && item.sourceId === 'company-official'))
+assert.equal(scenario.evidence.find(item => item.sourceId === 'company-official').disclosure, 'internal-only')
 assert.ok(scenario.claims.every(claim => validateClaim(claim).valid || claim.status === 'rejected'))
 
 scenario = publishScenario(scenario)

@@ -89,7 +89,7 @@ class PersonaWorkspaceStore {
 
   confirmDirection(positioningId) {
     this.mutateScenario(scenario => confirmDirection(scenario, positioningId), {
-      notice: 'G1 已通过：宣传方向已由你确认。现在才可以申请数据源授权。',
+      notice: 'G1 已通过：宣传方向已由你确认。现在才可以申请授权检索与取证。',
     })
   }
 
@@ -104,7 +104,7 @@ class PersonaWorkspaceStore {
     try {
       this.mutateScenario(scenario => grantSources(scenario, sourceIds), {
         overlay: null,
-        notice: 'G2 已通过：只读来源已按用途和期限授权，可开始证据采集。',
+        notice: 'G2 已通过：Agent 可在授权范围内主动检索公开网络与官方渠道。',
       })
     } catch (error) {
       this.patch({ notice: error.message }, false)
@@ -163,7 +163,7 @@ class PersonaWorkspaceStore {
           text: scenario.gates.G1 === 'pending'
             ? '我先不急着给你贴标签。结合你的传统行业经历、开源项目和内容表达，我建议比较三条定位路径，再由你确认哪一种最像你。'
             : scenario.gates.G2 !== 'approved'
-              ? '方向已经明确。下一步我会先列出需要核验的来源，但在你逐项授权前，我不会访问 GitHub 或其他外部个人资料。'
+              ? '方向已经明确。下一步我会列出建议的检索范围；在你逐项授权后，我会主动查找 GitHub、公开网络和公司官方渠道。'
               : '证据已获授权。我会把这个问题交给相应 Agent，并保留事实、推断、包装和验收记录。',
         },
       ],
