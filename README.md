@@ -1,3 +1,8 @@
+<p align="center">
+  <a href="https://github.com/shengjidaguai-china"><strong>升级打怪开源社区</strong></a> 首批开放共建项目 ·
+  <a href="https://github.com/shengjidaguai-china">点击组织首页右上角 <strong>Follow</strong></a>，及时获取新项目与共建活动
+</p>
+
 # Personal Homepage Skill
 
 一个让 AI Agent 稳定生成高质量个人主页、作品集和 HTML PPT 的 Skill + 模板库。
