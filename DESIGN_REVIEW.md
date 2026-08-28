@@ -150,6 +150,13 @@ Failure signals — all should be absent. Reject or revise if any signal is pres
 - [ ] Common visible text is editable, but navigation/filter buttons that control page logic are not made editable.
 - [ ] For HTML PPT/deck outputs, slide navigation ignores keyboard events from `[contenteditable="true"]` so arrow keys move the text cursor while editing.
 - [ ] For dynamically rendered pages, edits are saved before filtering/re-rendering and restored after the DOM is refreshed.
+- [ ] Pasted content passes through a whitelist sanitizer, and saved `innerHTML` is sanitized the same way.
+- [ ] Enter never splits single-line elements; block roles insert `<br>` only.
+- [ ] Edits save on every input event (plus a `beforeunload` fallback), not only on exit or shortcut.
+- [ ] Placeholder copy is marked with `data-placeholder="true"`, and export warns about unedited placeholders before shipping.
+- [ ] A `恢复初始` control restores the backed-up initial content after confirmation.
+- [ ] Editable links/images expose `href`/`src` editing through a small panel, persisted under `@attr:` storage keys.
+- [ ] The edit control stays reachable on touch devices (`@media (hover: none)` keeps it visible).
 
 ## 16. Responsive Design
 

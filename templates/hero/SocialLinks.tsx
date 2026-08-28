@@ -34,10 +34,10 @@ const SOCIALS: SocialLink[] = [
   { name: 'YouTube', label: 'YouTube', href: 'https://youtube.com', Icon: YoutubeIcon },
 ]
 
-function SocialLinkItem({ label, href, Icon }: SocialLink) {
+function SocialLinkItem({ name, label, href, Icon }: SocialLink) {
   const [hovered, setHovered] = useState(false)
   return (
-    <motion.a href={href} target="_blank" rel="noopener noreferrer" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.94 }} style={{ backgroundColor: 'rgba(255,255,255,0.06)' }} className="flex items-center gap-2 h-10 px-3 rounded-full border border-white/10 text-white/60 hover:text-white transition-colors duration-200" title={label}>
+    <motion.a href={href} target="_blank" rel="noopener noreferrer" data-edit-id={`social-${name.toLowerCase()}`} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.94 }} style={{ backgroundColor: 'rgba(255,255,255,0.06)' }} className="flex items-center gap-2 h-10 px-3 rounded-full border border-white/10 text-white/60 hover:text-white transition-colors duration-200" title={label}>
       <Icon className="w-[18px] h-[18px]" />
       <span className="text-[12px] tracking-wide"><ScrambleText text={label} isHovered={hovered} /></span>
     </motion.a>

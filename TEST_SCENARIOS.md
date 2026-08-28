@@ -174,6 +174,20 @@ Feature specification for an AI Skill that generates personal homepages, portfol
 | 1 | User requests full homepage generation. | Final answer includes design direction, structure, motion plan, tech stack, code, replacement guide, deployment notes, review summary, next steps. |
 | 2 | User asks only for Skill files. | Agent creates or outputs Skill folder structure. |
 
+## Scenario 15: Inline editing affordance survives real edits
+
+**Priority:** High
+
+| Step | Action | Expected Result |
+| --- | --- | --- |
+| 1 | User opens a generated standalone HTML and presses `E`. | Editable nodes become `contenteditable`, `body` gains the editing class; `E` does nothing while focus is in an input. |
+| 2 | User pastes rich text copied from Word/a web page. | A whitelist sanitizer keeps only basic inline markup; dirty tags, styles, and unsafe attributes are stripped. |
+| 3 | User presses Enter inside a heading, then inside a paragraph. | The heading gains no line break; the paragraph inserts `<br>` without splitting elements. |
+| 4 | User edits copy and closes the tab mid-edit, then reopens. | Input-event autosave (and the `beforeunload` fallback) preserved the edits. |
+| 5 | User clicks `恢复初始` and confirms. | All editable text returns to the backed-up initial content. |
+| 6 | User clicks `导出 HTML`. | Unedited placeholders trigger a confirmation; the download embeds edits (`__EXPORTED_EDITS__`), uses a fresh `data-edit-version`, stays editable and re-exportable, and shows a banner if its resources fail to load. |
+| 7 | User opens the page on a touch device. | The edit control remains visible without hover (`@media (hover: none)`). |
+
 ## Coverage Matrix
 
 | Requirement | Scenario |
@@ -183,6 +197,7 @@ Feature specification for an AI Skill that generates personal homepages, portfol
 | Template/reference-first routing | 4 |
 | Real visual previews only when unclear | 4B |
 | Missing info placeholders | 3, 12 |
+| Inline editing affordance | 15 |
 | React code quality | 7 |
 | Pure HTML | 8 |
 | 3D fallback | 9 |

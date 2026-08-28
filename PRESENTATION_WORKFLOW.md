@@ -163,6 +163,7 @@ Test behavior rather than searching source strings:
 - Esc exits editing without changing slides; browser-native Esc exits fullscreen and must leave the current slide unchanged.
 - E toggles inline editing outside form fields and editable text.
 - Cmd/Ctrl+S prevents the browser save-page action and persists edits.
+- While editing, Enter never splits a slide element: single-line roles ignore it and block roles insert `<br>` only.
 - Navigation shortcuts do nothing when the target is `input`, `textarea`, `select`, or `[contenteditable="true"]`.
 
 ## Controls and fullscreen chrome

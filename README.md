@@ -152,6 +152,11 @@ npm run check
 
 - `npm run dev`：打开可交互模板 Gallery。
 - `npm run check`：运行文档结构、模板注册表和构建检查。
+- `npm run check:all`：全量检查，包含便携版重建、编辑器行为测试（`test:editor`）与导出往返测试（`test:export`）。
+
+### 内联编辑
+
+内置模板生成的 standalone HTML 自带左上角隐藏编辑入口（悬停或触屏点击出现）：`E` 进入编辑、`Cmd/Ctrl+S` 保存、`Esc` 退出；支持「恢复初始」一键还原、编辑态点击链接/图片修改地址、粘贴自动清洗，以及「导出 HTML」把当前修改固化成新的独立文件（未修改的占位文案会在导出前提醒）。
 
 ## 模板 Gallery
 

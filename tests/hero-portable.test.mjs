@@ -40,8 +40,8 @@ try {
       footerImages: document.querySelectorAll('#contact img').length,
       brokenImages: Array.from(document.images).filter((image) => !image.complete || image.naturalWidth === 0).map((image) => image.src),
       horizontalOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
-      editButton: Boolean(Array.from(document.querySelectorAll('button')).find((button) => button.textContent?.trim() === '编辑')),
-      exportButton: Boolean(Array.from(document.querySelectorAll('button')).find((button) => button.textContent?.trim() === '导出 HTML')),
+      editButton: Boolean(document.querySelector('[data-editor-control="toggle"]')),
+      exportButton: Boolean(document.querySelector('#exportHtml, [data-editor-control="export"]')),
     }));
 
     if (!state.rootChildren) failures.push(`${viewport.name}: React application did not mount from file://`);
@@ -60,8 +60,10 @@ try {
       await editable.evaluate((element) => { element.innerHTML = 'Portable Test Name · AI Builder'; });
       await page.keyboard.press(process.platform === 'darwin' ? 'Meta+KeyS' : 'Control+KeyS');
 
+      // The untouched hero value proposition is placeholder copy; accept the export warning.
+      page.once('dialog', (dialog) => dialog.accept());
       const downloadPromise = page.waitForEvent('download');
-      await page.getByRole('button', { name: '导出 HTML' }).click();
+      await page.locator('#exportHtml').click();
       const download = await downloadPromise;
       const exportedRoot = await mkdtemp(resolve(tmpdir(), 'hero-export-roundtrip-'));
       try {
@@ -73,7 +75,7 @@ try {
         await exportedPage.waitForTimeout(1000);
         const roundTrip = await exportedPage.evaluate(() => ({
           editedText: document.querySelector('[data-edit-id="hero-identity"]')?.textContent,
-          exportButton: Boolean(Array.from(document.querySelectorAll('button')).find((button) => button.textContent?.trim() === '导出 HTML')),
+          exportButton: Boolean(document.querySelector('#exportHtml, [data-editor-control="export"]')),
           editVersion: document.documentElement.dataset.editVersion,
         }));
         if (!roundTrip.editedText?.includes('Portable Test Name')) failures.push('desktop: exported HTML did not embed current edits');

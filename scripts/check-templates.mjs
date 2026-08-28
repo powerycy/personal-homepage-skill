@@ -47,10 +47,25 @@ for (const entry of entries) {
 
 if (entries.length < 18) failures.push(`Expected at least 18 templates, found ${entries.length}`);
 
+// The two vanilla templates must embed a byte-identical InlineEditor class so
+// their editing behavior cannot drift apart; only the constructor options may differ.
+const extractEditor = (file) => {
+  const html = readFileSync(resolve(root, file), 'utf8');
+  const match = html.match(/class InlineEditor \{[\s\S]*?\n    \}\n/);
+  return match ? match[0] : null;
+};
+const homepageEditor = extractEditor('templates/single-html/personal-homepage.html');
+const presentationEditor = extractEditor('templates/presentation-html/presentation.html');
+if (!homepageEditor || !presentationEditor) {
+  failures.push('Vanilla templates are missing their InlineEditor class');
+} else if (homepageEditor !== presentationEditor) {
+  failures.push('InlineEditor classes in single-html and presentation templates have drifted apart; synchronize them');
+}
+
 if (failures.length) {
   console.error('Template registry check failed:');
   for (const failure of failures) console.error(`- ${failure}`);
   process.exit(1);
 }
 
-console.log(`Template registry check passed: ${entries.length} templates include generation metadata, CJK typography, image policy, and risks.`);
+console.log(`Template registry check passed: ${entries.length} templates include generation metadata, CJK typography, image policy, and risks; vanilla editors are in sync.`);

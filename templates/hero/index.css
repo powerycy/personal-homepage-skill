@@ -35,6 +35,13 @@ video { display: block; }
 .hero-editor__hotzone:hover + .hero-editor__controls, .hero-editor__controls:hover, .hero-editor__controls:focus-within, body.hero-editing .hero-editor__controls { opacity: 1; transform: translateY(0); pointer-events: auto; }
 .hero-editor__button { min-height: 36px; border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 0 13px; background: rgba(10,10,14,.78); color: #fff; font: 700 12px/1 var(--font-sans); backdrop-filter: blur(12px); cursor: pointer; }
 .hero-editor__button:hover, .hero-editor__button:focus-visible { border-color: rgba(255,255,255,.55); outline: none; }
+.hero-editor__panel { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1002; display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid rgba(255,255,255,.18); border-radius: 14px; background: rgba(10,10,14,.92); color: #fff; font: 600 12px/1.2 var(--font-sans); backdrop-filter: blur(14px); box-shadow: 0 18px 48px rgba(0,0,0,.4); }
+.hero-editor__panel label { color: rgba(255,255,255,.72); }
+.hero-editor__panel input { min-width: 240px; padding: 8px 10px; border: 1px solid rgba(255,255,255,.22); border-radius: 8px; background: rgba(255,255,255,.07); color: #fff; font: 500 12px/1.2 var(--font-sans); outline: none; }
+.hero-editor__panel input:focus { border-color: rgba(114,231,255,.8); }
+.hero-editor__panel button { border: none; border-radius: 999px; padding: 8px 12px; background: rgba(114,231,255,.9); color: #05070a; font: 700 11px/1 var(--font-sans); cursor: pointer; }
+.hero-editor__panel .hero-editor__panel-cancel { background: transparent; color: rgba(255,255,255,.72); border: 1px solid rgba(255,255,255,.22); }
+@media (hover: none) { .hero-editor__controls { opacity: .92; transform: none; pointer-events: auto; } }
 body.hero-editing [data-edit-id][contenteditable="true"] { outline: 1px dashed rgba(114,231,255,.72); outline-offset: 4px; border-radius: 4px; cursor: text; }
 body.hero-editing [data-edit-id][contenteditable="true"]:focus { outline: 2px solid rgba(114,231,255,.94); background: rgba(114,231,255,.08); }
 
